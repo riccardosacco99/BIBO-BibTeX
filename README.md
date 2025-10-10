@@ -1,4 +1,4 @@
-# BIBO-BibTex
+# BIBO-BibTeX
 
 ## Introduzione
 Questo progetto nasce come parte della mia tesi triennale e ha come obiettivo lo sviluppo di un convertitore tra modelli bibliografici.  
