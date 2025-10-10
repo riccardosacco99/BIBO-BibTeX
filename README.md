@@ -15,3 +15,38 @@ Il progetto è realizzato in **Java**, con due strumenti principali:
 - [RDF4J](https://rdf4j.org/) (versione 5.x) per la gestione del modello BIBO in RDF  
 
 L’obiettivo finale è integrare il convertitore come **plugin per la piattaforma VocBench**, affrontando le sfide di modellazione derivanti dalle differenze tra i vari formati bibliografici.
+## Struttura del progetto
+```
+BIBO-BibTeX/
+├── pom.xml
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── it
+│   │   │       └── riccardosacco
+│   │   │           └── bibobibtex
+│   │   │               ├── App.java
+│   │   │               ├── converter
+│   │   │               │   ├── BibTeXToBiboConverter.java
+│   │   │               │   ├── BiboToBibTeXConverter.java
+│   │   │               │   └── BibliographicConverter.java
+│   │   │               └── model
+│   │   │                   ├── bibo
+│   │   │                   │   └── BiboDocument.java
+│   │   │                   └── bibtex
+│   │   │                       └── BibTeXEntry.java
+│   │   └── resources
+│   └── test
+│       └── java
+│           └── it
+│               └── riccardosacco
+│                   └── bibobibtex
+│                       └── converter
+│                           └── BibliographicConverterTest.java
+└── .gitignore
+```
+
+### Come compilare
+```bash
+mvn clean package
+```
