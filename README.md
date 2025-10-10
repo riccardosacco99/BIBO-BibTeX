@@ -40,15 +40,20 @@ BIBO-BibTeX/
 │   │   │                   │   ├── BiboPersonName.java
 │   │   │                   │   └── BiboPublicationDate.java
 │   │   │                   └── bibtex
-│   │   │                       └── BibTeXEntry.java
+│   │   │                       ├── BibTeXEntry.java
+│   │   │                       └── BibTeXEntryType.java
 │   │   └── resources
 │   └── test
 │       └── java
 │           └── it
 │               └── riccardosacco
 │                   └── bibobibtex
-│                       └── converter
-│                           └── BibliographicConverterTest.java
+│                       ├── converter
+│                       │   ├── BibTeXBibliographicConverterDetailedTest.java
+│                       │   └── BibliographicConverterTest.java
+│                       └── model
+│                           └── bibo
+│                               └── BiboDocumentTest.java
 └── .gitignore
 ```
 
