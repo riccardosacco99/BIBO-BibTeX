@@ -31,7 +31,14 @@ BIBO-BibTeX/
 │   │   │               │   └── BibliographicConverter.java
 │   │   │               └── model
 │   │   │                   ├── bibo
-│   │   │                   │   └── BiboDocument.java
+│   │   │                   │   ├── BiboContributor.java
+│   │   │                   │   ├── BiboContributorRole.java
+│   │   │                   │   ├── BiboDocument.java
+│   │   │                   │   ├── BiboDocumentType.java
+│   │   │                   │   ├── BiboIdentifier.java
+│   │   │                   │   ├── BiboIdentifierType.java
+│   │   │                   │   ├── BiboPersonName.java
+│   │   │                   │   └── BiboPublicationDate.java
 │   │   │                   └── bibtex
 │   │   │                       └── BibTeXEntry.java
 │   │   └── resources
