@@ -27,8 +27,7 @@ BIBO-BibTeX/
 │   │   │           └── bibobibtex
 │   │   │               ├── App.java
 │   │   │               ├── converter
-│   │   │               │   ├── BibTeXToBiboConverter.java
-│   │   │               │   ├── BiboToBibTeXConverter.java
+│   │   │               │   ├── BibTeXBibliographicConverter.java
 │   │   │               │   └── BibliographicConverter.java
 │   │   │               └── model
 │   │   │                   ├── bibo

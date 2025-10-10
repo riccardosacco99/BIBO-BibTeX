@@ -7,12 +7,12 @@ import it.riccardosacco.bibobibtex.model.bibtex.BibTeXEntry;
 import org.junit.jupiter.api.Test;
 
 class BibliographicConverterTest {
-    private final BiboToBibTeXConverter toBibTeX = new BiboToBibTeXConverter();
-    private final BibTeXToBiboConverter toBibo = new BibTeXToBiboConverter();
+    private final BibliographicConverter<BibTeXEntry> converter =
+            new BibTeXBibliographicConverter();
 
     @Test
     void conversionStubsReturnEmptyOptional() {
-        assertTrue(toBibTeX.convert(new BiboDocument("dummy")).isEmpty());
-        assertTrue(toBibo.convert(new BibTeXEntry("dummy")).isEmpty());
+        assertTrue(converter.convertFromBibo(new BiboDocument("dummy")).isEmpty());
+        assertTrue(converter.convertToBibo(new BibTeXEntry("dummy")).isEmpty());
     }
 }
