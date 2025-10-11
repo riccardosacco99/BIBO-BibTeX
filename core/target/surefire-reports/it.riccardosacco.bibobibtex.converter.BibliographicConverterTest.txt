@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: it.riccardosacco.bibobibtex.converter.BibliographicConverterTest
--------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in it.riccardosacco.bibobibtex.converter.BibliographicConverterTest
