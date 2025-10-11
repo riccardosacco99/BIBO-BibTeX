@@ -19,43 +19,41 @@ L’obiettivo finale è integrare il convertitore come **plugin per la piattafor
 ```
 BIBO-BibTeX/
 ├── pom.xml
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── it
-│   │   │       └── riccardosacco
-│   │   │           └── bibobibtex
-│   │   │               ├── App.java
-│   │   │               ├── converter
-│   │   │               │   ├── BibTeXBibliographicConverter.java
-│   │   │               │   └── BibliographicConverter.java
-│   │   │               └── model
-│   │   │                   ├── bibo
-│   │   │                   │   ├── BiboContributor.java
-│   │   │                   │   ├── BiboContributorRole.java
-│   │   │                   │   ├── BiboDocument.java
-│   │   │                   │   ├── BiboDocumentType.java
-│   │   │                   │   ├── BiboIdentifier.java
-│   │   │                   │   ├── BiboIdentifierType.java
-│   │   │                   │   ├── BiboPersonName.java
-│   │   │                   │   └── BiboPublicationDate.java
-│   │   │                   └── bibtex
-│   │   │                       ├── BibTeXEntry.java
-│   │   │                       └── BibTeXEntryType.java
-│   │   └── resources
-│   └── test
-│       └── java
-│           └── it
-│               └── riccardosacco
-│                   └── bibobibtex
-│                       ├── converter
-│                       │   ├── BibTeXBibliographicConverterDetailedTest.java
-│                       │   └── BibliographicConverterTest.java
-│                       └── model
-│                           └── bibo
-│                               └── BiboDocumentTest.java
-└── .gitignore
+├── core/
+│   ├── pom.xml
+│   └── src
+│       ├── main/java/it/riccardosacco/bibobibtex
+│       │   ├── App.java
+│       │   ├── converter/
+│       │   │   ├── BibTeXBibliographicConverter.java
+│       │   │   └── BibliographicConverter.java
+│       │   └── model/bibo/
+│       │       ├── BiboContributor*.java
+│       │       ├── BiboDocument.java
+│       │       ├── BiboDocumentType.java
+│       │       ├── BiboIdentifier*.java
+│       │       ├── BiboPersonName.java
+│       │       ├── BiboPublicationDate.java
+│       │       └── BiboVocabulary.java
+│       └── test/java/it/riccardosacco/bibobibtex
+│           ├── converter/
+│           │   ├── BibTeXBibliographicConverterDetailedTest.java
+│           │   └── BibliographicConverterTest.java
+│           └── model/bibo/BiboDocumentTest.java
+├── vocbench-plugin/
+│   ├── pom.xml
+│   └── src
+│       ├── main/java/it/riccardosacco/bibobibtex/vocbench/
+│       │   ├── VocBenchPluginBootstrap.java
+│       │   ├── VocBenchPluginLifecycle.java
+│       │   └── VocBenchRepositoryGateway.java
+│       └── test/java/it/riccardosacco/bibobibtex/vocbench/
+│           └── VocBenchPluginLifecycleTest.java
+└── README.md
 ```
+
+- `core`: modulo principale con i convertitori e i modelli BIBO rappresentati in RDF4J.
+- `vocbench-plugin`: scheletro del plugin VocBench, pronto per l'integrazione con i servizi di repository della piattaforma.
 
 ### Come compilare
 ```bash
