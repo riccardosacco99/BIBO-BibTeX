@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:bibo="http://purl.org/ontology/bibo/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db1">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
+	<dcterms:title>Development and application of artificial neural network</dcterms:title>
+	<dcterms:identifier>wu2018development</dcterms:identifier>
+	<dcterms:creator rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db2"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db2">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Wu, Yu-chen</foaf:name>
+	<foaf:givenName>Yu-chen</foaf:givenName>
+	<foaf:familyName>Wu</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db1">
+	<dcterms:creator rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db3"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db3">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Feng, Jun-wen</foaf:name>
+	<foaf:givenName>Jun-wen</foaf:givenName>
+	<foaf:familyName>Feng</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db1">
+	<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear">2018</dcterms:issued>
+	<dcterms:publisher>Springer</dcterms:publisher>
+	<dcterms:isPartOf rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db4"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db4">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<dcterms:title>Wireless Personal Communications</dcterms:title>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-397602a00b4704bfab670ed28c6aa21db1">
+	<bibo:volume>102</bibo:volume>
+	<bibo:issue>2</bibo:issue>
+	<bibo:pages>1645--1656</bibo:pages>
+</rdf:Description>
+
+</rdf:RDF>

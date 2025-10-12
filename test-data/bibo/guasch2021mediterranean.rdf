@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:bibo="http://purl.org/ontology/bibo/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
+	<dcterms:title>The Mediterranean diet and health: a comprehensive overview</dcterms:title>
+	<dcterms:identifier>guasch2021mediterranean</dcterms:identifier>
+	<dcterms:creator rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac392"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac392">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Guasch-Ferr{\'e}, Marta</foaf:name>
+	<foaf:givenName>Marta</foaf:givenName>
+	<foaf:familyName>Guasch-Ferr{\'e}</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
+	<dcterms:creator rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac393"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac393">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Willett, Walter C</foaf:name>
+	<foaf:givenName>Walter C</foaf:givenName>
+	<foaf:familyName>Willett</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
+	<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear">2021</dcterms:issued>
+	<dcterms:publisher>Wiley Online Library</dcterms:publisher>
+	<dcterms:isPartOf rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac394"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac394">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<dcterms:title>Journal of internal medicine</dcterms:title>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
+	<bibo:volume>290</bibo:volume>
+	<bibo:issue>3</bibo:issue>
+	<bibo:pages>549--566</bibo:pages>
+</rdf:Description>
+
+</rdf:RDF>

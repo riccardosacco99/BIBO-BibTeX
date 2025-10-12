@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:bibo="http://purl.org/ontology/bibo/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
+	<dcterms:title>Artificial intelligence in medicine</dcterms:title>
+	<dcterms:identifier>holmes2004artificial</dcterms:identifier>
+	<dcterms:creator rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e2"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e2">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Holmes, J</foaf:name>
+	<foaf:givenName>J</foaf:givenName>
+	<foaf:familyName>Holmes</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<dcterms:creator rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e3"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e3">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Sacchi, L</foaf:name>
+	<foaf:givenName>L</foaf:givenName>
+	<foaf:familyName>Sacchi</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<dcterms:creator rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e4"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e4">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>Bellazzi, R</foaf:name>
+	<foaf:givenName>R</foaf:givenName>
+	<foaf:familyName>Bellazzi</foaf:familyName>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<dcterms:creator rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e5"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e5">
+	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
+	<foaf:name>others</foaf:name>
+	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</bibo:sequence>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear">2004</dcterms:issued>
+	<dcterms:publisher>Springer</dcterms:publisher>
+	<dcterms:isPartOf rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e6"/>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e6">
+	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
+	<dcterms:title>Ann R Coll Surg Engl</dcterms:title>
+</rdf:Description>
+
+<rdf:Description rdf:nodeID="genid-start-36965d34fcdea4457ba7655510f455b2e1">
+	<bibo:volume>86</bibo:volume>
+	<bibo:issue>86</bibo:issue>
+	<bibo:pages>334--8</bibo:pages>
+</rdf:Description>
+
+</rdf:RDF>
