@@ -8,6 +8,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.Normalizer;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -75,8 +76,11 @@ public final class SampleConversion {
         }
     }
 
-    private static void writeRdf(BiboDocument document, Path outputDir) throws IOException {
-        String baseName = document.id().orElseGet(() -> document.title().replaceAll("\\s+", "_"));
+    static void writeRdf(BiboDocument document, Path outputDir) throws IOException {
+        String baseName = document.id()
+                .map(SampleConversion::safeFileName)
+                .filter(name -> !name.isBlank())
+                .orElseGet(() -> safeFileName(document.title()));
         Path outputFile = outputDir.resolve(baseName + ".rdf");
 
         Model model = document.rdfModel();
@@ -85,5 +89,18 @@ public final class SampleConversion {
         }
 
         System.out.printf("Generato %s con %d triple%n", outputFile, model.size());
+    }
+
+    static String safeFileName(String value) {
+        if (value == null) {
+            return "document";
+        }
+        String normalized = Normalizer.normalize(value, Normalizer.Form.NFD);
+        String ascii = normalized.replaceAll("\\p{M}", "");
+        String sanitized = ascii.replaceAll("[^a-zA-Z0-9._-]", "_");
+        sanitized = sanitized.replaceAll("_+", "_")
+                .replaceAll("^_+", "")
+                .replaceAll("_+$", "");
+        return sanitized.isEmpty() ? "document" : sanitized;
     }
 }

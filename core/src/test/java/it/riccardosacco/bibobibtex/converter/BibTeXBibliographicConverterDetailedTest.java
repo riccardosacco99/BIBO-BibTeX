@@ -90,6 +90,37 @@ class BibTeXBibliographicConverterDetailedTest {
     }
 
     @Test
+    void convertToBiboIgnoresNonNumericYearValues() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("nonNumericYear"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Legacy Manuscript");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Doe, Jane");
+        addField(entry, BibTeXEntry.KEY_YEAR, "n.d.");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertTrue(document.publicationDate().isEmpty());
+    }
+
+    @Test
+    void convertToBiboTreatsCorporateAuthorsAsSingleContributor() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("corporate2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Corporate Authorship Example");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "{Research and Development Department} and Doe, John");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals(2, document.authors().size());
+
+        BiboContributor corporate = document.authors().get(0);
+        assertEquals("Research and Development Department", corporate.name().fullName());
+        assertTrue(corporate.name().givenName().isEmpty());
+        assertTrue(corporate.name().familyName().isEmpty());
+
+        BiboContributor individual = document.authors().get(1);
+        assertEquals("Doe, John", individual.name().fullName());
+        assertTrue(individual.name().givenName().isPresent());
+        assertTrue(individual.name().familyName().isPresent());
+    }
+
+    @Test
     void convertFromBiboMapsIdentifiersAndContributors() {
         BiboPersonName firstAuthor =
                 BiboPersonName.builder("Alice Smith").givenName("Alice").familyName("Smith").build();
