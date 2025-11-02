@@ -10,6 +10,7 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboPersonName;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -50,6 +51,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                     Map.entry("dec", 12),
                     Map.entry("december", 12));
 
+    private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s+and\\s+", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTI_VALUE_SEPARATOR = Pattern.compile("[,;]");
     private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^a-z0-9]+");
 
@@ -241,7 +243,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return List.of();
         }
 
-        return splitContributorNames(rawNames.get()).stream()
+        return Arrays.stream(NAME_SEPARATOR.split(rawNames.get().trim()))
                 .map(String::trim)
                 .filter(name -> !name.isEmpty())
                 .map(name -> new BiboContributor(parseName(name), role))
@@ -249,23 +251,14 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     }
 
     private static BiboPersonName parseName(String rawName) {
-        String normalized = rawName == null ? "" : rawName.trim();
-        boolean hasEnclosingBraces = hasEnclosingBalancedBraces(normalized);
-        if (hasEnclosingBraces) {
-            normalized = normalized.substring(1, normalized.length() - 1).trim();
-        }
+        BiboPersonName.Builder builder = BiboPersonName.builder(rawName);
+        String normalized = rawName.trim();
 
-        if (normalized.isEmpty()) {
-            normalized = rawName == null ? "" : rawName.trim();
-        }
-
-        BiboPersonName.Builder builder = BiboPersonName.builder(normalized);
-
-        if (!hasEnclosingBraces && normalized.contains(",")) {
+        if (normalized.contains(",")) {
             String[] parts = normalized.split(",", 2);
             builder.familyName(parts[0].trim());
             builder.givenName(parts.length > 1 ? parts[1].trim() : null);
-        } else if (!hasEnclosingBraces) {
+        } else {
             String[] tokens = normalized.split("\\s+");
             if (tokens.length > 1) {
                 builder.givenName(tokens[0]);
@@ -295,109 +288,16 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 return Optional.of(BiboPublicationDate.ofYear(year));
             }
         } catch (NumberFormatException ex) {
-            return extractYearFromFreeForm(yearValue.get()).map(BiboPublicationDate::ofYear);
+            return Optional.of(BiboPublicationDate.ofYear(extractYearFromFreeForm(yearValue.get())));
         }
     }
 
-    private static Optional<Integer> extractYearFromFreeForm(String value) {
-        if (value == null) {
-            return Optional.empty();
-        }
+    private static int extractYearFromFreeForm(String value) {
         String digits = value.replaceAll("[^0-9]", "");
         if (digits.length() >= 4) {
-            return Optional.of(Integer.parseInt(digits.substring(0, 4)));
+            return Integer.parseInt(digits.substring(0, 4));
         }
-        return Optional.empty();
-    }
-
-    private static List<String> splitContributorNames(String rawNames) {
-        String trimmed = rawNames == null ? "" : rawNames.trim();
-        if (trimmed.isEmpty()) {
-            return List.of();
-        }
-
-        List<String> names = new ArrayList<>();
-        StringBuilder current = new StringBuilder();
-        int braceDepth = 0;
-        int index = 0;
-        while (index < trimmed.length()) {
-            char ch = trimmed.charAt(index);
-            if (ch == '{') {
-                braceDepth++;
-            } else if (ch == '}') {
-                if (braceDepth > 0) {
-                    braceDepth--;
-                }
-            }
-
-            if (braceDepth == 0 && isAndDelimiter(trimmed, index)) {
-                addContributor(names, current);
-                index = skipDelimiter(trimmed, index);
-                continue;
-            }
-
-            current.append(ch);
-            index++;
-        }
-        addContributor(names, current);
-
-        return names;
-    }
-
-    private static boolean isAndDelimiter(String text, int index) {
-        if (index < 0 || index + 3 > text.length()) {
-            return false;
-        }
-        if (!text.regionMatches(true, index, "and", 0, 3)) {
-            return false;
-        }
-        int beforeIndex = index - 1;
-        if (beforeIndex < 0 || !Character.isWhitespace(text.charAt(beforeIndex))) {
-            return false;
-        }
-        int afterIndex = index + 3;
-        if (afterIndex >= text.length() || !Character.isWhitespace(text.charAt(afterIndex))) {
-            return false;
-        }
-        return true;
-    }
-
-    private static int skipDelimiter(String text, int index) {
-        int next = index + 3;
-        while (next < text.length() && Character.isWhitespace(text.charAt(next))) {
-            next++;
-        }
-        return next;
-    }
-
-    private static void addContributor(List<String> names, StringBuilder builder) {
-        String name = builder.toString().trim();
-        if (!name.isEmpty()) {
-            names.add(name);
-        }
-        builder.setLength(0);
-    }
-
-    private static boolean hasEnclosingBalancedBraces(String value) {
-        if (value == null || value.length() < 2 || value.charAt(0) != '{' || value.charAt(value.length() - 1) != '}') {
-            return false;
-        }
-        int depth = 0;
-        for (int i = 0; i < value.length(); i++) {
-            char ch = value.charAt(i);
-            if (ch == '{') {
-                depth++;
-            } else if (ch == '}') {
-                depth--;
-                if (depth == 0 && i < value.length() - 1) {
-                    return false;
-                }
-                if (depth < 0) {
-                    return false;
-                }
-            }
-        }
-        return depth == 0;
+        throw new IllegalArgumentException("Cannot extract year from value: " + value);
     }
 
     private static Optional<Integer> parseMonth(String value) {
