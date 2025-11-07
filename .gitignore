@@ -7,12 +7,4 @@ target/
 .claude
 CLAUDE.md
 
-PROFESSOR_FEEDBACK_ANALYSIS.md
-ROADMAP.md
-sprint-00-hot-fixes.md
-sprint-01-critical-mvp.md
-sprint-02-production-quality.md
-sprint-03-advanced-features.md
-sprint-backlog.md
-SPRINT_PLANNING_GUIDE.md
-SPRINT_UPDATES_SUMMARY.md
+sprints/
