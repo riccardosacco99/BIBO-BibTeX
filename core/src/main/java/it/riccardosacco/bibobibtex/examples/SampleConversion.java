@@ -17,11 +17,12 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.BibTeXParser;
+import org.jbibtex.ObjectResolutionException;
 import org.jbibtex.ParseException;
 
 /**
  * Piccolo programma dimostrativo che converte un file BibTeX in RDF (BIBO) sfruttando il core
- * converter. Viene generato un file RDF/XML per ogni entry trovata.
+ * converter. Viene generato un file Turtle per ogni entry trovata.
  */
 public final class SampleConversion {
     private SampleConversion() {
@@ -53,7 +54,16 @@ public final class SampleConversion {
         BibTeXBibliographicConverter converter = new BibTeXBibliographicConverter();
 
         try (Reader reader = Files.newBufferedReader(input, StandardCharsets.UTF_8)) {
-            BibTeXDatabase database = parser.parse(reader);
+            BibTeXDatabase database;
+            try {
+                database = parser.parse(reader);
+            } catch (ObjectResolutionException e) {
+                System.err.println("WARNING: Cross-reference resolution failed: " + e.getMessage());
+                System.err.println("The BibTeX file contains references to entries that don't exist.");
+                System.err.println("Processing will continue with entries parsed before the error.");
+                throw new ParseException("Cannot parse BibTeX with unresolved cross-references. "
+                        + "Please remove or fix crossref fields in the BibTeX file.");
+            }
             Collection<BibTeXEntry> entries = database.getEntries().values();
 
             if (entries.isEmpty()) {
@@ -77,11 +87,13 @@ public final class SampleConversion {
 
     private static void writeRdf(BiboDocument document, Path outputDir) throws IOException {
         String baseName = document.id().orElseGet(() -> document.title().replaceAll("\\s+", "_"));
-        Path outputFile = outputDir.resolve(baseName + ".rdf");
+        // Sanitize filename by replacing filesystem-problematic characters
+        baseName = baseName.replaceAll("[/\\\\:*?\"<>|]", "_");
+        Path outputFile = outputDir.resolve(baseName + ".ttl");
 
         Model model = document.rdfModel();
         try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
-            Rio.write(model, writer, RDFFormat.RDFXML);
+            Rio.write(model, writer, RDFFormat.TURTLE);
         }
 
         System.out.printf("Generato %s con %d triple%n", outputFile, model.size());

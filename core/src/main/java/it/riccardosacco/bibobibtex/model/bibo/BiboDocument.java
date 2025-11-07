@@ -1,5 +1,7 @@
 package it.riccardosacco.bibobibtex.model.bibo;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -16,6 +18,8 @@ import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.Rio;
 
 public final class BiboDocument {
     private static final ValueFactory VF = SimpleValueFactory.getInstance();
@@ -155,6 +159,40 @@ public final class BiboDocument {
 
     public Resource resource() {
         return resource;
+    }
+
+    /**
+     * Serializes this document to Turtle format (pretty-printed).
+     *
+     * @return the Turtle representation as a String
+     */
+    public String toTurtle() {
+        StringWriter writer = new StringWriter();
+        writeTurtle(writer);
+        return writer.toString();
+    }
+
+    /**
+     * Writes this document to a Writer in Turtle format.
+     *
+     * @param writer the Writer to write to
+     */
+    public void writeTurtle(Writer writer) {
+        write(writer, RDFFormat.TURTLE);
+    }
+
+    /**
+     * Writes this document to a Writer in the specified RDF format.
+     *
+     * @param writer the Writer to write to
+     * @param format the RDF format to use (TURTLE, RDFXML, JSONLD, etc.)
+     */
+    public void write(Writer writer, RDFFormat format) {
+        try {
+            Rio.write(model, writer, format);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to write RDF in format " + format, e);
+        }
     }
 
     public static final class Builder {

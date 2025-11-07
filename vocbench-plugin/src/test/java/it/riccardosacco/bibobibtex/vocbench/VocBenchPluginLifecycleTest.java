@@ -51,7 +51,7 @@ class VocBenchPluginLifecycleTest {
         assertEquals("Article Example", value(entry.get(), BibTeXEntry.KEY_TITLE));
     }
 
-    private static final class InMemoryGateway implements VocBenchRepositoryGateway {
+    static final class InMemoryGateway implements VocBenchRepositoryGateway {
         private final Map<String, BiboDocument> documents = new HashMap<>();
         private final Map<String, Model> models = new HashMap<>();
         private final List<Model> storedModels = new ArrayList<>();
