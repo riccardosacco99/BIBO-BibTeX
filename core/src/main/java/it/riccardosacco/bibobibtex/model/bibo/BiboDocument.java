@@ -46,6 +46,11 @@ public final class BiboDocument {
     private final String language;
     private final String abstractText;
     private final String notes;
+    private final String series;
+    private final String edition;
+    private final List<String> keywords;
+    private final String organization;
+    private final String howPublished;
     private final Model model;
     private final Resource resource;
 
@@ -67,6 +72,11 @@ public final class BiboDocument {
         this.language = builder.language;
         this.abstractText = builder.abstractText;
         this.notes = builder.notes;
+        this.series = builder.series;
+        this.edition = builder.edition;
+        this.keywords = builder.keywords != null ? List.copyOf(builder.keywords) : List.of();
+        this.organization = builder.organization;
+        this.howPublished = builder.howPublished;
         this.model = new LinkedHashModel(model);
         this.resource = resource;
     }
@@ -158,6 +168,26 @@ public final class BiboDocument {
         return Optional.ofNullable(notes);
     }
 
+    public Optional<String> series() {
+        return Optional.ofNullable(series);
+    }
+
+    public Optional<String> edition() {
+        return Optional.ofNullable(edition);
+    }
+
+    public List<String> keywords() {
+        return keywords;
+    }
+
+    public Optional<String> organization() {
+        return Optional.ofNullable(organization);
+    }
+
+    public Optional<String> howPublished() {
+        return Optional.ofNullable(howPublished);
+    }
+
     public Model rdfModel() {
         return new LinkedHashModel(model);
     }
@@ -218,6 +248,11 @@ public final class BiboDocument {
         private String language;
         private String abstractText;
         private String notes;
+        private String series;
+        private String edition;
+        private final List<String> keywords = new ArrayList<>();
+        private String organization;
+        private String howPublished;
 
         private Builder(BiboDocumentType type, String title) {
             this.type = Objects.requireNonNull(type, "type");
@@ -321,6 +356,41 @@ public final class BiboDocument {
             return this;
         }
 
+        public Builder series(String series) {
+            this.series = normalizeOptional(series);
+            return this;
+        }
+
+        public Builder edition(String edition) {
+            this.edition = normalizeOptional(edition);
+            return this;
+        }
+
+        public Builder addKeyword(String keyword) {
+            String normalized = normalizeOptional(keyword);
+            if (normalized != null) {
+                keywords.add(normalized);
+            }
+            return this;
+        }
+
+        public Builder keywords(Collection<String> keywords) {
+            if (keywords != null) {
+                keywords.forEach(this::addKeyword);
+            }
+            return this;
+        }
+
+        public Builder organization(String organization) {
+            this.organization = normalizeOptional(organization);
+            return this;
+        }
+
+        public Builder howPublished(String howPublished) {
+            this.howPublished = normalizeOptional(howPublished);
+            return this;
+        }
+
         public BiboDocument build() {
             Model model = new LinkedHashModel();
             model.setNamespace(BiboVocabulary.NS);
@@ -382,6 +452,21 @@ public final class BiboDocument {
             }
             if (notes != null) {
                 model.add(subject, RDFS.COMMENT, VF.createLiteral(notes));
+            }
+
+            if (series != null) {
+                model.add(subject, BiboVocabulary.SERIES, VF.createLiteral(series));
+            }
+            if (edition != null) {
+                model.add(subject, BiboVocabulary.EDITION, VF.createLiteral(edition));
+            }
+            keywords.forEach(keyword -> model.add(subject, DCTERMS.SUBJECT, VF.createLiteral(keyword)));
+
+            if (organization != null) {
+                model.add(subject, BiboVocabulary.CONTRIBUTOR, VF.createLiteral(organization));
+            }
+            if (howPublished != null) {
+                model.add(subject, DCTERMS.DESCRIPTION, VF.createLiteral(howPublished));
             }
 
             return new BiboDocument(this, subject, model);

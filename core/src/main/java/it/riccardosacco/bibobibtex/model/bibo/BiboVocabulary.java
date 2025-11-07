@@ -34,6 +34,8 @@ public final class BiboVocabulary {
     public static final IRI VOLUME = iri("volume");
     public static final IRI ISSUE = iri("issue");
     public static final IRI PAGES = iri("pages");
+    public static final IRI SERIES = iri("series");
+    public static final IRI EDITION = iri("edition");
 
     public static final IRI DOI = iri("doi");
     public static final IRI HANDLE = iri("handle");

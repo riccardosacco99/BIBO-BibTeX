@@ -63,17 +63,18 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_LANGUAGE = new Key("language");
     private static final Key FIELD_ABSTRACT = new Key("abstract");
     private static final Key FIELD_URI = new Key("uri");
+    private static final Key FIELD_KEYWORDS = new Key("keywords");
+    private static final Key FIELD_ORGANIZATION = new Key("organization");
+    private static final Key FIELD_HOWPUBLISHED = new Key("howpublished");
     private static final Key TYPE_ONLINE = new Key("online");
 
     @Override
     public Optional<BiboDocument> convertToBibo(BibTeXEntry source) {
-        if (source == null) {
-            return Optional.empty();
-        }
+        validateBibTeXEntry(source);
 
         String title = fieldValue(source, BibTeXEntry.KEY_TITLE).orElseGet(() -> citationKeyValue(source));
         if (title == null || title.isBlank()) {
-            return Optional.empty();
+            throw BibliographicConversionException.missingRequiredField("title");
         }
 
         BiboDocumentType documentType = mapDocumentType(source.getType());
@@ -101,14 +102,19 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, FIELD_ABSTRACT).ifPresent(builder::abstractText);
         fieldValue(source, BibTeXEntry.KEY_NOTE).ifPresent(builder::notes);
 
+        // Extended fields (Sprint 01 - US-03)
+        fieldValue(source, BibTeXEntry.KEY_SERIES).ifPresent(builder::series);
+        fieldValue(source, BibTeXEntry.KEY_EDITION).ifPresent(builder::edition);
+        fieldValue(source, FIELD_KEYWORDS).ifPresent(keywords -> parseKeywords(keywords).forEach(builder::addKeyword));
+        fieldValue(source, FIELD_ORGANIZATION).ifPresent(builder::organization);
+        fieldValue(source, FIELD_HOWPUBLISHED).ifPresent(builder::howPublished);
+
         return Optional.of(builder.build());
     }
 
     @Override
     public Optional<BibTeXEntry> convertFromBibo(BiboDocument source) {
-        if (source == null) {
-            return Optional.empty();
-        }
+        validateBiboDocument(source);
 
         Key entryType = mapEntryType(source.type());
         String citationKey =
@@ -143,6 +149,15 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         source.language().ifPresent(value -> putField(entry, FIELD_LANGUAGE, value));
         source.abstractText().ifPresent(value -> putField(entry, FIELD_ABSTRACT, value));
         source.notes().ifPresent(value -> putField(entry, BibTeXEntry.KEY_NOTE, value));
+
+        // Extended fields (Sprint 01 - US-03)
+        source.series().ifPresent(value -> putField(entry, BibTeXEntry.KEY_SERIES, value));
+        source.edition().ifPresent(value -> putField(entry, BibTeXEntry.KEY_EDITION, value));
+        if (!source.keywords().isEmpty()) {
+            putField(entry, FIELD_KEYWORDS, String.join(", ", source.keywords()));
+        }
+        source.organization().ifPresent(value -> putField(entry, FIELD_ORGANIZATION, value));
+        source.howPublished().ifPresent(value -> putField(entry, FIELD_HOWPUBLISHED, value));
 
         return Optional.of(entry);
     }
@@ -243,6 +258,23 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return BibTeXEntry.KEY_BOOKTITLE;
         }
         return BibTeXEntry.KEY_BOOKTITLE;
+    }
+
+    /**
+     * Parses keywords from a string where keywords are separated by commas or semicolons.
+     *
+     * @param keywords the keywords string to parse
+     * @return list of individual keywords
+     * @since Sprint 01 - US-03
+     */
+    private static List<String> parseKeywords(String keywords) {
+        if (keywords == null || keywords.isBlank()) {
+            return List.of();
+        }
+        return MULTI_VALUE_SEPARATOR.splitAsStream(keywords)
+                .map(String::trim)
+                .filter(keyword -> !keyword.isEmpty())
+                .collect(Collectors.toList());
     }
 
     private static List<BiboContributor> parseContributors(
@@ -462,5 +494,40 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(Integer.toString(month));
+    }
+
+    /**
+     * Validates a BibTeX entry before conversion.
+     *
+     * @param entry the BibTeX entry to validate
+     * @throws BibliographicConversionException if the entry is null or invalid
+     */
+    private static void validateBibTeXEntry(BibTeXEntry entry) {
+        if (entry == null) {
+            throw BibliographicConversionException.nullInput("BibTeX entry");
+        }
+        // Additional validation can be added here
+        // Note: Title validation is done later since we allow citation key as fallback
+    }
+
+    /**
+     * Validates a BIBO document before conversion.
+     *
+     * @param document the BIBO document to validate
+     * @throws BibliographicConversionException if the document is null or missing required fields
+     */
+    private static void validateBiboDocument(BiboDocument document) {
+        if (document == null) {
+            throw BibliographicConversionException.nullInput("BIBO document");
+        }
+
+        // Validate required fields
+        if (document.title() == null || document.title().isBlank()) {
+            throw BibliographicConversionException.missingRequiredField("title");
+        }
+
+        if (document.type() == null) {
+            throw BibliographicConversionException.missingRequiredField("type");
+        }
     }
 }
