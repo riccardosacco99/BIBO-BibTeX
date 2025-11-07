@@ -2,16 +2,21 @@ package it.riccardosacco.bibobibtex.model.bibo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.eclipse.rdf4j.model.IRI;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
@@ -356,17 +361,38 @@ public final class BiboDocument {
         }
 
         private void addContributors(Model model, Resource subject) {
-            int order = 0;
-            for (BiboContributor contributor : contributors) {
-                Resource person = VF.createBNode();
-                model.add(subject, predicateForRole(contributor.role()), person);
-                model.add(person, RDF.TYPE, FOAF.PERSON);
-                BiboPersonName name = contributor.name();
-                model.add(person, FOAF.NAME, VF.createLiteral(name.fullName()));
-                name.givenName().ifPresent(value -> model.add(person, FOAF.GIVEN_NAME, VF.createLiteral(value)));
-                name.familyName().ifPresent(value -> model.add(person, FOAF.FAMILY_NAME, VF.createLiteral(value)));
-                model.add(person, BiboVocabulary.ORDER, VF.createLiteral(order));
-                order++;
+            // Group contributors by role
+            Map<BiboContributorRole, List<BiboContributor>> byRole = contributors.stream()
+                    .collect(Collectors.groupingBy(BiboContributor::role));
+
+            // For each role, create an RDF List if there are multiple contributors
+            // or use a single triple if there's only one
+            for (Map.Entry<BiboContributorRole, List<BiboContributor>> entry : byRole.entrySet()) {
+                BiboContributorRole role = entry.getKey();
+                List<BiboContributor> roleContributors = entry.getValue();
+
+                if (roleContributors.isEmpty()) {
+                    continue;
+                }
+
+                // Create person resources
+                List<Resource> personResources = new ArrayList<>();
+                for (BiboContributor contributor : roleContributors) {
+                    Resource person = VF.createBNode();
+                    model.add(person, RDF.TYPE, FOAF.PERSON);
+                    BiboPersonName name = contributor.name();
+                    model.add(person, FOAF.NAME, VF.createLiteral(name.fullName()));
+                    name.givenName().ifPresent(value -> model.add(person, FOAF.GIVEN_NAME, VF.createLiteral(value)));
+                    name.familyName().ifPresent(value -> model.add(person, FOAF.FAMILY_NAME, VF.createLiteral(value)));
+                    personResources.add(person);
+                }
+
+                // Use RDF List for ordered collection
+                IRI listPredicate = listPredicateForRole(role);
+                // Create the RDF List manually
+                Resource listHead = createRDFList(model, personResources);
+                // Link the list to the subject
+                model.add(subject, listPredicate, listHead);
             }
         }
 
@@ -399,6 +425,39 @@ public final class BiboDocument {
                 case REVIEWER -> BiboVocabulary.REVIEWER;
                 case CONTRIBUTOR -> DCTERMS.CONTRIBUTOR;
             };
+        }
+
+        private static org.eclipse.rdf4j.model.IRI listPredicateForRole(BiboContributorRole role) {
+            return switch (role) {
+                case AUTHOR -> BiboVocabulary.AUTHOR_LIST;
+                case EDITOR -> BiboVocabulary.EDITOR_LIST;
+                default -> BiboVocabulary.CONTRIBUTOR_LIST;
+            };
+        }
+
+        /**
+         * Creates an RDF List from a list of resources.
+         * An RDF List is represented using rdf:first, rdf:rest, and rdf:nil.
+         *
+         * @param model the RDF model to add statements to
+         * @param resources the list of resources to convert to an RDF List
+         * @return the head of the RDF List
+         */
+        private static Resource createRDFList(Model model, List<Resource> resources) {
+            if (resources.isEmpty()) {
+                return RDF.NIL;
+            }
+
+            // Create list nodes from back to front
+            Resource rest = RDF.NIL;
+            for (int i = resources.size() - 1; i >= 0; i--) {
+                Resource current = VF.createBNode();
+                model.add(current, RDF.FIRST, resources.get(i));
+                model.add(current, RDF.REST, rest);
+                rest = current;
+            }
+
+            return rest; // This is the head of the list
         }
 
         private static String normalizeRequired(String value, String fieldName) {

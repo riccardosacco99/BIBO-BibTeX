@@ -21,7 +21,7 @@ import org.jbibtex.ParseException;
 
 /**
  * Piccolo programma dimostrativo che converte un file BibTeX in RDF (BIBO) sfruttando il core
- * converter. Viene generato un file RDF/XML per ogni entry trovata.
+ * converter. Viene generato un file Turtle per ogni entry trovata.
  */
 public final class SampleConversion {
     private SampleConversion() {
@@ -77,11 +77,11 @@ public final class SampleConversion {
 
     private static void writeRdf(BiboDocument document, Path outputDir) throws IOException {
         String baseName = document.id().orElseGet(() -> document.title().replaceAll("\\s+", "_"));
-        Path outputFile = outputDir.resolve(baseName + ".rdf");
+        Path outputFile = outputDir.resolve(baseName + ".ttl");
 
         Model model = document.rdfModel();
         try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
-            Rio.write(model, writer, RDFFormat.RDFXML);
+            Rio.write(model, writer, RDFFormat.TURTLE);
         }
 
         System.out.printf("Generato %s con %d triple%n", outputFile, model.size());

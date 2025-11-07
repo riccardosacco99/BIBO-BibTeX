@@ -161,7 +161,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return Optional.empty();
         }
         String text = value.toUserString().trim();
-        return text.isEmpty() ? Optional.empty() : Optional.of(text);
+        if (text.isEmpty()) {
+            return Optional.empty();
+        }
+        // Convert BibTeX LaTeX escapes to Unicode
+        text = BibTeXUnicodeConverter.toUnicode(text);
+        return Optional.of(text);
     }
 
     private static Optional<String> fieldValue(BibTeXEntry entry, Key primary, Key fallback) {
@@ -188,8 +193,10 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return BiboDocumentType.BOOK;
         } else if (BibTeXEntry.TYPE_INBOOK.equals(type) || BibTeXEntry.TYPE_INCOLLECTION.equals(type)) {
             return BiboDocumentType.BOOK_SECTION;
-        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type) || BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
+        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type)) {
             return BiboDocumentType.CONFERENCE_PAPER;
+        } else if (BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
+            return BiboDocumentType.PROCEEDINGS;
         } else if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(type) || BibTeXEntry.TYPE_PHDTHESIS.equals(type)) {
             return BiboDocumentType.THESIS;
         } else if (BibTeXEntry.TYPE_TECHREPORT.equals(type)) {
@@ -209,6 +216,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             case BOOK -> BibTeXEntry.TYPE_BOOK;
             case BOOK_SECTION -> BibTeXEntry.TYPE_INCOLLECTION;
             case CONFERENCE_PAPER -> BibTeXEntry.TYPE_INPROCEEDINGS;
+            case PROCEEDINGS -> BibTeXEntry.TYPE_PROCEEDINGS;
             case THESIS -> BibTeXEntry.TYPE_PHDTHESIS;
             case REPORT -> BibTeXEntry.TYPE_TECHREPORT;
             case WEBPAGE -> TYPE_ONLINE;

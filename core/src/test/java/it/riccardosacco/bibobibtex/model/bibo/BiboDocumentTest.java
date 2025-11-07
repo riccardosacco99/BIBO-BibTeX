@@ -102,13 +102,21 @@ class BiboDocumentTest {
                         resource,
                         FOAF.PAGE,
                         Values.iri("https://example.org/analytical-engine")));
-        Resource authorNode =
-                model.filter(resource, DCTERMS.CREATOR, null).objects().stream()
+        // With RDF Lists, authors are in a list structure
+        Resource authorList =
+                model.filter(resource, BiboVocabulary.AUTHOR_LIST, null).objects().stream()
                         .filter(value -> value instanceof Resource)
                         .map(value -> (Resource) value)
                         .findFirst()
                         .orElseThrow();
-        assertTrue(model.contains(authorNode, FOAF.NAME, Values.literal("Ada Lovelace")));
+        // Get the first element of the list
+        Resource firstAuthorNode =
+                model.filter(authorList, RDF.FIRST, null).objects().stream()
+                        .filter(value -> value instanceof Resource)
+                        .map(value -> (Resource) value)
+                        .findFirst()
+                        .orElseThrow();
+        assertTrue(model.contains(firstAuthorNode, FOAF.NAME, Values.literal("Ada Lovelace")));
 
         assertThrows(
                 UnsupportedOperationException.class,
