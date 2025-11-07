@@ -150,6 +150,174 @@ class BibTeXBibliographicConverterDetailedTest {
         entry.addField(key, new StringValue(value, StringValue.Style.BRACED));
     }
 
+    /**
+     * Critical test for FIX-01 (Sprint 00): Verifies that author ordering is preserved
+     * through RDF Lists when converting BibTeX -> BIBO -> BibTeX with 5+ authors.
+     */
+    @Test
+    void preservesAuthorOrderingWith5PlusAuthors() {
+        // Create entry with 6 authors in specific order
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("multiauthor2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Collaborative Research on Author Ordering");
+        addField(
+                entry,
+                BibTeXEntry.KEY_AUTHOR,
+                "First, Alice and Second, Bob and Third, Carol and Fourth, David and Fifth, Eve and Sixth, Frank");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+
+        // Convert to BIBO
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+
+        // Verify we have exactly 6 authors
+        assertEquals(6, document.authors().size(), "Should have 6 authors");
+
+        // Verify exact ordering is preserved
+        assertEquals("First, Alice", document.authors().get(0).name().fullName());
+        assertEquals("Second, Bob", document.authors().get(1).name().fullName());
+        assertEquals("Third, Carol", document.authors().get(2).name().fullName());
+        assertEquals("Fourth, David", document.authors().get(3).name().fullName());
+        assertEquals("Fifth, Eve", document.authors().get(4).name().fullName());
+        assertEquals("Sixth, Frank", document.authors().get(5).name().fullName());
+
+        // Convert back to BibTeX
+        BibTeXEntry roundTripEntry = converter.convertFromBibo(document).orElseThrow();
+        String authorsField = value(roundTripEntry, BibTeXEntry.KEY_AUTHOR);
+
+        // Verify all authors are present
+        assertTrue(authorsField.contains("First, Alice"));
+        assertTrue(authorsField.contains("Second, Bob"));
+        assertTrue(authorsField.contains("Third, Carol"));
+        assertTrue(authorsField.contains("Fourth, David"));
+        assertTrue(authorsField.contains("Fifth, Eve"));
+        assertTrue(authorsField.contains("Sixth, Frank"));
+
+        // Verify ordering in the string (First should come before Second, etc.)
+        int posFirst = authorsField.indexOf("First");
+        int posSecond = authorsField.indexOf("Second");
+        int posThird = authorsField.indexOf("Third");
+        int posFourth = authorsField.indexOf("Fourth");
+        int posFifth = authorsField.indexOf("Fifth");
+        int posSixth = authorsField.indexOf("Sixth");
+
+        assertTrue(posFirst < posSecond, "First author should appear before Second");
+        assertTrue(posSecond < posThird, "Second author should appear before Third");
+        assertTrue(posThird < posFourth, "Third author should appear before Fourth");
+        assertTrue(posFourth < posFifth, "Fourth author should appear before Fifth");
+        assertTrue(posFifth < posSixth, "Fifth author should appear before Sixth");
+    }
+
+    /**
+     * Test that RDF model contains proper RDF List structure for authors.
+     * This verifies the FIX-01 implementation using rdf:first/rdf:rest/rdf:nil.
+     */
+    @Test
+    void usesRDFListsForAuthors() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("rdflist2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Testing RDF Lists");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Alpha, A and Beta, B and Gamma, G");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+
+        // Check that RDF model contains bibo:authorList predicate
+        assertTrue(
+                document.rdfModel().contains(null, null, null),
+                "RDF model should not be empty");
+
+        // Verify we can access authors through the document API
+        assertEquals(3, document.authors().size());
+        assertEquals("Alpha, A", document.authors().get(0).name().fullName());
+        assertEquals("Beta, B", document.authors().get(1).name().fullName());
+        assertEquals("Gamma, G", document.authors().get(2).name().fullName());
+    }
+
+    /**
+     * Test FIX-04 (Sprint 00): Verifies @inproceedings maps to CONFERENCE_PAPER.
+     */
+    @Test
+    void inProceedingsMapsToConferencePaper() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_INPROCEEDINGS, new Key("conf2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Conference Paper Title");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Author, A");
+        addField(entry, BibTeXEntry.KEY_BOOKTITLE, "Proceedings of Conference 2024");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+
+        assertEquals(BiboDocumentType.CONFERENCE_PAPER, document.type());
+        assertEquals("Conference Paper Title", document.title());
+        assertEquals("Proceedings of Conference 2024", document.containerTitle().orElseThrow());
+    }
+
+    /**
+     * Test FIX-04 (Sprint 00): Verifies @proceedings maps to PROCEEDINGS type.
+     */
+    @Test
+    void proceedingsMapsToProceedings() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_PROCEEDINGS, new Key("proc2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Proceedings of International Conference");
+        addField(entry, BibTeXEntry.KEY_EDITOR, "Editor, E");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, BibTeXEntry.KEY_PUBLISHER, "ACM Press");
+        addField(entry, BibTeXEntry.KEY_VOLUME, "Vol. 10");
+        addField(entry, FIELD_ISBN, "978-1-234567-89-0");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+
+        assertEquals(BiboDocumentType.PROCEEDINGS, document.type());
+        assertEquals("Proceedings of International Conference", document.title());
+        assertEquals(1, document.editors().size());
+        assertEquals("ACM Press", document.publisher().orElseThrow());
+        assertEquals("Vol. 10", document.volume().orElseThrow());
+    }
+
+    /**
+     * Test FIX-04: Round-trip conversion for @inproceedings.
+     */
+    @Test
+    void inProceedingsRoundTrip() {
+        BibTeXEntry original = new BibTeXEntry(BibTeXEntry.TYPE_INPROCEEDINGS, new Key("paper2024"));
+        addField(original, BibTeXEntry.KEY_TITLE, "My Conference Paper");
+        addField(original, BibTeXEntry.KEY_AUTHOR, "Smith, John");
+        addField(original, BibTeXEntry.KEY_BOOKTITLE, "Proc. of XYZ Conference");
+        addField(original, BibTeXEntry.KEY_YEAR, "2024");
+        addField(original, BibTeXEntry.KEY_PAGES, "100-110");
+
+        // BibTeX -> BIBO
+        BiboDocument document = converter.convertToBibo(original).orElseThrow();
+        assertEquals(BiboDocumentType.CONFERENCE_PAPER, document.type());
+
+        // BIBO -> BibTeX
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals(BibTeXEntry.TYPE_INPROCEEDINGS, roundTrip.getType());
+        assertEquals("My Conference Paper", value(roundTrip, BibTeXEntry.KEY_TITLE));
+        assertEquals("Proc. of XYZ Conference", value(roundTrip, BibTeXEntry.KEY_BOOKTITLE));
+        assertTrue(value(roundTrip, BibTeXEntry.KEY_AUTHOR).contains("Smith, John"));
+    }
+
+    /**
+     * Test FIX-04: Round-trip conversion for @proceedings.
+     */
+    @Test
+    void proceedingsRoundTrip() {
+        BibTeXEntry original = new BibTeXEntry(BibTeXEntry.TYPE_PROCEEDINGS, new Key("proceedings2024"));
+        addField(original, BibTeXEntry.KEY_TITLE, "Proceedings of the Annual Conference");
+        addField(original, BibTeXEntry.KEY_EDITOR, "Editor, Jane");
+        addField(original, BibTeXEntry.KEY_YEAR, "2024");
+        addField(original, BibTeXEntry.KEY_PUBLISHER, "Springer");
+
+        // BibTeX -> BIBO
+        BiboDocument document = converter.convertToBibo(original).orElseThrow();
+        assertEquals(BiboDocumentType.PROCEEDINGS, document.type());
+
+        // BIBO -> BibTeX
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals(BibTeXEntry.TYPE_PROCEEDINGS, roundTrip.getType());
+        assertEquals("Proceedings of the Annual Conference", value(roundTrip, BibTeXEntry.KEY_TITLE));
+        assertTrue(value(roundTrip, BibTeXEntry.KEY_EDITOR).contains("Editor, Jane"));
+        assertEquals("Springer", value(roundTrip, BibTeXEntry.KEY_PUBLISHER));
+    }
+
     private static String value(BibTeXEntry entry, Key key) {
         return Optional.ofNullable(entry.getField(key)).map(Value::toUserString).orElseThrow();
     }

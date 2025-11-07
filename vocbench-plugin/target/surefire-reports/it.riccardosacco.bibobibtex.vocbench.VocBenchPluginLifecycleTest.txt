@@ -1,15 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.026 s <<< FAILURE! -- in it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest
-it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest -- Time elapsed: 0.026 s <<< ERROR!
-java.lang.NoClassDefFoundError: it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycleTest$InMemoryGateway
-	at java.base/java.lang.Class.getDeclaredFields0(Native Method)
-	at java.base/java.lang.Class.privateGetDeclaredFields(Class.java:2917)
-	at java.base/java.lang.Class.getDeclaredFields(Class.java:2247)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-Caused by: java.lang.ClassNotFoundException: it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest$InMemoryGateway
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	... 4 more
-
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.165 s -- in it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest

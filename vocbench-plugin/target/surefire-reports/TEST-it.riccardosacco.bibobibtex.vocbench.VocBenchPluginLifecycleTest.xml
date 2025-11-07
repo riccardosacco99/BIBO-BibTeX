@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest" time="0.026" tests="1" errors="1" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest" time="0.165" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IT"/>
     <property name="sun.boot.library.path" value="/Users/riccardosacco/Library/Java/JavaVirtualMachines/openjdk-25/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire/surefirebooter-20251107172000078_6.jar /Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire 2025-11-07T17-19-57_914-jvmRun1 surefire-20251107172000078_4tmp surefire_1-20251107172000078_5tmp"/>
+    <property name="sun.java.command" value="/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire/surefirebooter-20251107193144291_6.jar /Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire 2025-11-07T19-31-42_492-jvmRun1 surefire-20251107193144291_4tmp surefire_1-20251107193144291_5tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/test-classes:/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/classes:/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/core/target/bibo-bibtex-core-0.1.0-SNAPSHOT.jar:/Users/riccardosacco/.m2/repository/org/jbibtex/jbibtex/1.0.18/jbibtex-1.0.18.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-rdfxml/5.1.5/rdf4j-rio-rdfxml-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-api/5.1.5/rdf4j-rio-api-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-xml/5.1.5/rdf4j-common-xml-5.1.5.jar:/Users/riccardosacco/.m2/repository/commons-codec/commons-codec/1.15/commons-codec-1.15.jar:/Users/riccardosacco/.m2/repository/no/hasmac/hasmac-json-ld/0.9.0/hasmac-json-ld-0.9.0.jar:/Users/riccardosacco/.m2/repository/com/github/jsonld-java/jsonld-java/0.13.4/jsonld-java-0.13.4.jar:/Users/riccardosacco/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.13.5/jackson-annotations-2.13.5.jar:/Users/riccardosacco/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.13.5/jackson-core-2.13.5.jar:/Users/riccardosacco/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.13.5/jackson-databind-2.13.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-datatypes/5.1.5/rdf4j-rio-datatypes-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-languages/5.1.5/rdf4j-rio-languages-5.1.5.jar:/Users/riccardosacco/.m2/repository/commons-io/commons-io/2.14.0/commons-io-2.14.0.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-rio-turtle/5.1.5/rdf4j-rio-turtle-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-model/5.1.5/rdf4j-model-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-model-api/5.1.5/rdf4j-model-api-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-annotation/5.1.5/rdf4j-common-annotation-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-model-vocabulary/5.1.5/rdf4j-model-vocabulary-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-exception/5.1.5/rdf4j-common-exception-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-text/5.1.5/rdf4j-common-text-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-io/5.1.5/rdf4j-common-io-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-iterator/5.1.5/rdf4j-common-iterator-5.1.5.jar:/Users/riccardosacco/.m2/repository/org/eclipse/rdf4j/rdf4j-common-order/5.1.5/rdf4j-common-order-5.1.5.jar:/Users/riccardosacco/.m2/repository/com/google/guava/guava/32.1.3-jre/guava-32.1.3-jre.jar:/Users/riccardosacco/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/riccardosacco/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/riccardosacco/.m2/repository/org/junit/jupiter/junit-jupiter/5.10.1/junit-jupiter-5.10.1.jar:/Users/riccardosacco/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.10.1/junit-jupiter-api-5.10.1.jar:/Users/riccardosacco/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/Users/riccardosacco/.m2/repository/org/junit/platform/junit-platform-commons/1.10.1/junit-platform-commons-1.10.1.jar:/Users/riccardosacco/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/riccardosacco/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.10.1/junit-jupiter-params-5.10.1.jar:/Users/riccardosacco/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.10.1/junit-jupiter-engine-5.10.1.jar:/Users/riccardosacco/.m2/repository/org/junit/platform/junit-platform-engine/1.10.1/junit-platform-engine-1.10.1.jar:"/>
@@ -29,7 +29,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire/surefirebooter-20251107172000078_6.jar"/>
+    <property name="surefire.real.class.path" value="/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/target/surefire/surefirebooter-20251107193144291_6.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="25+36-3489"/>
@@ -58,16 +58,6 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="" classname="it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest" time="0.026">
-    <error message="it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycleTest$InMemoryGateway" type="java.lang.NoClassDefFoundError"><![CDATA[java.lang.NoClassDefFoundError: it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycleTest$InMemoryGateway
-	at java.base/java.lang.Class.getDeclaredFields0(Native Method)
-	at java.base/java.lang.Class.privateGetDeclaredFields(Class.java:2917)
-	at java.base/java.lang.Class.getDeclaredFields(Class.java:2247)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
-Caused by: java.lang.ClassNotFoundException: it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest$InMemoryGateway
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	... 4 more
-]]></error>
-  </testcase>
+  <testcase name="importEntryStoresModelInGateway" classname="it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest" time="0.085"/>
+  <testcase name="exportDocumentReliesOnGatewayLookup" classname="it.riccardosacco.bibobibtex.vocbench.VocBenchPluginLifecycleTest" time="0.008"/>
 </testsuite>

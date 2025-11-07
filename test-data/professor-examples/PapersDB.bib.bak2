@@ -8,6 +8,7 @@
   Pages                    = {256-273},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {EDBT2004},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2992{\&}spage=256}
 }
 
@@ -20,6 +21,7 @@
   month       = {October 13},
   added-at    = {2006-03-01T00:00:00.000+0100},
   biburl      = {http://www.bibsonomy.org/bibtex/2e9179d12462a0f555179d11a89a6fc75/dblp},
+  crossref    = {conf/ismir/2004},
   date        = {2006-03-01},
   description = {dblp},
   ee          = {http://ismir2004.ismir.net/proceedings/p092-page-505-paper239.pdf},
@@ -40,6 +42,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   year      = {2012},
   pages     = {194-201},
   bibsource = {DBLP, http://dblp.uni-trier.de},
+  crossref  = {DBLP:conf/semco/2012},
   ee        = {http://doi.ieeecomputersociety.org/10.1109/ICSC.2012.61},
   groups    = {StellatoExport},
 }
@@ -52,6 +55,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Pages                    = {490-500},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/pakm/2002},
   Ee                       = {http://link.springer.de/link/service/series/0558/bibs/2569/25690490.htm},
   Keywords                 = {rdf}
 }
@@ -64,6 +68,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Volume                   = {1},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:journals/jods/2003},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2800{\&}spage=153},
   Journal                  = {J. Data Semantics},
   Keywords                 = {rdf}
@@ -77,6 +82,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Pages                    = {164-179},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/semweb/2003},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2870{\&}spage=164},
   Keywords                 = {rdf}
 }
@@ -89,6 +95,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Pages                    = {66-79},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/context/2003},
   Ee                       = {http://link.springer.de/link/service/series/0558/bibs/2680/26800066.htm},
   Keywords                 = {rdf}
 }
@@ -101,6 +108,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Pages                    = {75-84},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/aimsa/2004},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=3192{\&}spage=75},
   Keywords                 = {rdf}
 }
@@ -113,6 +121,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Pages                    = {130-145},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/semweb/2003},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2870{\&}spage=130},
   Keywords                 = {rdf}
 }
@@ -124,6 +133,7 @@ http://dc.ofai.at/browser?j=23&y=all},
   Year                     = {2005},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/dagstuhl/2005P4391},
   Ee                       = {http://drops.dagstuhl.de/opus/volltexte/2005/52}
 }
 
@@ -138,6 +148,7 @@ ISSN: 2210-4968 (Online)},
   Pages                    = {341–348},
   Volume                   = {4},
 
+  Crossref                 = {http://iospress.metapress.com/content/r18n37466271/},
   Doi                      = {10.3233/SW-130106},
   Eid                      = {Hitzler, Pascal and Janowicz, Krzysztof},
   File                     = {:C\:\\DEVELOPMENT\\WEBROOT\\art\\publications\\docs\\2013_SWJ_Agrovoc Dataset.pdf:PDF},
@@ -157,6 +168,7 @@ ISSN: 2210-4968 (Online)},
   Pages                    = {73-78},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/ijcai/2003iiweb},
   Ee                       = {http://www.isi.edu/info-agents/workshops/ijcai03/papers/Cohen-p.pdf}
 }
 
@@ -167,6 +179,7 @@ ISSN: 2210-4968 (Online)},
   Publisher                = {Basil Blackwell},
   Year                     = {1986},
 
+  Crossref                 = {lepore},
   Keywords                 = {rdf},
   Owner                    = {stoermer}
 }
@@ -178,6 +191,7 @@ ISSN: 2210-4968 (Online)},
   Year                     = {2010},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/lrec/2010},
   Ee                       = {http://www.lrec-conf.org/proceedings/lrec2010/summaries/832.html}
 }
 
@@ -191,6 +205,7 @@ ISSN: 2210-4968 (Online)},
   publisher   = {INSTICC Press},
   added-at    = {2008-08-18T00:00:00.000+0200},
   biburl      = {http://www.bibsonomy.org/bibtex/23fcd54b495ee9161aff6ce922c5cb7cd/dblp},
+  crossref    = {conf/webist/2008-2},
   date        = {2008-08-18},
   description = {dblp},
   groups      = {StellatoExport},
@@ -222,6 +237,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
 
   Bibsource                = {dblp computer science bibliography, http://dblp.org},
   Biburl                   = {http://dblp.uni-trier.de/rec/bib/conf/ieaaie/FiorelliGPST14},
+  Crossref                 = {DBLP:conf/ieaaie/2014-2},
   Doi                      = {10.1007/978-3-319-07467-2_9},
   File                     = {:C\:\\DEVELOPMENT\\WEBROOT\\art\\publications\\docs\\2014_IEA-AIE_CODA.pdf:PDF},
   Timestamp                = {Fri, 19 Sep 2014 19:26:15 +0200},
@@ -241,6 +257,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
 
   Bibsource                = {dblp computer science bibliography, http://dblp.org},
   Biburl                   = {http://dblp.uni-trier.de/rec/bib/conf/ic3k/FiorelliPS13},
+  Crossref                 = {DBLP:conf/ic3k/2013keod},
   Doi                      = {10.5220/0004545702450252},
   File                     = {:C\:\\DEVELOPMENT\\WEBROOT\\art\\publications\\docs\\2013_KEOD_A Comprehensive Framework for Semantic Annotation.pdf:PDF},
   Owner                    = {Odnamar},
@@ -255,6 +272,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Year                     = {2005},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/dagstuhl/2005P4391},
   Ee                       = {http://drops.dagstuhl.de/opus/volltexte/2005/37},
   Keywords                 = {rdf}
 }
@@ -267,6 +285,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {32-46},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/semweb/2004},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=3298{\&}spage=32},
   Keywords                 = {rdf}
 }
@@ -279,6 +298,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {1100-1117},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/coopis/2002},
   Ee                       = {http://link.springer.de/link/service/series/0558/bibs/2519/25191100.htm},
   Keywords                 = {rdf}
 }
@@ -291,6 +311,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {65-78},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/er/2002},
   Ee                       = {http://link.springer.de/link/service/series/0558/bibs/2503/25030065.htm},
   Keywords                 = {rdf}
 }
@@ -303,6 +324,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {353-367},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {ISWC2005},
   Ee                       = {http://dx.doi.org/10.1007/11574620_27}
 }
 
@@ -314,6 +336,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {182-197},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {ESWC2005},
   Ee                       = {http://dx.doi.org/10.1007/11431053_13}
 }
 
@@ -325,6 +348,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {732-744},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/semweb/2005},
   Ee                       = {http://dx.doi.org/10.1007/11574620_52}
 }
 
@@ -336,6 +360,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {44-57},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {ISWC2006},
   Ee                       = {http://dx.doi.org/10.1007/11926078_4}
 }
 
@@ -351,6 +376,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
 
   Added-at                 = {2009-02-15T00:00:00.000+0100},
   Biburl                   = {http://www.bibsonomy.org/bibtex/23d046eeee49493460ec5eec53ffcbd26/dblp},
+  Crossref                 = {conf/owled/2008},
   Date                     = {2009-02-15},
   Description              = {dblp},
   Ee                       = {http://ceur-ws.org/Vol-432/owled2008eu_submission_22.pdf},
@@ -368,6 +394,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {313-330},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/ds/1992},
   Keywords                 = {okkam}
 }
 
@@ -379,6 +406,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {49-58},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/vldb/2001},
   Ee                       = {http://www.vldb.org/conf/2001/P049.pdf},
   Keywords                 = {rdf}
 }
@@ -391,6 +419,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {436-448},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/aiia/2003},
   Ee                       = {http://springerlink.metapress.com/openurl.asp?genre=article{\&}issn=0302-9743{\&}volume=2829{\&}spage=436},
   Keywords                 = {rdf}
 }
@@ -403,6 +432,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {61-70},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {CIVR2005},
   Ee                       = {http://dx.doi.org/10.1007/11526346_10}
 }
 
@@ -414,6 +444,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {235-246},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/cidr/2007},
   Ee                       = {http://www.cidrdb.org/cidr2007/papers/P26.pdf},
   Keywords                 = {okkam}
 }
@@ -430,6 +461,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher = {IEEE Computer Society},
   added-at  = {2010-08-29T00:00:00.000+0200},
   biburl    = {http://www.bibsonomy.org/bibtex/2425e06ceb80a005fa7dd9c1e647e9bda/dblp},
+  crossref  = {conf/iv/2010},
   ee        = {http://doi.ieeecomputersociety.org/10.1109/IV.2010.47},
   groups    = {StellatoExport},
   interhash = {975484d43f3e736d1283487175e18bc7},
@@ -455,6 +487,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   note      = {IOS Press sta ad Amsterdam, però l'address immagino sia quello della conferenza},
   added-at  = {2010-08-24T00:00:00.000+0200},
   biburl    = {http://www.bibsonomy.org/bibtex/2349b0f54b3fc86acc4bd6408831da28d/dblp},
+  crossref  = {conf/jurix/2009},
   ee        = {http://dx.doi.org/10.3233/978-1-60750-082-7-156},
   file      = {:http\://art.uniroma2.it/publications/docs/2009_JURIX2009_STIA_Experience_of_Semantic_Annotation_In_Jurisprudence_Domain.pdf:PDF},
   groups    = {StellatoExport},
@@ -473,6 +506,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   year      = {2008},
   address   = {Rome, Italy},
   bibsource = {DBLP, http://dblp.uni-trier.de},
+  crossref  = {DBLP:conf/swap/2008},
   ee        = {http://ceur-ws.org/Vol-426/swap2008_submission_37.pdf},
   groups    = {StellatoExport},
 }
@@ -491,6 +525,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   note        = {ISSN 1613-0073},
   added-at    = {2007-10-31T00:00:00.000+0100},
   biburl      = {http://www.bibsonomy.org/bibtex/2daa2f673e82449a959ce7abe3886d22a/dblp},
+  crossref    = {conf/swap/2005},
   date        = {2007-10-31},
   description = {dblp},
   ee          = {http://www.ceur-ws.org/Vol-166/26.pdf},
@@ -512,6 +547,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Month                    = {15-17 December},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/swap/2008},
   Ee                       = {http://ceur-ws.org/Vol-426/swap2008_submission_39.pdf},
   Owner                    = {Odnamar},
   Timestamp                = {2010.01.22}
@@ -527,6 +563,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher   = {Pitagora Editrice Bologna},
   added-at    = {2005-01-18T00:00:00.000+0100},
   biburl      = {http://www.bibsonomy.org/bibtex/22b00bc7a8323d8d1b77fc9f577322f78/dblp},
+  crossref    = {conf/woa/2002},
   date        = {2005-01-18},
   description = {dblp},
   groups      = {StellatoExport},
@@ -546,6 +583,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Pages                    = {118-123},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/aaai/2004},
   Keywords                 = {rdf}
 }
 
@@ -560,6 +598,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher = {INSTICC Press},
   added-at  = {2011-01-06T00:00:00.000+0100},
   biburl    = {http://www.bibsonomy.org/bibtex/2441b1f4fec47db474154600d7da844d7/dblp},
+  crossref  = {conf/enase/2008},
   groups    = {StellatoExport},
   interhash = {fe02c4d7c4467ab9d15d7fb36302a185},
   intrahash = {441b1f4fec47db474154600d7da844d7},
@@ -581,6 +620,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher = {INSTICC Press},
   added-at  = {2008-08-18T00:00:00.000+0200},
   biburl    = {http://www.bibsonomy.org/bibtex/2a77b4ae275f5bb3d06f7bbd3c1ee7c9d/dblp},
+  crossref  = {conf/webist/2008-2},
   date      = {2008-08-18},
   groups    = {StellatoExport},
   interhash = {0fafe740f59daa4210ba1ce0ccce5d27},
@@ -603,6 +643,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher   = {CEUR-WS.org},
   added-at    = {2007-10-31T00:00:00.000+0100},
   biburl      = {http://www.bibsonomy.org/bibtex/266b8bbb78327f71ba0872ba0fc996eac/dblp},
+  crossref    = {conf/woa/2006},
   date        = {2007-10-31},
   description = {dblp},
   ee          = {http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-204/P09.pdf},
@@ -627,6 +668,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   publisher   = {CEUR-WS.org},
   added-at    = {2008-08-27T00:00:00.000+0200},
   biburl      = {http://www.bibsonomy.org/bibtex/2e92b38856303a10f840978ff8d4c6163/dblp},
+  crossref    = {conf/swap/2007},
   date        = {2008-08-27},
   description = {dblp},
   ee          = {http://ceur-ws.org/Vol-314/28.pdf},
@@ -646,6 +688,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
   Booktitle                = {J. Data Semantics IV},
+  Crossref                 = {DBLP:journals/jods/2005-4},
   Ee                       = {http://dx.doi.org/10.1007/11603412_5}
 }
 
@@ -656,6 +699,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   Year                     = {2004},
 
   Bibsource                = {DBLP, http://dblp.uni-trier.de},
+  Crossref                 = {DBLP:conf/p2pkm/2004},
   Ee                       = {http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-108/1568938872.pdf},
   Keywords                 = {rdf}
 }
@@ -668,6 +712,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
   address   = {Lisbon, Portugal},
   month     = {May},
   bibsource = {DGDS, http://www.digidisco.disco.unimib.it},
+  crossref  = {llpm2-},
   groups    = {StellatoExport},
 }
 
@@ -681,6 +726,7 @@ ISSN: 03029743 ISBN: 978-331907466-5},
  year = {2005},
  pages = {146-171},
  ee = {http://dx.doi.org/10.1007/11603412_5},
+ crossref = {DBLP:journals/jods/2005-4},
  bibsource = {DBLP, http://dblp.uni-trier.de}
 }},
   Year                     = {2003},
