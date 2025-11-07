@@ -59,3 +59,13 @@ BIBO-BibTeX/
 ```bash
 mvn clean package
 ```
+
+### Dataset del professore
+- Gli archivi BibTeX forniti dal professore sono versionati in `test-data/professor-examples/PapersDB_MIUR.bib` e `test-data/professor-examples/PapersDB.bib`.
+- Per verifiche manuali o benchmark di regressione è sufficiente eseguire:
+  ```bash
+  mvn -pl core exec:java \
+      -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.SampleConversion \
+      -Dexec.args="test-data/professor-examples/PapersDB.bib core/target/papersdb-full"
+  ```
+  I Turtle generati finiscono sotto `core/target/…` (ignorato da git) e possono essere confrontati con run futuri.
