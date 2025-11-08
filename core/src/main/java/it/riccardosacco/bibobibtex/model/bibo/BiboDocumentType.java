@@ -17,6 +17,9 @@ public enum BiboDocumentType {
     CONFERENCE_PAPER(BiboVocabulary.CONFERENCE_PAPER),
     PROCEEDINGS(BiboVocabulary.PROCEEDINGS),
     WEBPAGE(BiboVocabulary.WEBPAGE),
+    BOOKLET(BiboVocabulary.BOOKLET),
+    MANUAL(BiboVocabulary.MANUAL),
+    UNPUBLISHED(BiboVocabulary.MANUSCRIPT),
     OTHER(BiboVocabulary.DOCUMENT);
 
     private static final Map<IRI, BiboDocumentType> BY_IRI =

@@ -51,6 +51,7 @@ public final class BiboDocument {
     private final List<String> keywords;
     private final String organization;
     private final String howPublished;
+    private final String degreeType;
     private final Model model;
     private final Resource resource;
 
@@ -77,6 +78,7 @@ public final class BiboDocument {
         this.keywords = builder.keywords != null ? List.copyOf(builder.keywords) : List.of();
         this.organization = builder.organization;
         this.howPublished = builder.howPublished;
+        this.degreeType = builder.degreeType;
         this.model = new LinkedHashModel(model);
         this.resource = resource;
     }
@@ -188,6 +190,10 @@ public final class BiboDocument {
         return Optional.ofNullable(howPublished);
     }
 
+    public Optional<String> degreeType() {
+        return Optional.ofNullable(degreeType);
+    }
+
     public Model rdfModel() {
         return new LinkedHashModel(model);
     }
@@ -253,6 +259,7 @@ public final class BiboDocument {
         private final List<String> keywords = new ArrayList<>();
         private String organization;
         private String howPublished;
+        private String degreeType;
 
         private Builder(BiboDocumentType type, String title) {
             this.type = Objects.requireNonNull(type, "type");
@@ -391,6 +398,11 @@ public final class BiboDocument {
             return this;
         }
 
+        public Builder degreeType(String degreeType) {
+            this.degreeType = normalizeOptional(degreeType);
+            return this;
+        }
+
         public BiboDocument build() {
             Model model = new LinkedHashModel();
             model.setNamespace(BiboVocabulary.NS);
@@ -467,6 +479,9 @@ public final class BiboDocument {
             }
             if (howPublished != null) {
                 model.add(subject, DCTERMS.DESCRIPTION, VF.createLiteral(howPublished));
+            }
+            if (degreeType != null) {
+                model.add(subject, BiboVocabulary.DEGREE, VF.createLiteral(degreeType));
             }
 
             return new BiboDocument(this, subject, model);

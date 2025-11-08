@@ -1,4 +1,5 @@
 it/riccardosacco/bibobibtex/vocbench/VocBenchPluginBootstrap.class
 it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycle.class
 it/riccardosacco/bibobibtex/vocbench/RDF4JRepositoryGateway.class
+it/riccardosacco/bibobibtex/vocbench/VocBenchPluginConfiguration.class
 it/riccardosacco/bibobibtex/vocbench/VocBenchRepositoryGateway.class

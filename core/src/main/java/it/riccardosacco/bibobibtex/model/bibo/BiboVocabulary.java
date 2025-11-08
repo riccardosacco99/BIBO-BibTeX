@@ -29,6 +29,9 @@ public final class BiboVocabulary {
     public static final IRI CONFERENCE_PAPER = iri("ConferencePaper");
     public static final IRI PROCEEDINGS = iri("Proceedings");
     public static final IRI WEBPAGE = iri("Webpage");
+    public static final IRI BOOKLET = iri("Booklet");
+    public static final IRI MANUAL = iri("Manual");
+    public static final IRI MANUSCRIPT = iri("Manuscript");
 
     public static final IRI SUBTITLE = iri("subtitle");
     public static final IRI VOLUME = iri("volume");
@@ -36,6 +39,7 @@ public final class BiboVocabulary {
     public static final IRI PAGES = iri("pages");
     public static final IRI SERIES = iri("series");
     public static final IRI EDITION = iri("edition");
+    public static final IRI DEGREE = iri("degree");
 
     public static final IRI DOI = iri("doi");
     public static final IRI HANDLE = iri("handle");

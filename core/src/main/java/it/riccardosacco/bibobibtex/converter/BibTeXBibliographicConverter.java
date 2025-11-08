@@ -66,7 +66,11 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_KEYWORDS = new Key("keywords");
     private static final Key FIELD_ORGANIZATION = new Key("organization");
     private static final Key FIELD_HOWPUBLISHED = new Key("howpublished");
+    private static final Key FIELD_TYPE = new Key("type");
     private static final Key TYPE_ONLINE = new Key("online");
+    private static final Key TYPE_BOOKLET = new Key("booklet");
+    private static final Key TYPE_MANUAL = new Key("manual");
+    private static final Key TYPE_UNPUBLISHED = new Key("unpublished");
 
     @Override
     public Optional<BiboDocument> convertToBibo(BibTeXEntry source) {
@@ -88,7 +92,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         parsePublicationDate(source).ifPresent(builder::publicationDate);
 
-        fieldValue(source, BibTeXEntry.KEY_PUBLISHER).ifPresent(builder::publisher);
+        // Publisher field varies by type: publisher, school, or institution
+        fieldValue(source, BibTeXEntry.KEY_PUBLISHER, BibTeXEntry.KEY_SCHOOL, BibTeXEntry.KEY_INSTITUTION)
+                .ifPresent(builder::publisher);
         fieldValue(source, BibTeXEntry.KEY_ADDRESS).ifPresent(builder::placeOfPublication);
 
         fieldValue(source, BibTeXEntry.KEY_JOURNAL, BibTeXEntry.KEY_BOOKTITLE).ifPresent(builder::containerTitle);
@@ -108,6 +114,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, FIELD_KEYWORDS).ifPresent(keywords -> parseKeywords(keywords).forEach(builder::addKeyword));
         fieldValue(source, FIELD_ORGANIZATION).ifPresent(builder::organization);
         fieldValue(source, FIELD_HOWPUBLISHED).ifPresent(builder::howPublished);
+
+        // Sprint 02 - US-08: Handle degree type for thesis
+        fieldValue(source, FIELD_TYPE).ifPresent(builder::degreeType);
 
         return Optional.of(builder.build());
     }
@@ -159,6 +168,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         source.organization().ifPresent(value -> putField(entry, FIELD_ORGANIZATION, value));
         source.howPublished().ifPresent(value -> putField(entry, FIELD_HOWPUBLISHED, value));
 
+        // Sprint 02 - US-08: Output degree type for thesis
+        source.degreeType().ifPresent(value -> putField(entry, FIELD_TYPE, value));
+
         return Optional.of(entry);
     }
 
@@ -186,6 +198,10 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     private static Optional<String> fieldValue(BibTeXEntry entry, Key primary, Key fallback) {
         return fieldValue(entry, primary).or(() -> fieldValue(entry, fallback));
+    }
+
+    private static Optional<String> fieldValue(BibTeXEntry entry, Key first, Key second, Key third) {
+        return fieldValue(entry, first).or(() -> fieldValue(entry, second)).or(() -> fieldValue(entry, third));
     }
 
     private static void putField(BibTeXEntry entry, Key key, String value) {
@@ -218,6 +234,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return BiboDocumentType.REPORT;
         } else if (TYPE_ONLINE.equals(type)) {
             return BiboDocumentType.WEBPAGE;
+        } else if (TYPE_BOOKLET.equals(type)) {
+            return BiboDocumentType.BOOKLET;
+        } else if (TYPE_MANUAL.equals(type)) {
+            return BiboDocumentType.MANUAL;
+        } else if (TYPE_UNPUBLISHED.equals(type)) {
+            return BiboDocumentType.UNPUBLISHED;
         }
         return BiboDocumentType.OTHER;
     }
@@ -235,6 +257,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             case THESIS -> BibTeXEntry.TYPE_PHDTHESIS;
             case REPORT -> BibTeXEntry.TYPE_TECHREPORT;
             case WEBPAGE -> TYPE_ONLINE;
+            case BOOKLET -> TYPE_BOOKLET;
+            case MANUAL -> TYPE_MANUAL;
+            case UNPUBLISHED -> TYPE_UNPUBLISHED;
             default -> BibTeXEntry.TYPE_MISC;
         };
     }

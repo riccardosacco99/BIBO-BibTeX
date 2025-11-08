@@ -1,0 +1,28 @@
+# VocBench BIBO-BibTeX Converter Plugin Configuration
+# Copy this file to vocbench-plugin.properties and customize as needed
+
+# RDF Output Format
+# Supported: TURTLE, RDFXML, JSONLD, NTRIPLES, N3, TRIG, NQUADS
+vocbench.biblio.outputFormat=TURTLE
+
+# Identifier Validation
+# Enable checksum validation for ISBN, ISSN identifiers
+vocbench.biblio.validateIdentifiers=true
+
+# Citation Key Preservation
+# Preserve original BibTeX citation keys as dcterms:identifier
+vocbench.biblio.preserveCitationKeys=true
+
+# Strict Validation Mode
+# When enabled, conversion fails on warnings (invalid identifiers, future dates, etc.)
+# When disabled, warnings are logged but conversion proceeds
+vocbench.biblio.strictValidation=false
+
+# Repository Type
+# "memory" for in-memory storage (default, good for testing)
+# "native" for persistent file-based storage
+vocbench.biblio.repositoryType=memory
+
+# Repository Path (for native repositories only)
+# Path to store RDF data files
+# vocbench.biblio.repositoryPath=/path/to/repository/data
