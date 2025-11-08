@@ -1,0 +1,28 @@
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] a bibo:Document, bibo:Article;
+  dcterms:title "Improving cycling performance: how should we spend our time and money";
+  dcterms:identifier "jeukendrup2001improving";
+  dcterms:creator [ a foaf:Person;
+      foaf:name "Jeukendrup, Asker E";
+      foaf:givenName "Asker E";
+      foaf:familyName "Jeukendrup";
+      bibo:sequence "0"^^<http://www.w3.org/2001/XMLSchema#int>
+    ], [ a foaf:Person;
+      foaf:name "Martin, James";
+      foaf:givenName "James";
+      foaf:familyName "Martin";
+      bibo:sequence "1"^^<http://www.w3.org/2001/XMLSchema#int>
+    ];
+  dcterms:issued "2001"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  dcterms:publisher "Springer";
+  dcterms:isPartOf [ a bibo:Document;
+      dcterms:title "Sports medicine"
+    ];
+  bibo:volume "31";
+  bibo:issue "7";
+  bibo:pages "559--569" .

@@ -1,0 +1,36 @@
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] a bibo:Document, bibo:Article;
+  dcterms:title "Artificial intelligence in medicine";
+  dcterms:identifier "holmes2004artificial";
+  dcterms:creator [ a foaf:Person;
+      foaf:name "Holmes, J";
+      foaf:givenName "J";
+      foaf:familyName "Holmes";
+      bibo:sequence "0"^^<http://www.w3.org/2001/XMLSchema#int>
+    ], [ a foaf:Person;
+      foaf:name "Sacchi, L";
+      foaf:givenName "L";
+      foaf:familyName "Sacchi";
+      bibo:sequence "1"^^<http://www.w3.org/2001/XMLSchema#int>
+    ], [ a foaf:Person;
+      foaf:name "Bellazzi, R";
+      foaf:givenName "R";
+      foaf:familyName "Bellazzi";
+      bibo:sequence "2"^^<http://www.w3.org/2001/XMLSchema#int>
+    ], [ a foaf:Person;
+      foaf:name "others";
+      bibo:sequence "3"^^<http://www.w3.org/2001/XMLSchema#int>
+    ];
+  dcterms:issued "2004"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  dcterms:publisher "Springer";
+  dcterms:isPartOf [ a bibo:Document;
+      dcterms:title "Ann R Coll Surg Engl"
+    ];
+  bibo:volume "86";
+  bibo:issue "86";
+  bibo:pages "334--8" .

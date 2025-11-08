@@ -60,6 +60,43 @@ BIBO-BibTeX/
 mvn clean package
 ```
 
+### Output Format (Turtle RDF)
+Il convertitore genera file **Turtle** (`.ttl`) per default, con pretty-print abilitato per la leggibilità:
+
+```turtle
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+[] a bibo:Article, bibo:Document ;
+  dcterms:title "The Mediterranean diet and health: a comprehensive overview" ;
+  dcterms:identifier "guasch2021mediterranean" ;
+  bibo:authorList (
+    [ a foaf:Person ;
+      foaf:name "Guasch-Ferré, Marta" ;
+      foaf:givenName "Marta" ;
+      foaf:familyName "Guasch-Ferré"
+    ]
+    [ a foaf:Person ;
+      foaf:name "Willett, Walter C" ;
+      foaf:givenName "Walter C" ;
+      foaf:familyName "Willett"
+    ]
+  ) ;
+  dcterms:issued "2021"^^xsd:gYear ;
+  dcterms:publisher "Wiley Online Library" ;
+  bibo:volume "290" ;
+  bibo:issue "3" ;
+  bibo:pages "549--566" .
+```
+
+**Caratteristiche:**
+- Formato **Turtle** (leggibile, compatto)
+- **RDF Lists** per l'ordinamento degli autori (non `bibo:sequence`)
+- **Unicode** per caratteri accentati (non escape LaTeX)
+- Blank nodes per le persone (non necessitano URI globale)
+- Supporta anche RDF/XML, JSON-LD via parametro `RDFFormat`
+
 ### Dataset del professore
 - Gli archivi BibTeX forniti dal professore sono versionati in `test-data/professor-examples/PapersDB_MIUR.bib` e `test-data/professor-examples/PapersDB.bib`.
 - Per verifiche manuali o benchmark di regressione è sufficiente eseguire:

@@ -1,5 +1,5 @@
-/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/RDF4JRepositoryGateway.java
-/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycle.java
-/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginConfiguration.java
-/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginBootstrap.java
-/Users/riccardosacco/Documents/Uni/Triennale/Tesi/BIBO-fix-claude/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchRepositoryGateway.java
+/workspace/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginLifecycle.java
+/workspace/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginBootstrap.java
+/workspace/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/RDF4JRepositoryGateway.java
+/workspace/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchRepositoryGateway.java
+/workspace/vocbench-plugin/src/main/java/it/riccardosacco/bibobibtex/vocbench/VocBenchPluginConfiguration.java

@@ -24,7 +24,10 @@ import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.WriterConfig;
+import org.eclipse.rdf4j.rio.helpers.BasicWriterSettings;
 
 public final class BiboDocument {
     private static final ValueFactory VF = SimpleValueFactory.getInstance();
@@ -224,13 +227,27 @@ public final class BiboDocument {
 
     /**
      * Writes this document to a Writer in the specified RDF format.
+     * For Turtle format, uses pretty-print settings with inline blank nodes.
      *
      * @param writer the Writer to write to
      * @param format the RDF format to use (TURTLE, RDFXML, JSONLD, etc.)
      */
     public void write(Writer writer, RDFFormat format) {
         try {
-            Rio.write(model, writer, format);
+            RDFWriter rdfWriter = Rio.createWriter(format, writer);
+            
+            // Configure writer settings for better readability
+            WriterConfig config = rdfWriter.getWriterConfig();
+            config.set(BasicWriterSettings.PRETTY_PRINT, true);
+            config.set(BasicWriterSettings.INLINE_BLANK_NODES, true);
+            config.set(BasicWriterSettings.XSD_STRING_TO_PLAIN_LITERAL, true);
+            config.set(BasicWriterSettings.RDF_LANGSTRING_TO_LANG_LITERAL, true);
+            
+            rdfWriter.startRDF();
+            for (Statement statement : model) {
+                rdfWriter.handleStatement(statement);
+            }
+            rdfWriter.endRDF();
         } catch (Exception e) {
             throw new RuntimeException("Failed to write RDF in format " + format, e);
         }

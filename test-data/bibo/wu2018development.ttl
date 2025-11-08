@@ -1,0 +1,28 @@
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+[] a bibo:Document, bibo:Article;
+  dcterms:title "Development and application of artificial neural network";
+  dcterms:identifier "wu2018development";
+  dcterms:creator [ a foaf:Person;
+      foaf:name "Wu, Yu-chen";
+      foaf:givenName "Yu-chen";
+      foaf:familyName "Wu";
+      bibo:sequence "0"^^<http://www.w3.org/2001/XMLSchema#int>
+    ], [ a foaf:Person;
+      foaf:name "Feng, Jun-wen";
+      foaf:givenName "Jun-wen";
+      foaf:familyName "Feng";
+      bibo:sequence "1"^^<http://www.w3.org/2001/XMLSchema#int>
+    ];
+  dcterms:issued "2018"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  dcterms:publisher "Springer";
+  dcterms:isPartOf [ a bibo:Document;
+      dcterms:title "Wireless Personal Communications"
+    ];
+  bibo:volume "102";
+  bibo:issue "2";
+  bibo:pages "1645--1656" .
