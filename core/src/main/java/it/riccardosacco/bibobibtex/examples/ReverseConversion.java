@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +22,7 @@ import org.eclipse.rdf4j.model.Literal;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.util.Models;
+import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
@@ -69,7 +69,8 @@ public final class ReverseConversion {
 
         BibTeXBibliographicConverter converter = new BibTeXBibliographicConverter();
 
-        try (Stream<Path> files = Files.list(inputDir).filter(path -> path.toString().endsWith(".rdf"))) {
+        try (Stream<Path> files = Files.list(inputDir)
+                .filter(path -> path.toString().endsWith(".rdf") || path.toString().endsWith(".ttl"))) {
             files.forEach(path -> {
                 try {
                     BiboDocument document = parseDocument(path);
@@ -85,7 +86,9 @@ public final class ReverseConversion {
 
     private static BiboDocument parseDocument(Path file) throws IOException {
         try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-            Model model = Rio.parse(reader, "", RDFFormat.RDFXML);
+            // Auto-detect format based on file extension
+            RDFFormat format = Rio.getParserFormatForFileName(file.toString()).orElse(RDFFormat.RDFXML);
+            Model model = Rio.parse(reader, "", format);
             Resource subject = selectSubject(model);
             return buildDocument(model, subject);
         } catch (Exception ex) {
@@ -137,42 +140,92 @@ public final class ReverseConversion {
     }
 
     private static List<BiboContributor> readContributors(Model model, Resource subject) {
-        List<OrderedContributor> contributors = new ArrayList<>();
+        List<BiboContributor> contributors = new ArrayList<>();
 
+        // Read authors from RDF List (bibo:authorList)
+        contributors.addAll(readContributorList(model, subject, BiboVocabulary.AUTHOR_LIST, BiboContributorRole.AUTHOR));
+
+        // Read editors from RDF List (bibo:editorList)
+        contributors.addAll(readContributorList(model, subject, BiboVocabulary.EDITOR_LIST, BiboContributorRole.EDITOR));
+
+        // Read other contributor roles individually (not as lists)
         for (Map.Entry<IRI, BiboContributorRole> entry : CONTRIBUTOR_PREDICATES.entrySet()) {
             IRI predicate = entry.getKey();
             BiboContributorRole role = entry.getValue();
+
+            // Skip AUTHOR and EDITOR as they're already handled via RDF Lists
+            if (role == BiboContributorRole.AUTHOR || role == BiboContributorRole.EDITOR) {
+                continue;
+            }
 
             model.filter(subject, predicate, null).objects().stream()
                     .filter(value -> value instanceof Resource)
                     .map(value -> (Resource) value)
                     .forEach(resource -> {
-                        Optional<String> given = literal(model, resource, FOAF.GIVEN_NAME);
-                        Optional<String> family = literal(model, resource, FOAF.FAMILY_NAME);
-                        String fullName = literal(model, resource, FOAF.NAME)
-                                .orElseGet(() -> Stream.of(given.orElse(null), family.orElse(null))
-                                        .filter(Objects::nonNull)
-                                        .collect(Collectors.joining(" ")));
-                        if (fullName.isBlank()) {
-                            return;
-                        }
-
-                        BiboPersonName.Builder nameBuilder = BiboPersonName.builder(fullName);
-                        given.ifPresent(nameBuilder::givenName);
-                        family.ifPresent(nameBuilder::familyName);
-
-                        int order = literal(model, resource, BiboVocabulary.ORDER)
-                                .flatMap(ReverseConversion::parseInteger)
-                                .orElse(Integer.MAX_VALUE);
-
-                        contributors.add(new OrderedContributor(order, new BiboContributor(nameBuilder.build(), role)));
+                        readPersonName(model, resource).ifPresent(name ->
+                                contributors.add(new BiboContributor(name, role)));
                     });
         }
 
-        return contributors.stream()
-                .sorted(Comparator.comparingInt(candidate -> candidate.order))
-                .map(candidate -> candidate.contributor)
-                .collect(Collectors.toList());
+        return contributors;
+    }
+
+    /**
+     * Reads a list of contributors from an RDF Collection (RDF List).
+     *
+     * @param model the RDF model
+     * @param subject the document resource
+     * @param listPredicate the predicate pointing to the RDF List (e.g., bibo:authorList)
+     * @param role the contributor role
+     * @return list of contributors in the order they appear in the RDF List
+     */
+    private static List<BiboContributor> readContributorList(Model model, Resource subject, IRI listPredicate, BiboContributorRole role) {
+        List<BiboContributor> contributors = new ArrayList<>();
+
+        model.filter(subject, listPredicate, null).objects().stream()
+                .filter(value -> value instanceof Resource)
+                .map(value -> (Resource) value)
+                .findFirst()
+                .ifPresent(listHead -> {
+                    List<Resource> personNodes = RDFCollections.asValues(model, listHead, new ArrayList<>())
+                            .stream()
+                            .filter(value -> value instanceof Resource)
+                            .map(value -> (Resource) value)
+                            .collect(Collectors.toList());
+
+                    for (Resource person : personNodes) {
+                        readPersonName(model, person).ifPresent(name ->
+                                contributors.add(new BiboContributor(name, role)));
+                    }
+                });
+
+        return contributors;
+    }
+
+    /**
+     * Reads a person's name from FOAF properties.
+     *
+     * @param model the RDF model
+     * @param person the person resource (blank node or IRI)
+     * @return the person's name, or empty if the name is blank
+     */
+    private static Optional<BiboPersonName> readPersonName(Model model, Resource person) {
+        Optional<String> given = literal(model, person, FOAF.GIVEN_NAME);
+        Optional<String> family = literal(model, person, FOAF.FAMILY_NAME);
+        String fullName = literal(model, person, FOAF.NAME)
+                .orElseGet(() -> Stream.of(given.orElse(null), family.orElse(null))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.joining(" ")));
+
+        if (fullName.isBlank()) {
+            return Optional.empty();
+        }
+
+        BiboPersonName.Builder nameBuilder = BiboPersonName.builder(fullName);
+        given.ifPresent(nameBuilder::givenName);
+        family.ifPresent(nameBuilder::familyName);
+
+        return Optional.of(nameBuilder.build());
     }
 
     private static List<BiboIdentifier> readIdentifiers(Model model, Resource subject) {
@@ -284,16 +337,6 @@ public final class ReverseConversion {
             System.out.println("Generato " + outputFile);
         } catch (IOException ex) {
             System.err.println("Errore nello scrivere " + outputFile.getFileName() + ": " + ex.getMessage());
-        }
-    }
-
-    private static final class OrderedContributor {
-        private final int order;
-        private final BiboContributor contributor;
-
-        private OrderedContributor(int order, BiboContributor contributor) {
-            this.order = order;
-            this.contributor = contributor;
         }
     }
 }

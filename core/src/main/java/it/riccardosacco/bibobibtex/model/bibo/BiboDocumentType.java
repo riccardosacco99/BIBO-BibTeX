@@ -15,6 +15,7 @@ public enum BiboDocumentType {
     THESIS(BiboVocabulary.THESIS),
     REPORT(BiboVocabulary.REPORT),
     CONFERENCE_PAPER(BiboVocabulary.CONFERENCE_PAPER),
+    PROCEEDINGS(BiboVocabulary.PROCEEDINGS),
     WEBPAGE(BiboVocabulary.WEBPAGE),
     OTHER(BiboVocabulary.DOCUMENT);
 

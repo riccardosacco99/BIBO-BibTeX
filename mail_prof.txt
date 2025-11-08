@@ -1,0 +1,47 @@
+Rieccomi,
+
+allora, direi che sei partito bene (modulo l’errore alla fine, vedi sotto). Non so se hai portato avanti qualcosa (e.g. magari allargarti oltre i journal, o cmq prendere esempi più “ricchi” dato che quelli esaminati erano sostanzialmente equivalenti), però intanto ti do feedback su quel che hai fatto:
+
+Molto carina l’idea di verificare con il round-trip che i dati originali venissero mantenuti. Ho proceduto con un tool di diffing e, ordine degli attributi a parte (che ovviamente non è da considerare) ho osservato un 100% di correttezza
+Mi pare adeguata la rappresentazione BIBO in RDF, però mi chiedo, l’hai generata usando una libreria RDF (e.g. RDF4J, come ti avevo suggerito) oppure hai scritto tu delle stringhe che sei stato attento a formattare come RDF?
+Te lo chiedo perché, ad esempio, in guasch2021mediterranean.rdf noto che sia presente una descrizione distribuita di genid-start-39f8b72c0919b442688053b8d1cf4ac391 dove all’inizio si fornisce il tipo, titolo, identificatore e creator, poi si fornisce un altro creator, poi issued, publisher, isPartOf  e infine volume, issue, pages. A parte l’utilità di collassare tutto nello stesso soggetto (ma può non essere fatto in esportazioni “a stream” dove cioè non si tiene niente in memoria e si buttano fuori le triple così come escono (e quindi viene generato un nuovo gruppo ogni volta che escono delle nuove triple con un soggetto differente, salvo riprendere lo stesso soggetto più avanti se dovesse ricomparire), mi pare strano che sia scritta così perché RDF/XML cmq impone di usare l’ID una volta sola e inserire poi un riferimento all’ID già dichiarato.
+Small note: vedo l’odiosa (non è colpa tua, era l’input, che però è purtroppo parte dello standard usato in Bibtex, che si basa su ASCII e escape characters) noia di vedere escape chars nei nomi, come in Guasch-Ferr{\'e}. Potresti vedere se sia accessibile una lista completa di escape chars ( o almeno delle regole) e convertirli nei char giusti in UNICODE. Magari documentati se bibtex può supportare UNICODE (e.g in UTF-8) così che in export non ti devi preoccupare di ri-escaparli e scrivere invece direttamente in unicode.
+Hai scelto di non usare bnodes per gli autori. Questo però porterebbe alla generaizone di URI sempre diversi per uno stesso autore (ok non è una tragedia..) però usare bnodes potrebbe essere una scelta ideale: come a dire, non so quale sia l’autore e quindi lascio il suo ID anonimo.
+Hai usato bibo:sequence e sono inorridito di fronte alla scelta modellistica perché la sequenza non dovrebbe essere in alcun modo una prop intrinseca dell’autore. La sequenza è infatti una proprietà della relazione tra un autore e una particolare pubblicazione. Io potrei essere a prima firma in un articolo e a ultima in un altro. Come potrebbe una indicazione di sequenza essere presente in una descrizione di me, avulsa dall’articolo in cui compaio? (ricorda sempre che, in teoria, avendo un DB degli autori, uno potrebbe essere in grado di ricondurli ad una stessa identità, soprattutto al fine di poter scrivere tutte le pubblicazioni di uno stesso autore). Sono andato a controllare in bibo e…fermi tutti, bibo:sequence non esiste! Da dove è uscito?
+Gli autori dovrebbero invece essere ordinati usando le rdf list, e.g. in questo modo:
+
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix ex: <http://example.org/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ex:pub1 a bibo:Document ;
+    bibo:authorList (
+        ex:author1
+        ex:author2
+        ex:author3
+    ) .
+
+ex:author1 a foaf:Person ; foaf:name "Maria Rossi" .
+ex:author2 a foaf:Person ; foaf:name "Luca Bianchi" .
+ex:author3 a foaf:Person ; foaf:name "Giulia Verdi" .
+
+               dove, attenzione, ho usato la notazione compatta per le liste in RDF che fornisce la sintassi Turtle, ma queste sono strutture simili a come si gestiscono le liste in Prolog (vedi: https://ontola.io/blog/ordered-data-in-rdf )
+Parlando di sintassi (non è un appunto al tuo lavoro, dato che se hai utiliuzzato nativamente RDF con RDF4J, puoi sempre decidere come serializzare) forse per scambiarci informazioni userei una sintassi Turtle (con tutte le impostazioni per una migliore leggibilità: pretty print, inline blank nodes, xsd:string to plainliteral, rdf:langString to language tagged literal, base directive, settate a true).
+
+Direzioni future:
+
+Come dicevo, non pretendo che sia coperto tutto il pubblicabile, però uscire un po’ dal singolo modello journal e confrontarsi con il resto non sarebbe male (entro ragionevoli limiti). Ad esempio la pubblicazione di una sezione di proceedings (cioè un articolo su proceedings. ossia atti di una conferenza, che non è un “article” ma un “InProceedings”) e la pubblicazione dei proceedings stessi (quindi l’intero volume).
+Ti allego in tal senso, dato che potrebbero fungerti da casi di studio, due asset bibtex che ho assemblato io in questi anni (un po’ outdated a dire la verità).
+Il primo, PapersDB, è l’insieme delle referenze bibtex che ho (come dicevo un po’ outdated perché per lo più le mantengo in Word, ma ce ne sono tantissime, a te non serve che sia aggiornato :-D ).
+Il secondo ti evidenzia solo un aspetto, che è magari un limite di bibtex ma che potrebbe invece rappresentare un possibile aspetto che (forse, non ho studiato la cosa e puoi farlo tu :-D ) di miglior potere espressivo in BIBO, ossia come gestire dei lavori pubblicati su proceedings dove questi proceedings sono anche dei veri e propri libri. Nel secondo ritrovi quindi alcune pubblicazioni che, a mio parere, almeno in Bibtex, dovendo fare una scelta, erano meglio pubblicati come @InProceedings (e questa è la scelta fatta in PapersDB) ma che, per ragioni di evidenziare l’importanza dei proceedings stessi, in alcuni ambiti (e.g. le registrazioni degli stessi sui DB MIUR) sono stati riportati (in PapersDB_MIUR) come @InCollection. In realtà (almeno in questo Bibtext è flessibile) in ambo i casi i due equivalenti hanno poi le stesse proprietà, ma forse in BIBO questa differenziazione non è neanche importante, perché avrai una classe per l’articolo in se e una classe per descrivere i proceedings dei quali fa parte. In effetti, bibtex tende cmq ad avere una rappresentazione compatta, dove tu in una entry metti tutto (e.g. in @InProceedings descrivi sia l’articolo che i proceedings dei quali fa parte) mentre in BIBO hai una totale reificazione, per la quale descrivi separatamente ogni autore, il lavoro, i proceedings e pure la conferenza della quale sono pubblicati i proceedings.
+
+Integrazione come lifters e Reformatters in VocBench. A tal proposito, ti link la pagina utenti di VB che porta a questi due aspetti:
+https://vocbench.uniroma2.it/doc/user/ioext/
+e le relative pagine tecniche del backend di VocBench  Semantic Turkey, per gli stessi due aspetti:
+https://semanticturkey.uniroma2.it/doc/sys/rdf_lifter.jsf
+https://semanticturkey.uniroma2.it/doc/sys/reformatting_exporter.jsf
+il repo del codice di Semantic Turkey è questo:
+https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/
+
+A presto!

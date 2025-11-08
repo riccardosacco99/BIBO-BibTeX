@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.util.Values;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
@@ -102,12 +104,17 @@ class BiboDocumentTest {
                         resource,
                         FOAF.PAGE,
                         Values.iri("https://example.org/analytical-engine")));
-        Resource authorNode =
-                model.filter(resource, DCTERMS.CREATOR, null).objects().stream()
+
+        // Verify author is stored in RDF List at bibo:authorList
+        Resource authorListHead =
+                model.filter(resource, BiboVocabulary.AUTHOR_LIST, null).objects().stream()
                         .filter(value -> value instanceof Resource)
                         .map(value -> (Resource) value)
                         .findFirst()
                         .orElseThrow();
+        List<Value> authorValues = RDFCollections.asValues(model, authorListHead, new ArrayList<>());
+        assertFalse(authorValues.isEmpty());
+        Resource authorNode = (Resource) authorValues.get(0);
         assertTrue(model.contains(authorNode, FOAF.NAME, Values.literal("Ada Lovelace")));
 
         assertThrows(

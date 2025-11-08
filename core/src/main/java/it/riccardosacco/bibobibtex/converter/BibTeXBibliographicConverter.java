@@ -8,6 +8,7 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifier;
 import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifierType;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPersonName;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
+import it.riccardosacco.bibobibtex.converter.BibTeXUnicodeConverter;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -156,11 +157,20 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (key == null) {
             return Optional.empty();
         }
-        Value value = entry.getField(key);
+        Value value;
+        try {
+            value = entry.getField(key);
+        } catch (ClassCastException e) {
+            // This can happen when cross-references are not properly resolved
+            // and the field contains a StringValue instead of a CrossReferenceValue
+            return Optional.empty();
+        }
         if (value == null) {
             return Optional.empty();
         }
         String text = value.toUserString().trim();
+        // FIX-02: Convert LaTeX escape sequences to Unicode
+        text = BibTeXUnicodeConverter.toUnicode(text);
         return text.isEmpty() ? Optional.empty() : Optional.of(text);
     }
 
@@ -176,9 +186,19 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (trimmed.isEmpty()) {
             return;
         }
+        // FIX-02: Convert Unicode characters to LaTeX escape sequences
+        trimmed = BibTeXUnicodeConverter.fromUnicode(trimmed);
         entry.addField(key, new StringValue(trimmed, StringValue.Style.BRACED));
     }
 
+    /**
+     * Maps BibTeX entry type to BIBO document type.
+     * Note: @inbook and @incollection both map to BOOK_SECTION as they represent
+     * the same concept (chapter/section in edited collection) with identical field sets.
+     *
+     * @param type the BibTeX entry type
+     * @return the corresponding BIBO document type
+     */
     private static BiboDocumentType mapDocumentType(Key type) {
         if (type == null) {
             return BiboDocumentType.OTHER;
@@ -187,9 +207,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         } else if (BibTeXEntry.TYPE_BOOK.equals(type)) {
             return BiboDocumentType.BOOK;
         } else if (BibTeXEntry.TYPE_INBOOK.equals(type) || BibTeXEntry.TYPE_INCOLLECTION.equals(type)) {
+            // FIX-04: Both @inbook and @incollection map to BOOK_SECTION
             return BiboDocumentType.BOOK_SECTION;
-        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type) || BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
+        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type)) {
             return BiboDocumentType.CONFERENCE_PAPER;
+        } else if (BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
+            return BiboDocumentType.PROCEEDINGS;
         } else if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(type) || BibTeXEntry.TYPE_PHDTHESIS.equals(type)) {
             return BiboDocumentType.THESIS;
         } else if (BibTeXEntry.TYPE_TECHREPORT.equals(type)) {
@@ -200,6 +223,14 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         return BiboDocumentType.OTHER;
     }
 
+    /**
+     * Maps BIBO document type to BibTeX entry type.
+     * Note: BOOK_SECTION maps to @incollection (preferred over @inbook for
+     * chapters in edited collections, as commonly used in academic databases).
+     *
+     * @param type the BIBO document type
+     * @return the corresponding BibTeX entry type
+     */
     private static Key mapEntryType(BiboDocumentType type) {
         if (type == null) {
             return BibTeXEntry.TYPE_MISC;
@@ -207,8 +238,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         return switch (type) {
             case ARTICLE -> BibTeXEntry.TYPE_ARTICLE;
             case BOOK -> BibTeXEntry.TYPE_BOOK;
-            case BOOK_SECTION -> BibTeXEntry.TYPE_INCOLLECTION;
+            case BOOK_SECTION -> BibTeXEntry.TYPE_INCOLLECTION;  // FIX-04: prefer @incollection
             case CONFERENCE_PAPER -> BibTeXEntry.TYPE_INPROCEEDINGS;
+            case PROCEEDINGS -> BibTeXEntry.TYPE_PROCEEDINGS;
             case THESIS -> BibTeXEntry.TYPE_PHDTHESIS;
             case REPORT -> BibTeXEntry.TYPE_TECHREPORT;
             case WEBPAGE -> TYPE_ONLINE;

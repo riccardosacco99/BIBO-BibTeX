@@ -27,6 +27,7 @@ public final class BiboVocabulary {
     public static final IRI THESIS = iri("Thesis");
     public static final IRI REPORT = iri("Report");
     public static final IRI CONFERENCE_PAPER = iri("ConferencePaper");
+    public static final IRI PROCEEDINGS = iri("Proceedings");
     public static final IRI WEBPAGE = iri("Webpage");
 
     public static final IRI SUBTITLE = iri("subtitle");
@@ -47,5 +48,9 @@ public final class BiboVocabulary {
     public static final IRI TRANSLATOR = iri("translator");
     public static final IRI ADVISOR = iri("advisor");
     public static final IRI REVIEWER = iri("reviewer");
-    public static final IRI ORDER = iri("sequence");
+
+    // RDF Lists for ordered contributors (FIX-01)
+    public static final IRI AUTHOR_LIST = iri("authorList");
+    public static final IRI EDITOR_LIST = iri("editorList");
+    public static final IRI CONTRIBUTOR_LIST = iri("contributorList");
 }

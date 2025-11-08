@@ -29,7 +29,7 @@ public final class SampleConversion {
         // utility class
     }
 
-    public static void main(String[] args) throws IOException, ParseException {
+    public static void main(String[] args) throws IOException {
         Path input =
                 args.length > 0
                         ? Path.of(args[0])
@@ -39,7 +39,12 @@ public final class SampleConversion {
                         ? Path.of(args[1])
                         : Path.of("core", "target", "examples");
 
-        convertBibTeXToRdf(input, outputDir);
+        try {
+            convertBibTeXToRdf(input, outputDir);
+        } catch (ParseException e) {
+            System.err.println("ERROR: Failed to parse BibTeX file: " + e.getMessage());
+            throw new IOException("BibTeX parsing failed", e);
+        }
     }
 
     private static void convertBibTeXToRdf(Path input, Path outputDir) throws IOException, ParseException {
@@ -60,9 +65,9 @@ public final class SampleConversion {
             } catch (ObjectResolutionException e) {
                 System.err.println("WARNING: Cross-reference resolution failed: " + e.getMessage());
                 System.err.println("The BibTeX file contains references to entries that don't exist.");
-                System.err.println("Processing will continue with entries parsed before the error.");
-                throw new ParseException("Cannot parse BibTeX with unresolved cross-references. "
-                        + "Please remove or fix crossref fields in the BibTeX file.");
+                System.err.println("Processing will continue with entries that were successfully parsed.");
+                // Get the partially parsed database from the parser and continue
+                database = parser.getDatabase();
             }
             Collection<BibTeXEntry> entries = database.getEntries().values();
 

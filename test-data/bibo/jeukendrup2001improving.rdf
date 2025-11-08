@@ -1,54 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF
-	xmlns:bibo="http://purl.org/ontology/bibo/"
-	xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb41">
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
-	<dcterms:title>Improving cycling performance: how should we spend our time and money</dcterms:title>
-	<dcterms:identifier>jeukendrup2001improving</dcterms:identifier>
-	<dcterms:creator rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb42"/>
-</rdf:Description>
+_:395422ae0ddd42ca827dd23aaeb9f71e1 a bibo:Document, bibo:Article;
+  dcterms:title "Improving cycling performance: how should we spend our time and money";
+  dcterms:identifier "jeukendrup2001improving";
+  bibo:authorList _:395422ae0ddd42ca827dd23aaeb9f71e4;
+  dcterms:issued "2001"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  dcterms:publisher "Springer";
+  dcterms:isPartOf _:395422ae0ddd42ca827dd23aaeb9f71e6;
+  bibo:volume "31";
+  bibo:issue "7";
+  bibo:pages "559--569" .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb42">
-	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
-	<foaf:name>Jeukendrup, Asker E</foaf:name>
-	<foaf:givenName>Asker E</foaf:givenName>
-	<foaf:familyName>Jeukendrup</foaf:familyName>
-	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</bibo:sequence>
-</rdf:Description>
+_:395422ae0ddd42ca827dd23aaeb9f71e2 a foaf:Person;
+  foaf:name "Jeukendrup, Asker E";
+  foaf:givenName "Asker E";
+  foaf:familyName "Jeukendrup" .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb41">
-	<dcterms:creator rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb43"/>
-</rdf:Description>
+_:395422ae0ddd42ca827dd23aaeb9f71e3 a foaf:Person;
+  foaf:name "Martin, James";
+  foaf:givenName "James";
+  foaf:familyName "Martin" .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb43">
-	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
-	<foaf:name>Martin, James</foaf:name>
-	<foaf:givenName>James</foaf:givenName>
-	<foaf:familyName>Martin</foaf:familyName>
-	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</bibo:sequence>
-</rdf:Description>
+_:395422ae0ddd42ca827dd23aaeb9f71e4 a rdf:List;
+  rdf:first _:395422ae0ddd42ca827dd23aaeb9f71e2;
+  rdf:rest _:395422ae0ddd42ca827dd23aaeb9f71e5 .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb41">
-	<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear">2001</dcterms:issued>
-	<dcterms:publisher>Springer</dcterms:publisher>
-	<dcterms:isPartOf rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb44"/>
-</rdf:Description>
+_:395422ae0ddd42ca827dd23aaeb9f71e5 rdf:first _:395422ae0ddd42ca827dd23aaeb9f71e3;
+  rdf:rest rdf:nil .
 
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb44">
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
-	<dcterms:title>Sports medicine</dcterms:title>
-</rdf:Description>
-
-<rdf:Description rdf:nodeID="genid-start-35b1d15181f21478ba8c7d77fc9c7fcb41">
-	<bibo:volume>31</bibo:volume>
-	<bibo:issue>7</bibo:issue>
-	<bibo:pages>559--569</bibo:pages>
-</rdf:Description>
-
-</rdf:RDF>
+_:395422ae0ddd42ca827dd23aaeb9f71e6 a bibo:Document;
+  dcterms:title "Sports medicine" .

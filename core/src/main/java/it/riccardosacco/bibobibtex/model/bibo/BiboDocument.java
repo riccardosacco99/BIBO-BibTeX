@@ -3,8 +3,10 @@ package it.riccardosacco.bibobibtex.model.bibo;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,12 +16,16 @@ import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.ValueFactory;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.util.RDFCollections;
 import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
 import org.eclipse.rdf4j.model.vocabulary.FOAF;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.RDFS;
 import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFWriter;
 import org.eclipse.rdf4j.rio.Rio;
+import org.eclipse.rdf4j.rio.WriterConfig;
+import org.eclipse.rdf4j.rio.helpers.BasicWriterSettings;
 
 public final class BiboDocument {
     private static final ValueFactory VF = SimpleValueFactory.getInstance();
@@ -183,13 +189,27 @@ public final class BiboDocument {
 
     /**
      * Writes this document to a Writer in the specified RDF format.
+     * Configures the writer with optimal settings for readability:
+     * - Pretty printing enabled
+     * - Blank nodes inlined where possible
+     * - XSD strings converted to plain literals
+     * - Language-tagged literals preserved
      *
      * @param writer the Writer to write to
      * @param format the RDF format to use (TURTLE, RDFXML, JSONLD, etc.)
      */
     public void write(Writer writer, RDFFormat format) {
         try {
-            Rio.write(model, writer, format);
+            RDFWriter rdfWriter = Rio.createWriter(format, writer);
+            WriterConfig config = rdfWriter.getWriterConfig();
+
+            // Configure optimal settings for readability (FIX-03)
+            config.set(BasicWriterSettings.PRETTY_PRINT, true);
+            config.set(BasicWriterSettings.INLINE_BLANK_NODES, true);
+            config.set(BasicWriterSettings.XSD_STRING_TO_PLAIN_LITERAL, true);
+            config.set(BasicWriterSettings.RDF_LANGSTRING_TO_LANG_LITERAL, true);
+
+            Rio.write(model, rdfWriter);
         } catch (Exception e) {
             throw new RuntimeException("Failed to write RDF in format " + format, e);
         }
@@ -393,19 +413,72 @@ public final class BiboDocument {
             return VF.createBNode();
         }
 
+        /**
+         * Adds contributors to the model using RDF Collections for authors and editors.
+         * Authors are stored in bibo:authorList, editors in bibo:editorList, both as ordered RDF Lists.
+         * Other contributor roles (translator, advisor, reviewer) are stored as individual properties.
+         */
         private void addContributors(Model model, Resource subject) {
-            int order = 0;
-            for (BiboContributor contributor : contributors) {
-                Resource person = VF.createBNode();
-                model.add(subject, predicateForRole(contributor.role()), person);
-                model.add(person, RDF.TYPE, FOAF.PERSON);
-                BiboPersonName name = contributor.name();
-                model.add(person, FOAF.NAME, VF.createLiteral(name.fullName()));
-                name.givenName().ifPresent(value -> model.add(person, FOAF.GIVEN_NAME, VF.createLiteral(value)));
-                name.familyName().ifPresent(value -> model.add(person, FOAF.FAMILY_NAME, VF.createLiteral(value)));
-                model.add(person, BiboVocabulary.ORDER, VF.createLiteral(order));
-                order++;
+            // Group contributors by role
+            Map<BiboContributorRole, List<BiboContributor>> byRole = contributors.stream()
+                .collect(Collectors.groupingBy(BiboContributor::role));
+
+            // Process authors as RDF List
+            List<BiboContributor> authors = byRole.get(BiboContributorRole.AUTHOR);
+            if (authors != null && !authors.isEmpty()) {
+                List<Resource> authorNodes = authors.stream()
+                    .map(contributor -> createPersonNode(model, contributor.name()))
+                    .collect(Collectors.toList());
+
+                Resource authorListHead = VF.createBNode();
+                RDFCollections.asRDF(authorNodes, authorListHead, model);
+                model.add(subject, BiboVocabulary.AUTHOR_LIST, authorListHead);
             }
+
+            // Process editors as RDF List
+            List<BiboContributor> editors = byRole.get(BiboContributorRole.EDITOR);
+            if (editors != null && !editors.isEmpty()) {
+                List<Resource> editorNodes = editors.stream()
+                    .map(contributor -> createPersonNode(model, contributor.name()))
+                    .collect(Collectors.toList());
+
+                Resource editorListHead = VF.createBNode();
+                RDFCollections.asRDF(editorNodes, editorListHead, model);
+                model.add(subject, BiboVocabulary.EDITOR_LIST, editorListHead);
+            }
+
+            // Process other roles individually (not as lists)
+            for (BiboContributorRole role : Arrays.asList(
+                    BiboContributorRole.TRANSLATOR,
+                    BiboContributorRole.ADVISOR,
+                    BiboContributorRole.REVIEWER,
+                    BiboContributorRole.CONTRIBUTOR)) {
+                List<BiboContributor> others = byRole.get(role);
+                if (others != null) {
+                    for (BiboContributor contributor : others) {
+                        Resource person = createPersonNode(model, contributor.name());
+                        model.add(subject, predicateForRole(role), person);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Creates a person node in the RDF model with FOAF properties.
+         *
+         * @param model the RDF model to add statements to
+         * @param name the person's name information
+         * @return the Resource representing the person (blank node)
+         */
+        private Resource createPersonNode(Model model, BiboPersonName name) {
+            Resource person = VF.createBNode();
+            model.add(person, RDF.TYPE, FOAF.PERSON);
+            model.add(person, FOAF.NAME, VF.createLiteral(name.fullName()));
+            name.givenName().ifPresent(value ->
+                model.add(person, FOAF.GIVEN_NAME, VF.createLiteral(value)));
+            name.familyName().ifPresent(value ->
+                model.add(person, FOAF.FAMILY_NAME, VF.createLiteral(value)));
+            return person;
         }
 
         private void addIdentifier(Model model, Resource subject, BiboIdentifier identifier) {

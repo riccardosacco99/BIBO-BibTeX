@@ -1,54 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<rdf:RDF
-	xmlns:bibo="http://purl.org/ontology/bibo/"
-	xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Article"/>
-	<dcterms:title>The Mediterranean diet and health: a comprehensive overview</dcterms:title>
-	<dcterms:identifier>guasch2021mediterranean</dcterms:identifier>
-	<dcterms:creator rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac392"/>
-</rdf:Description>
+_:dd59e8693efa42cf8a5d97cd162e5d931 a bibo:Document, bibo:Article;
+  dcterms:title "The Mediterranean diet and health: a comprehensive overview";
+  dcterms:identifier "guasch2021mediterranean";
+  bibo:authorList _:dd59e8693efa42cf8a5d97cd162e5d934;
+  dcterms:issued "2021"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  dcterms:publisher "Wiley Online Library";
+  dcterms:isPartOf _:dd59e8693efa42cf8a5d97cd162e5d936;
+  bibo:volume "290";
+  bibo:issue "3";
+  bibo:pages "549--566" .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac392">
-	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
-	<foaf:name>Guasch-Ferr{\'e}, Marta</foaf:name>
-	<foaf:givenName>Marta</foaf:givenName>
-	<foaf:familyName>Guasch-Ferr{\'e}</foaf:familyName>
-	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">0</bibo:sequence>
-</rdf:Description>
+_:dd59e8693efa42cf8a5d97cd162e5d932 a foaf:Person;
+  foaf:name "Guasch-Ferr{\\'e}, Marta";
+  foaf:givenName "Marta";
+  foaf:familyName "Guasch-Ferr{\\'e}" .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
-	<dcterms:creator rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac393"/>
-</rdf:Description>
+_:dd59e8693efa42cf8a5d97cd162e5d933 a foaf:Person;
+  foaf:name "Willett, Walter C";
+  foaf:givenName "Walter C";
+  foaf:familyName "Willett" .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac393">
-	<rdf:type rdf:resource="http://xmlns.com/foaf/0.1/Person"/>
-	<foaf:name>Willett, Walter C</foaf:name>
-	<foaf:givenName>Walter C</foaf:givenName>
-	<foaf:familyName>Willett</foaf:familyName>
-	<bibo:sequence rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</bibo:sequence>
-</rdf:Description>
+_:dd59e8693efa42cf8a5d97cd162e5d934 a rdf:List;
+  rdf:first _:dd59e8693efa42cf8a5d97cd162e5d932;
+  rdf:rest _:dd59e8693efa42cf8a5d97cd162e5d935 .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
-	<dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear">2021</dcterms:issued>
-	<dcterms:publisher>Wiley Online Library</dcterms:publisher>
-	<dcterms:isPartOf rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac394"/>
-</rdf:Description>
+_:dd59e8693efa42cf8a5d97cd162e5d935 rdf:first _:dd59e8693efa42cf8a5d97cd162e5d933;
+  rdf:rest rdf:nil .
 
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac394">
-	<rdf:type rdf:resource="http://purl.org/ontology/bibo/Document"/>
-	<dcterms:title>Journal of internal medicine</dcterms:title>
-</rdf:Description>
-
-<rdf:Description rdf:nodeID="genid-start-39f8b72c0919b442688053b8d1cf4ac391">
-	<bibo:volume>290</bibo:volume>
-	<bibo:issue>3</bibo:issue>
-	<bibo:pages>549--566</bibo:pages>
-</rdf:Description>
-
-</rdf:RDF>
+_:dd59e8693efa42cf8a5d97cd162e5d936 a bibo:Document;
+  dcterms:title "Journal of internal medicine" .
