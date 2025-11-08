@@ -368,12 +368,6 @@ This is the most complex fix because:
 
 ### T-02: Update Documentation
 
-- [ ] Update CLAUDE.md:
-  - [ ] Remove references to bibo:sequence
-  - [ ] Document RDF List approach for authors
-  - [ ] Document Turtle as default format
-  - [ ] Document Unicode handling
-  - [ ] Document InProceedings modeling
 - [ ] Update README with corrected examples
 - [ ] Update example outputs to show Turtle
 
