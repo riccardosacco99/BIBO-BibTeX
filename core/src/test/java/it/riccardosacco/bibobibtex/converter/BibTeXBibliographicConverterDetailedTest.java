@@ -26,6 +26,9 @@ class BibTeXBibliographicConverterDetailedTest {
     private static final Key FIELD_ISBN = new Key("isbn");
     private static final Key FIELD_ISSN = new Key("issn");
     private static final Key FIELD_URI = new Key("uri");
+    private static final Key FIELD_SERIES = new Key("series");
+    private static final Key FIELD_EDITION = new Key("edition");
+    private static final Key FIELD_KEYWORDS = new Key("keywords");
 
     @Test
     void convertToBiboMapsStandardFields() {
@@ -316,6 +319,199 @@ class BibTeXBibliographicConverterDetailedTest {
         assertEquals("Proceedings of the Annual Conference", value(roundTrip, BibTeXEntry.KEY_TITLE));
         assertTrue(value(roundTrip, BibTeXEntry.KEY_EDITOR).contains("Editor, Jane"));
         assertEquals("Springer", value(roundTrip, BibTeXEntry.KEY_PUBLISHER));
+    }
+
+    /**
+     * Test series field with @book.
+     */
+    @Test
+    void seriesFieldInBook() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_BOOK, new Key("book2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Design Patterns");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Gamma, Erich");
+        addField(entry, BibTeXEntry.KEY_YEAR, "1994");
+        addField(entry, FIELD_SERIES, "Addison-Wesley Professional Computing Series");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals("Addison-Wesley Professional Computing Series", document.series().orElseThrow());
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals("Addison-Wesley Professional Computing Series", value(roundTrip, FIELD_SERIES));
+    }
+
+    /**
+     * Test series field with @inproceedings.
+     */
+    @Test
+    void seriesFieldInProceedings() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_INPROCEEDINGS, new Key("conf2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Machine Learning Advances");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Smith, Jane");
+        addField(entry, BibTeXEntry.KEY_BOOKTITLE, "NeurIPS 2024");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, FIELD_SERIES, "Lecture Notes in Computer Science");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals("Lecture Notes in Computer Science", document.series().orElseThrow());
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals("Lecture Notes in Computer Science", value(roundTrip, FIELD_SERIES));
+    }
+
+    /**
+     * Test edition field with @book.
+     */
+    @Test
+    void editionFieldInBook() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_BOOK, new Key("knuth1997"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "The Art of Computer Programming");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Knuth, Donald E.");
+        addField(entry, BibTeXEntry.KEY_YEAR, "1997");
+        addField(entry, FIELD_EDITION, "3rd");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals("3rd", document.edition().orElseThrow());
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals("3rd", value(roundTrip, FIELD_EDITION));
+    }
+
+    /**
+     * Test edition field with @manual.
+     */
+    @Test
+    void editionFieldInManual() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_MANUAL, new Key("manual2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "User Guide");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, FIELD_EDITION, "Second Edition");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals("Second Edition", document.edition().orElseThrow());
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals("Second Edition", value(roundTrip, FIELD_EDITION));
+    }
+
+    /**
+     * Test keywords field with single keyword.
+     */
+    @Test
+    void singleKeyword() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("article2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Quantum Computing");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Einstein, Albert");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, FIELD_KEYWORDS, "quantum");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals(1, document.keywords().size());
+        assertTrue(document.keywords().contains("quantum"));
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        assertEquals("quantum", value(roundTrip, FIELD_KEYWORDS));
+    }
+
+    /**
+     * Test keywords field with multiple comma-separated keywords.
+     */
+    @Test
+    void multipleKeywordsCommaSeparated() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("article2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "Machine Learning Survey");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Turing, Alan");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, FIELD_KEYWORDS, "machine learning, neural networks, deep learning");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals(3, document.keywords().size());
+        assertTrue(document.keywords().contains("machine learning"));
+        assertTrue(document.keywords().contains("neural networks"));
+        assertTrue(document.keywords().contains("deep learning"));
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        String keywords = value(roundTrip, FIELD_KEYWORDS);
+        assertTrue(keywords.contains("machine learning"));
+        assertTrue(keywords.contains("neural networks"));
+        assertTrue(keywords.contains("deep learning"));
+    }
+
+    /**
+     * Test keywords field with unicode characters.
+     */
+    @Test
+    void keywordsWithUnicode() {
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("article2024"));
+        addField(entry, BibTeXEntry.KEY_TITLE, "International Research");
+        addField(entry, BibTeXEntry.KEY_AUTHOR, "Müller, Hans");
+        addField(entry, BibTeXEntry.KEY_YEAR, "2024");
+        addField(entry, FIELD_KEYWORDS, "résumé, naïve, café");
+
+        BiboDocument document = converter.convertToBibo(entry).orElseThrow();
+        assertEquals(3, document.keywords().size());
+        assertTrue(document.keywords().contains("résumé"));
+        assertTrue(document.keywords().contains("naïve"));
+        assertTrue(document.keywords().contains("café"));
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        String keywords = value(roundTrip, FIELD_KEYWORDS);
+        assertTrue(keywords.contains("résumé") || keywords.contains("r{\\'e}sum{\\'e}"));
+    }
+
+    /**
+     * Test round-trip preservation of series field.
+     */
+    @Test
+    void seriesRoundTripPreservation() {
+        BibTeXEntry original = new BibTeXEntry(BibTeXEntry.TYPE_BOOK, new Key("book2024"));
+        addField(original, BibTeXEntry.KEY_TITLE, "Test Book");
+        addField(original, BibTeXEntry.KEY_AUTHOR, "Author, Test");
+        addField(original, BibTeXEntry.KEY_YEAR, "2024");
+        addField(original, FIELD_SERIES, "Test Series Name");
+
+        BiboDocument document = converter.convertToBibo(original).orElseThrow();
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+
+        assertEquals(value(original, FIELD_SERIES), value(roundTrip, FIELD_SERIES));
+    }
+
+    /**
+     * Test round-trip preservation of edition field.
+     */
+    @Test
+    void editionRoundTripPreservation() {
+        BibTeXEntry original = new BibTeXEntry(BibTeXEntry.TYPE_BOOK, new Key("book2024"));
+        addField(original, BibTeXEntry.KEY_TITLE, "Test Book");
+        addField(original, BibTeXEntry.KEY_AUTHOR, "Author, Test");
+        addField(original, BibTeXEntry.KEY_YEAR, "2024");
+        addField(original, FIELD_EDITION, "First Edition");
+
+        BiboDocument document = converter.convertToBibo(original).orElseThrow();
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+
+        assertEquals(value(original, FIELD_EDITION), value(roundTrip, FIELD_EDITION));
+    }
+
+    /**
+     * Test round-trip preservation of keywords field.
+     */
+    @Test
+    void keywordsRoundTripPreservation() {
+        BibTeXEntry original = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("article2024"));
+        addField(original, BibTeXEntry.KEY_TITLE, "Test Article");
+        addField(original, BibTeXEntry.KEY_AUTHOR, "Author, Test");
+        addField(original, BibTeXEntry.KEY_YEAR, "2024");
+        addField(original, FIELD_KEYWORDS, "keyword1, keyword2, keyword3");
+
+        BiboDocument document = converter.convertToBibo(original).orElseThrow();
+        assertEquals(3, document.keywords().size());
+
+        BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
+        String roundTripKeywords = value(roundTrip, FIELD_KEYWORDS);
+
+        assertTrue(roundTripKeywords.contains("keyword1"));
+        assertTrue(roundTripKeywords.contains("keyword2"));
+        assertTrue(roundTripKeywords.contains("keyword3"));
     }
 
     private static String value(BibTeXEntry entry, Key key) {

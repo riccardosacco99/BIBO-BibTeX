@@ -41,9 +41,12 @@ This document describes the mapping decisions between BibTeX entry types/fields 
 | `isbn` | ISBN Identifier | `bibo:isbn10` or `bibo:isbn13` | Auto-classified by length |
 | `issn` | ISSN Identifier | `bibo:issn` | Serial number |
 | `url` | URL | - | Web address (literal) |
-| `note` | Notes | - | Free-text notes |
+| `note` | Notes | `rdfs:comment` | Free-text notes |
 | `abstract` | Abstract | `dcterms:abstract` | Summary text |
 | `language` | Language | `dcterms:language` | ISO language code |
+| `keywords` | Keywords | `dcterms:subject` | Multi-value, comma/semicolon separated |
+| `series` | Series | `bibo:series` | Book or proceedings series name |
+| `edition` | Edition | `bibo:edition` | Edition description (e.g., "3rd", "Second Edition") |
 
 ### Article-Specific Fields
 
@@ -59,10 +62,10 @@ This document describes the mapping decisions between BibTeX entry types/fields 
 | BibTeX Field | BIBO Property | Modeling Decision |
 |--------------|---------------|-------------------|
 | `booktitle` | `dcterms:isPartOf` | **Proceedings title** (container) |
-| `series` | - | Proceedings series name |
+| `series` | `bibo:series` | Proceedings series name |
 | `volume` | `bibo:volume` | Proceedings volume (if multi-volume) |
 | `pages` | `bibo:pages` | Paper page range |
-| `organization` | - | Sponsoring organization |
+| `organization` | - | **LOST** - Sponsoring organization (not mapped) |
 | `publisher` | `dcterms:publisher` | Proceedings publisher |
 
 **Modeling Note:** `@inproceedings` entries represent a **paper** published in proceedings. The `booktitle` field contains the proceedings title and is mapped to the container relationship. In BIBO, this can be modeled as:
@@ -77,10 +80,10 @@ The current implementation uses the simple approach for pragmatism. Full reifica
 |--------------|---------------|-------|
 | `title` | `dcterms:title` | Proceedings title |
 | `editor` | `bibo:editorList` | Proceedings editors (RDF List) |
-| `series` | - | Conference series |
+| `series` | `bibo:series` | Conference series |
 | `volume` | `bibo:volume` | Volume in series |
 | `publisher` | `dcterms:publisher` | Publisher |
-| `organization` | - | Organizing body |
+| `organization` | - | **LOST** - Organizing body (not mapped) |
 | `isbn` | `bibo:isbn13` | Proceedings ISBN |
 
 ### Book-Specific Fields
@@ -89,7 +92,7 @@ The current implementation uses the simple approach for pragmatism. Full reifica
 |--------------|---------------|-------|
 | `author` or `editor` | `bibo:authorList` / `bibo:editorList` | Books can have authors or editors |
 | `edition` | `bibo:edition` | Edition number/description |
-| `series` | - | Book series name |
+| `series` | `bibo:series` | Book series name |
 | `volume` | `bibo:volume` | Volume in series |
 | `isbn` | `bibo:isbn10` or `bibo:isbn13` | Book identifier |
 
@@ -203,16 +206,20 @@ Different entry types use different fields for publisher:
 
 Some BibTeX fields don't have direct BIBO equivalents:
 
-**Fields that may be lost:**
+**Fields that are lost:**
 - `crossref` (removed in Sprint 00 - problematic)
-- `key` (sorting key)
-- `howpublished` (publication method)
-- `organization` (no standard BIBO property)
-- `series` (no standard BIBO property)
+- `key` (sorting key - not semantically meaningful)
+- `howpublished` (publication method - no BIBO equivalent)
+- `organization` (sponsoring organization - no standard BIBO property)
 
-**Fields stored as notes/literals:**
-- `address` → Stored but not semantically typed
-- `note` → Preserved as free text
+**Fields stored as literals (partial semantic loss):**
+- `address` → Stored via `dcterms:spatial` but not semantically typed as location
+
+**Fields fully preserved (Sprint 01):**
+- `series` → `bibo:series` (bidirectional)
+- `edition` → `bibo:edition` (bidirectional)
+- `keywords` → `dcterms:subject` (multi-value, bidirectional)
+- `note` → `rdfs:comment` (bidirectional)
 
 ### Citation Key Generation
 
@@ -264,6 +271,6 @@ Potential improvements for future sprints:
 
 ---
 
-**Document Version:** Sprint 00 Complete
+**Document Version:** Sprint 01 Phase 3 Complete
 **Last Updated:** November 2025
-**Status:** Reflects current implementation
+**Status:** Extended fields (series, edition, keywords) implemented and fully bidirectional

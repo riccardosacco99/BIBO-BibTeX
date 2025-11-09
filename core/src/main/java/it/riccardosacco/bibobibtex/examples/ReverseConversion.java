@@ -158,6 +158,14 @@ public final class ReverseConversion {
         literal(model, subject, BiboVocabulary.VOLUME).ifPresent(builder::volume);
         literal(model, subject, BiboVocabulary.ISSUE).ifPresent(builder::issue);
         literal(model, subject, BiboVocabulary.PAGES).ifPresent(builder::pages);
+        literal(model, subject, BiboVocabulary.SERIES).ifPresent(builder::series);
+        literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
+
+        // Read keywords from dcterms:subject
+        model.filter(subject, DCTERMS.SUBJECT, null).objects().stream()
+                .filter(value -> value instanceof Literal)
+                .map(value -> ((Literal) value).getLabel())
+                .forEach(builder::addKeyword);
 
         containerTitle(model, subject).ifPresent(builder::containerTitle);
         iriOrLiteral(model, subject, FOAF.PAGE).ifPresent(builder::url);
@@ -339,14 +347,6 @@ public final class ReverseConversion {
                 .map(String::trim)
                 .filter(text -> !text.isEmpty())
                 .findFirst();
-    }
-
-    private static Optional<Integer> parseInteger(String value) {
-        try {
-            return Optional.of(Integer.parseInt(value.trim()));
-        } catch (NumberFormatException ex) {
-            return Optional.empty();
-        }
     }
 
     private static void writeBibTexFile(Path outputDir, Path sourceFile, List<BibTeXEntry> entries) {

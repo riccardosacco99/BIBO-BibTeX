@@ -9,7 +9,6 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifier;
 import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifierType;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPersonName;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
-import it.riccardosacco.bibobibtex.converter.BibTeXUnicodeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.text.Normalizer;
@@ -68,6 +67,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_LANGUAGE = new Key("language");
     private static final Key FIELD_ABSTRACT = new Key("abstract");
     private static final Key FIELD_URI = new Key("uri");
+    private static final Key FIELD_SERIES = new Key("series");
+    private static final Key FIELD_EDITION = new Key("edition");
+    private static final Key FIELD_KEYWORDS = new Key("keywords");
     private static final Key TYPE_ONLINE = new Key("online");
 
     @Override
@@ -110,6 +112,15 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, FIELD_LANGUAGE).ifPresent(builder::language);
         fieldValue(source, FIELD_ABSTRACT).ifPresent(builder::abstractText);
         fieldValue(source, BibTeXEntry.KEY_NOTE).ifPresent(builder::notes);
+        fieldValue(source, FIELD_SERIES).ifPresent(builder::series);
+        fieldValue(source, FIELD_EDITION).ifPresent(builder::edition);
+        fieldValue(source, FIELD_KEYWORDS).ifPresent(keywords -> {
+            List<String> keywordList = Arrays.stream(MULTI_VALUE_SEPARATOR.split(keywords))
+                    .map(String::strip)
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList());
+            builder.keywords(keywordList);
+        });
 
         BiboDocument result = builder.build();
         logger.info("Successfully converted BibTeX entry to BIBO document: {}", result.title());
@@ -160,6 +171,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         source.language().ifPresent(value -> putField(entry, FIELD_LANGUAGE, value));
         source.abstractText().ifPresent(value -> putField(entry, FIELD_ABSTRACT, value));
         source.notes().ifPresent(value -> putField(entry, BibTeXEntry.KEY_NOTE, value));
+        source.series().ifPresent(value -> putField(entry, FIELD_SERIES, value));
+        source.edition().ifPresent(value -> putField(entry, FIELD_EDITION, value));
+        if (!source.keywords().isEmpty()) {
+            String keywordsString = String.join(", ", source.keywords());
+            putField(entry, FIELD_KEYWORDS, keywordsString);
+        }
 
         logger.info("Successfully converted BIBO document to BibTeX entry: {}", citationKey);
         logger.debug("Entry type: {}, fields count: {}", entryType, entry.getFields().size());
