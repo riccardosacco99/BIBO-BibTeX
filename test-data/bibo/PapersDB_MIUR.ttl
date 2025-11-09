@@ -1,0 +1,1383 @@
+
+<DBLP:conf/ieaaie/FiorelliGPST14> a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Semi-automatic Knowledge Acquisition through CODA";
+  <http://purl.org/dc/terms/identifier> "DBLP:conf/ieaaie/FiorelliGPST14";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa3422402416;
+  <http://purl.org/dc/terms/issued> "2014"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Verlag";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa34224024111;
+  <http://purl.org/ontology/bibo/volume> "8482";
+  <http://purl.org/ontology/bibo/pages> "78--87";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-319-07467-2_9";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-319-07467-2_9>;
+  <http://www.w3.org/2000/01/rdf-schema#comment> """I proceedings hanno:
+ISSN: 03029743 ISBN: 978-331907466-5""" .
+
+_:e6ac34e19fed4e7085f6aaa3422402411 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Fiorelli, Manuel";
+  <http://xmlns.com/foaf/0.1/givenName> "Manuel";
+  <http://xmlns.com/foaf/0.1/familyName> "Fiorelli" .
+
+_:e6ac34e19fed4e7085f6aaa3422402412 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Gambella, Riccardo";
+  <http://xmlns.com/foaf/0.1/givenName> "Riccardo";
+  <http://xmlns.com/foaf/0.1/familyName> "Gambella" .
+
+_:e6ac34e19fed4e7085f6aaa3422402413 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, Maria Teresa";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria Teresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa3422402414 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa3422402415 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Turbati, Andrea";
+  <http://xmlns.com/foaf/0.1/givenName> "Andrea";
+  <http://xmlns.com/foaf/0.1/familyName> "Turbati" .
+
+_:e6ac34e19fed4e7085f6aaa3422402416 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa3422402411;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa3422402417 .
+
+_:e6ac34e19fed4e7085f6aaa3422402417 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa3422402412;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa3422402418 .
+
+_:e6ac34e19fed4e7085f6aaa3422402418 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa3422402413;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa3422402419 .
+
+_:e6ac34e19fed4e7085f6aaa3422402419 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa3422402414;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024110 .
+
+_:e6ac34e19fed4e7085f6aaa34224024110 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa3422402415;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024111 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> """Modern Advances in Applied Intelligence - 27th International Conference
+on Industrial Engineering and Other Applications of Applied Intelligent
+Systems, {IEA/AIE} 2014, Kaohsiung, Taiwan, June 3-6, 2014, Proceedings,
+Part {II}""" .
+
+_:e6ac34e19fed4e7085f6aaa34224024112 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Semi-automatic Generation of GUIs for RDF Browsing.";
+  <http://purl.org/dc/terms/identifier> "conf/iv/PazienzaSS10";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa34224024116;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa34224024139;
+  <http://purl.org/dc/terms/issued> "2010"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "IEEE Computer Society";
+  <http://purl.org/dc/terms/spatial> "London South Bank University London, UK";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa34224024159;
+  <http://purl.org/ontology/bibo/pages> "267-272";
+  <http://xmlns.com/foaf/0.1/page> <http://dblp.uni-trier.de/db/conf/iv/iv2010.html#PazienzaSS10>;
+  <http://purl.org/ontology/bibo/isbn13> "978-0-7695-4165-5" .
+
+_:e6ac34e19fed4e7085f6aaa34224024113 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, Maria Teresa";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria Teresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa34224024114 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Scarpato, Noemi";
+  <http://xmlns.com/foaf/0.1/givenName> "Noemi";
+  <http://xmlns.com/foaf/0.1/familyName> "Scarpato" .
+
+_:e6ac34e19fed4e7085f6aaa34224024115 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa34224024116 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024113;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024117 .
+
+_:e6ac34e19fed4e7085f6aaa34224024117 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024114;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024118 .
+
+_:e6ac34e19fed4e7085f6aaa34224024118 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024115;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024119 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Banissi, Ebad";
+  <http://xmlns.com/foaf/0.1/givenName> "Ebad";
+  <http://xmlns.com/foaf/0.1/familyName> "Banissi" .
+
+_:e6ac34e19fed4e7085f6aaa34224024120 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Bertschi, Stefan";
+  <http://xmlns.com/foaf/0.1/givenName> "Stefan";
+  <http://xmlns.com/foaf/0.1/familyName> "Bertschi" .
+
+_:e6ac34e19fed4e7085f6aaa34224024121 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Burkhard, Remo Aslak";
+  <http://xmlns.com/foaf/0.1/givenName> "Remo Aslak";
+  <http://xmlns.com/foaf/0.1/familyName> "Burkhard" .
+
+_:e6ac34e19fed4e7085f6aaa34224024122 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Counsell, John";
+  <http://xmlns.com/foaf/0.1/givenName> "John";
+  <http://xmlns.com/foaf/0.1/familyName> "Counsell" .
+
+_:e6ac34e19fed4e7085f6aaa34224024123 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Dastbaz, Mohammad";
+  <http://xmlns.com/foaf/0.1/givenName> "Mohammad";
+  <http://xmlns.com/foaf/0.1/familyName> "Dastbaz" .
+
+_:e6ac34e19fed4e7085f6aaa34224024124 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Eppler, Martin J.";
+  <http://xmlns.com/foaf/0.1/givenName> "Martin J.";
+  <http://xmlns.com/foaf/0.1/familyName> "Eppler" .
+
+_:e6ac34e19fed4e7085f6aaa34224024125 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Forsell, Camilla";
+  <http://xmlns.com/foaf/0.1/givenName> "Camilla";
+  <http://xmlns.com/foaf/0.1/familyName> "Forsell" .
+
+_:e6ac34e19fed4e7085f6aaa34224024126 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Grinstein, Georges G.";
+  <http://xmlns.com/foaf/0.1/givenName> "Georges G.";
+  <http://xmlns.com/foaf/0.1/familyName> "Grinstein" .
+
+_:e6ac34e19fed4e7085f6aaa34224024127 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Johansson, Jimmy";
+  <http://xmlns.com/foaf/0.1/givenName> "Jimmy";
+  <http://xmlns.com/foaf/0.1/familyName> "Johansson" .
+
+_:e6ac34e19fed4e7085f6aaa34224024128 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Jern, Mikael";
+  <http://xmlns.com/foaf/0.1/givenName> "Mikael";
+  <http://xmlns.com/foaf/0.1/familyName> "Jern" .
+
+_:e6ac34e19fed4e7085f6aaa34224024129 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Khosrowshahi, Farzad";
+  <http://xmlns.com/foaf/0.1/givenName> "Farzad";
+  <http://xmlns.com/foaf/0.1/familyName> "Khosrowshahi" .
+
+_:e6ac34e19fed4e7085f6aaa34224024130 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Marchese, Francis T.";
+  <http://xmlns.com/foaf/0.1/givenName> "Francis T.";
+  <http://xmlns.com/foaf/0.1/familyName> "Marchese" .
+
+_:e6ac34e19fed4e7085f6aaa34224024131 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Maple, Carsten";
+  <http://xmlns.com/foaf/0.1/givenName> "Carsten";
+  <http://xmlns.com/foaf/0.1/familyName> "Maple" .
+
+_:e6ac34e19fed4e7085f6aaa34224024132 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Laing, Richard";
+  <http://xmlns.com/foaf/0.1/givenName> "Richard";
+  <http://xmlns.com/foaf/0.1/familyName> "Laing" .
+
+_:e6ac34e19fed4e7085f6aaa34224024133 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cvek, Urska";
+  <http://xmlns.com/foaf/0.1/givenName> "Urska";
+  <http://xmlns.com/foaf/0.1/familyName> "Cvek" .
+
+_:e6ac34e19fed4e7085f6aaa34224024134 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Trutschl, Marjan";
+  <http://xmlns.com/foaf/0.1/givenName> "Marjan";
+  <http://xmlns.com/foaf/0.1/familyName> "Trutschl" .
+
+_:e6ac34e19fed4e7085f6aaa34224024135 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Sarfraz, Muhammad";
+  <http://xmlns.com/foaf/0.1/givenName> "Muhammad";
+  <http://xmlns.com/foaf/0.1/familyName> "Sarfraz" .
+
+_:e6ac34e19fed4e7085f6aaa34224024136 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stuart, Liz J.";
+  <http://xmlns.com/foaf/0.1/givenName> "Liz J.";
+  <http://xmlns.com/foaf/0.1/familyName> "Stuart" .
+
+_:e6ac34e19fed4e7085f6aaa34224024137 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Ursyn, Anna";
+  <http://xmlns.com/foaf/0.1/givenName> "Anna";
+  <http://xmlns.com/foaf/0.1/familyName> "Ursyn" .
+
+_:e6ac34e19fed4e7085f6aaa34224024138 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Wyeld, Theodor G.";
+  <http://xmlns.com/foaf/0.1/givenName> "Theodor G.";
+  <http://xmlns.com/foaf/0.1/familyName> "Wyeld" .
+
+_:e6ac34e19fed4e7085f6aaa34224024139 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024119;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024140 .
+
+_:e6ac34e19fed4e7085f6aaa34224024140 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024120;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024141 .
+
+_:e6ac34e19fed4e7085f6aaa34224024141 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024121;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024142 .
+
+_:e6ac34e19fed4e7085f6aaa34224024142 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024122;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024143 .
+
+_:e6ac34e19fed4e7085f6aaa34224024143 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024123;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024144 .
+
+_:e6ac34e19fed4e7085f6aaa34224024144 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024124;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024145 .
+
+_:e6ac34e19fed4e7085f6aaa34224024145 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024125;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024146 .
+
+_:e6ac34e19fed4e7085f6aaa34224024146 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024126;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024147 .
+
+_:e6ac34e19fed4e7085f6aaa34224024147 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024127;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024148 .
+
+_:e6ac34e19fed4e7085f6aaa34224024148 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024128;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024149 .
+
+_:e6ac34e19fed4e7085f6aaa34224024149 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024129;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024150 .
+
+_:e6ac34e19fed4e7085f6aaa34224024150 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024130;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024151 .
+
+_:e6ac34e19fed4e7085f6aaa34224024151 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024131;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024152 .
+
+_:e6ac34e19fed4e7085f6aaa34224024152 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024132;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024153 .
+
+_:e6ac34e19fed4e7085f6aaa34224024153 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024133;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024154 .
+
+_:e6ac34e19fed4e7085f6aaa34224024154 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024134;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024155 .
+
+_:e6ac34e19fed4e7085f6aaa34224024155 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024135;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024156 .
+
+_:e6ac34e19fed4e7085f6aaa34224024156 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024136;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024157 .
+
+_:e6ac34e19fed4e7085f6aaa34224024157 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024137;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024158 .
+
+_:e6ac34e19fed4e7085f6aaa34224024158 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024138;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024159 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "14th International Conference on Information Visualisation (IV 2010)" .
+
+_:e6ac34e19fed4e7085f6aaa34224024160 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Harvesting Relational and Structured Knowledge for Ontology Building in the WPro Architecture";
+  <http://purl.org/dc/terms/identifier> "Bagni2007a";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa34224024166;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa34224024173;
+  <http://purl.org/dc/terms/issued> "2007"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa34224024175;
+  <http://purl.org/ontology/bibo/volume> "4733";
+  <http://purl.org/ontology/bibo/pages> "157-169";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-540-74782-6_15";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-540-74782-6_15>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-540-74781-9" .
+
+_:e6ac34e19fed4e7085f6aaa34224024161 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Bagni, Daniele";
+  <http://xmlns.com/foaf/0.1/givenName> "Daniele";
+  <http://xmlns.com/foaf/0.1/familyName> "Bagni" .
+
+_:e6ac34e19fed4e7085f6aaa34224024162 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cappella, Marco";
+  <http://xmlns.com/foaf/0.1/givenName> "Marco";
+  <http://xmlns.com/foaf/0.1/familyName> "Cappella" .
+
+_:e6ac34e19fed4e7085f6aaa34224024163 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, MariaTeresa";
+  <http://xmlns.com/foaf/0.1/givenName> "MariaTeresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa34224024164 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pennacchiotti, Marco";
+  <http://xmlns.com/foaf/0.1/givenName> "Marco";
+  <http://xmlns.com/foaf/0.1/familyName> "Pennacchiotti" .
+
+_:e6ac34e19fed4e7085f6aaa34224024165 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa34224024166 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024161;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024167 .
+
+_:e6ac34e19fed4e7085f6aaa34224024167 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024162;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024168 .
+
+_:e6ac34e19fed4e7085f6aaa34224024168 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024163;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024169 .
+
+_:e6ac34e19fed4e7085f6aaa34224024169 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024164;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024170 .
+
+_:e6ac34e19fed4e7085f6aaa34224024170 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024165;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024171 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Basili, Roberto";
+  <http://xmlns.com/foaf/0.1/givenName> "Roberto";
+  <http://xmlns.com/foaf/0.1/familyName> "Basili" .
+
+_:e6ac34e19fed4e7085f6aaa34224024172 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, MariaTeresa";
+  <http://xmlns.com/foaf/0.1/givenName> "MariaTeresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa34224024173 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024171;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024174 .
+
+_:e6ac34e19fed4e7085f6aaa34224024174 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024172;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024175 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "AI*IA 2007: Artificial Intelligence and Human-Oriented Computing" .
+
+_:e6ac34e19fed4e7085f6aaa34224024176 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "CONGAS: A COllaborative Ontology Development Framework Based on Named GrAphS";
+  <http://purl.org/dc/terms/identifier> "Bagni2009";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa34224024181;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa34224024187;
+  <http://purl.org/dc/terms/issued> "2009"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa34224024189;
+  <http://purl.org/ontology/bibo/volume> "5883";
+  <http://purl.org/ontology/bibo/pages> "42-51";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-642-10291-2_5";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-642-10291-2_5>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-642-10290-5" .
+
+_:e6ac34e19fed4e7085f6aaa34224024177 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Bagni, Daniele";
+  <http://xmlns.com/foaf/0.1/givenName> "Daniele";
+  <http://xmlns.com/foaf/0.1/familyName> "Bagni" .
+
+_:e6ac34e19fed4e7085f6aaa34224024178 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cappella, Marco";
+  <http://xmlns.com/foaf/0.1/givenName> "Marco";
+  <http://xmlns.com/foaf/0.1/familyName> "Cappella" .
+
+_:e6ac34e19fed4e7085f6aaa34224024179 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, MariaTeresa";
+  <http://xmlns.com/foaf/0.1/givenName> "MariaTeresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa34224024180 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa34224024181 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024177;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024182 .
+
+_:e6ac34e19fed4e7085f6aaa34224024182 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024178;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024183 .
+
+_:e6ac34e19fed4e7085f6aaa34224024183 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024179;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024184 .
+
+_:e6ac34e19fed4e7085f6aaa34224024184 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024180;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024185 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Serra, Roberto";
+  <http://xmlns.com/foaf/0.1/givenName> "Roberto";
+  <http://xmlns.com/foaf/0.1/familyName> "Serra" .
+
+_:e6ac34e19fed4e7085f6aaa34224024186 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cucchiara, Rita";
+  <http://xmlns.com/foaf/0.1/givenName> "Rita";
+  <http://xmlns.com/foaf/0.1/familyName> "Cucchiara" .
+
+_:e6ac34e19fed4e7085f6aaa34224024187 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024185;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024188 .
+
+_:e6ac34e19fed4e7085f6aaa34224024188 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024186;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa34224024189 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "AI*IA 2009: Emergent Perspectives in Artificial Intelligence" .
+
+_:e6ac34e19fed4e7085f6aaa34224024190 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Thesaurus Maintenance, Alignment and Publication as Linked Data: The AGROVOC Use Case";
+  <http://purl.org/dc/terms/identifier> "MTSR2011FAO";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa34224024197;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241107;
+  <http://purl.org/dc/terms/issued> "2011"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241111;
+  <http://purl.org/ontology/bibo/volume> "240";
+  <http://purl.org/ontology/bibo/pages> "489-499";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-642-24731-6_48";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-642-24731-6_48>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-642-24730-9" .
+
+_:e6ac34e19fed4e7085f6aaa34224024191 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Caracciolo, Caterina";
+  <http://xmlns.com/foaf/0.1/givenName> "Caterina";
+  <http://xmlns.com/foaf/0.1/familyName> "Caracciolo" .
+
+_:e6ac34e19fed4e7085f6aaa34224024192 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Morshed, Ahsan";
+  <http://xmlns.com/foaf/0.1/givenName> "Ahsan";
+  <http://xmlns.com/foaf/0.1/familyName> "Morshed" .
+
+_:e6ac34e19fed4e7085f6aaa34224024193 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa34224024194 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Johannsen, Gudrun";
+  <http://xmlns.com/foaf/0.1/givenName> "Gudrun";
+  <http://xmlns.com/foaf/0.1/familyName> "Johannsen" .
+
+_:e6ac34e19fed4e7085f6aaa34224024195 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Jaques, Yves";
+  <http://xmlns.com/foaf/0.1/givenName> "Yves";
+  <http://xmlns.com/foaf/0.1/familyName> "Jaques" .
+
+_:e6ac34e19fed4e7085f6aaa34224024196 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Keizer, Johannes";
+  <http://xmlns.com/foaf/0.1/givenName> "Johannes";
+  <http://xmlns.com/foaf/0.1/familyName> "Keizer" .
+
+_:e6ac34e19fed4e7085f6aaa34224024197 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa34224024191;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024198 .
+
+_:e6ac34e19fed4e7085f6aaa34224024198 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024192;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa34224024199 .
+
+_:e6ac34e19fed4e7085f6aaa34224024199 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024193;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241100 .
+
+_:e6ac34e19fed4e7085f6aaa342240241100 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024194;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241101 .
+
+_:e6ac34e19fed4e7085f6aaa342240241101 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024195;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241102 .
+
+_:e6ac34e19fed4e7085f6aaa342240241102 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa34224024196;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241103 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "García-Barriocanal, Elena";
+  <http://xmlns.com/foaf/0.1/givenName> "Elena";
+  <http://xmlns.com/foaf/0.1/familyName> "García-Barriocanal" .
+
+_:e6ac34e19fed4e7085f6aaa342240241104 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cebeci, Zeynel";
+  <http://xmlns.com/foaf/0.1/givenName> "Zeynel";
+  <http://xmlns.com/foaf/0.1/familyName> "Cebeci" .
+
+_:e6ac34e19fed4e7085f6aaa342240241105 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Okur, MehmetC.";
+  <http://xmlns.com/foaf/0.1/givenName> "MehmetC.";
+  <http://xmlns.com/foaf/0.1/familyName> "Okur" .
+
+_:e6ac34e19fed4e7085f6aaa342240241106 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Öztürk, Aydın";
+  <http://xmlns.com/foaf/0.1/givenName> "Aydın";
+  <http://xmlns.com/foaf/0.1/familyName> "Öztürk" .
+
+_:e6ac34e19fed4e7085f6aaa342240241107 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241103;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241108 .
+
+_:e6ac34e19fed4e7085f6aaa342240241108 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241104;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241109 .
+
+_:e6ac34e19fed4e7085f6aaa342240241109 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241105;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241110 .
+
+_:e6ac34e19fed4e7085f6aaa342240241110 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241106;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241111 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Metadata and Semantic Research" .
+
+_:e6ac34e19fed4e7085f6aaa342240241112 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Semantic Bookmarking and Search in the Earth Observation Domain";
+  <http://purl.org/dc/terms/identifier> "Fallucchi2008a";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241119;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241128;
+  <http://purl.org/dc/terms/issued> "2008"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241131;
+  <http://purl.org/ontology/bibo/volume> "5179";
+  <http://purl.org/ontology/bibo/pages> "260-268";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-540-85567-5_33";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-540-85567-5_33>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-540-85566-8" .
+
+_:e6ac34e19fed4e7085f6aaa342240241113 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Fallucchi, Francesca";
+  <http://xmlns.com/foaf/0.1/givenName> "Francesca";
+  <http://xmlns.com/foaf/0.1/familyName> "Fallucchi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241114 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, MariaTeresa";
+  <http://xmlns.com/foaf/0.1/givenName> "MariaTeresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241115 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Scarpato, Noemi";
+  <http://xmlns.com/foaf/0.1/givenName> "Noemi";
+  <http://xmlns.com/foaf/0.1/familyName> "Scarpato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241116 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241117 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Fusco, Luigi";
+  <http://xmlns.com/foaf/0.1/givenName> "Luigi";
+  <http://xmlns.com/foaf/0.1/familyName> "Fusco" .
+
+_:e6ac34e19fed4e7085f6aaa342240241118 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Guidetti, Veronica";
+  <http://xmlns.com/foaf/0.1/givenName> "Veronica";
+  <http://xmlns.com/foaf/0.1/familyName> "Guidetti" .
+
+_:e6ac34e19fed4e7085f6aaa342240241119 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241113;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241120 .
+
+_:e6ac34e19fed4e7085f6aaa342240241120 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241114;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241121 .
+
+_:e6ac34e19fed4e7085f6aaa342240241121 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241115;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241122 .
+
+_:e6ac34e19fed4e7085f6aaa342240241122 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241116;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241123 .
+
+_:e6ac34e19fed4e7085f6aaa342240241123 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241117;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241124 .
+
+_:e6ac34e19fed4e7085f6aaa342240241124 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241118;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241125 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Lovrek, Ignac";
+  <http://xmlns.com/foaf/0.1/givenName> "Ignac";
+  <http://xmlns.com/foaf/0.1/familyName> "Lovrek" .
+
+_:e6ac34e19fed4e7085f6aaa342240241126 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Howlett, RobertJ.";
+  <http://xmlns.com/foaf/0.1/givenName> "RobertJ.";
+  <http://xmlns.com/foaf/0.1/familyName> "Howlett" .
+
+_:e6ac34e19fed4e7085f6aaa342240241127 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Jain, LakhmiC.";
+  <http://xmlns.com/foaf/0.1/givenName> "LakhmiC.";
+  <http://xmlns.com/foaf/0.1/familyName> "Jain" .
+
+_:e6ac34e19fed4e7085f6aaa342240241128 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241125;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241129 .
+
+_:e6ac34e19fed4e7085f6aaa342240241129 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241126;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241130 .
+
+_:e6ac34e19fed4e7085f6aaa342240241130 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241127;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241131 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Knowledge-Based Intelligent Information and Engineering Systems" .
+
+_:e6ac34e19fed4e7085f6aaa342240241132 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Probabilistic Ontology Learner in Semantic Turkey";
+  <http://purl.org/dc/terms/identifier> "jbibtex-1";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241137;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241143;
+  <http://purl.org/dc/terms/issued> "2009"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241145;
+  <http://purl.org/ontology/bibo/volume> "5883";
+  <http://purl.org/ontology/bibo/pages> "294-303";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-642-10291-2_30";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-642-10291-2_30>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-642-10290-5" .
+
+_:e6ac34e19fed4e7085f6aaa342240241133 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Fallucchi, Francesca";
+  <http://xmlns.com/foaf/0.1/givenName> "Francesca";
+  <http://xmlns.com/foaf/0.1/familyName> "Fallucchi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241134 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Scarpato, Noemi";
+  <http://xmlns.com/foaf/0.1/givenName> "Noemi";
+  <http://xmlns.com/foaf/0.1/familyName> "Scarpato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241135 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241136 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Zanzotto, FabioMassimo";
+  <http://xmlns.com/foaf/0.1/givenName> "FabioMassimo";
+  <http://xmlns.com/foaf/0.1/familyName> "Zanzotto" .
+
+_:e6ac34e19fed4e7085f6aaa342240241137 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241133;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241138 .
+
+_:e6ac34e19fed4e7085f6aaa342240241138 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241134;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241139 .
+
+_:e6ac34e19fed4e7085f6aaa342240241139 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241135;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241140 .
+
+_:e6ac34e19fed4e7085f6aaa342240241140 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241136;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241141 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Serra, Roberto";
+  <http://xmlns.com/foaf/0.1/givenName> "Roberto";
+  <http://xmlns.com/foaf/0.1/familyName> "Serra" .
+
+_:e6ac34e19fed4e7085f6aaa342240241142 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Cucchiara, Rita";
+  <http://xmlns.com/foaf/0.1/givenName> "Rita";
+  <http://xmlns.com/foaf/0.1/familyName> "Cucchiara" .
+
+_:e6ac34e19fed4e7085f6aaa342240241143 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241141;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241144 .
+
+_:e6ac34e19fed4e7085f6aaa342240241144 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241142;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241145 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "AI*IA 2009: Emergent Perspectives in Artificial Intelligence" .
+
+_:e6ac34e19fed4e7085f6aaa342240241146 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Computer-aided Ontology Development: an integrated environment";
+  <http://purl.org/dc/terms/identifier> "jbibtex-2";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241152;
+  <http://purl.org/dc/terms/issued> "2010"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "European Language Resources Association (ELRA)";
+  <http://purl.org/dc/terms/spatial> "Mediterranean Conference Centre, Valletta, Malta";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241157;
+  <http://purl.org/ontology/bibo/isbn10> "2-9517408-6-7" .
+
+_:e6ac34e19fed4e7085f6aaa342240241147 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Manuel Fiorelli";
+  <http://xmlns.com/foaf/0.1/givenName> "Manuel";
+  <http://xmlns.com/foaf/0.1/familyName> "Fiorelli" .
+
+_:e6ac34e19fed4e7085f6aaa342240241148 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Maria Teresa Pazienza";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241149 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Steve Petruzza";
+  <http://xmlns.com/foaf/0.1/givenName> "Steve";
+  <http://xmlns.com/foaf/0.1/familyName> "Petruzza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241150 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Armando Stellato";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241151 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Andrea Turbati";
+  <http://xmlns.com/foaf/0.1/givenName> "Andrea";
+  <http://xmlns.com/foaf/0.1/familyName> "Turbati" .
+
+_:e6ac34e19fed4e7085f6aaa342240241152 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241147;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241153 .
+
+_:e6ac34e19fed4e7085f6aaa342240241153 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241148;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241154 .
+
+_:e6ac34e19fed4e7085f6aaa342240241154 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241149;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241155 .
+
+_:e6ac34e19fed4e7085f6aaa342240241155 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241150;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241156 .
+
+_:e6ac34e19fed4e7085f6aaa342240241156 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241151;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241157 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "New Challenges for NLP Frameworks 2010 ( held jointly with LREC2010 )" .
+
+_:e6ac34e19fed4e7085f6aaa342240241158 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "A Meta-data Driven Platform for Semi-automatic Configuration of Ontology Mediators";
+  <http://purl.org/dc/terms/identifier> "FIORELLI14.1059";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241162;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241174;
+  <http://purl.org/dc/terms/issued> "2014-05"^^<http://www.w3.org/2001/XMLSchema#gYearMonth>;
+  <http://purl.org/dc/terms/publisher> "European Language Resources Association (ELRA)";
+  <http://purl.org/dc/terms/spatial> "Reykjavik, Iceland";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241183;
+  <http://purl.org/ontology/bibo/isbn13> "978-2-9517408-8-4";
+  <http://purl.org/dc/terms/language> "english" .
+
+_:e6ac34e19fed4e7085f6aaa342240241159 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Manuel Fiorelli";
+  <http://xmlns.com/foaf/0.1/givenName> "Manuel";
+  <http://xmlns.com/foaf/0.1/familyName> "Fiorelli" .
+
+_:e6ac34e19fed4e7085f6aaa342240241160 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Maria Teresa Pazienza";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241161 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Armando Stellato";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241162 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241159;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241163 .
+
+_:e6ac34e19fed4e7085f6aaa342240241163 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241160;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241164 .
+
+_:e6ac34e19fed4e7085f6aaa342240241164 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241161;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241165 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Nicoletta Calzolari (Conference Chair)";
+  <http://xmlns.com/foaf/0.1/givenName> "Nicoletta";
+  <http://xmlns.com/foaf/0.1/familyName> "Chair)" .
+
+_:e6ac34e19fed4e7085f6aaa342240241166 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Khalid Choukri";
+  <http://xmlns.com/foaf/0.1/givenName> "Khalid";
+  <http://xmlns.com/foaf/0.1/familyName> "Choukri" .
+
+_:e6ac34e19fed4e7085f6aaa342240241167 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Thierry Declerck";
+  <http://xmlns.com/foaf/0.1/givenName> "Thierry";
+  <http://xmlns.com/foaf/0.1/familyName> "Declerck" .
+
+_:e6ac34e19fed4e7085f6aaa342240241168 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Hrafn Loftsson";
+  <http://xmlns.com/foaf/0.1/givenName> "Hrafn";
+  <http://xmlns.com/foaf/0.1/familyName> "Loftsson" .
+
+_:e6ac34e19fed4e7085f6aaa342240241169 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Bente Maegaard";
+  <http://xmlns.com/foaf/0.1/givenName> "Bente";
+  <http://xmlns.com/foaf/0.1/familyName> "Maegaard" .
+
+_:e6ac34e19fed4e7085f6aaa342240241170 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Joseph Mariani";
+  <http://xmlns.com/foaf/0.1/givenName> "Joseph";
+  <http://xmlns.com/foaf/0.1/familyName> "Mariani" .
+
+_:e6ac34e19fed4e7085f6aaa342240241171 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Asuncion Moreno";
+  <http://xmlns.com/foaf/0.1/givenName> "Asuncion";
+  <http://xmlns.com/foaf/0.1/familyName> "Moreno" .
+
+_:e6ac34e19fed4e7085f6aaa342240241172 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Jan Odijk";
+  <http://xmlns.com/foaf/0.1/givenName> "Jan";
+  <http://xmlns.com/foaf/0.1/familyName> "Odijk" .
+
+_:e6ac34e19fed4e7085f6aaa342240241173 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stelios Piperidis";
+  <http://xmlns.com/foaf/0.1/givenName> "Stelios";
+  <http://xmlns.com/foaf/0.1/familyName> "Piperidis" .
+
+_:e6ac34e19fed4e7085f6aaa342240241174 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241165;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241175 .
+
+_:e6ac34e19fed4e7085f6aaa342240241175 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241166;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241176 .
+
+_:e6ac34e19fed4e7085f6aaa342240241176 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241167;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241177 .
+
+_:e6ac34e19fed4e7085f6aaa342240241177 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241168;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241178 .
+
+_:e6ac34e19fed4e7085f6aaa342240241178 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241169;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241179 .
+
+_:e6ac34e19fed4e7085f6aaa342240241179 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241170;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241180 .
+
+_:e6ac34e19fed4e7085f6aaa342240241180 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241171;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241181 .
+
+_:e6ac34e19fed4e7085f6aaa342240241181 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241172;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241182 .
+
+_:e6ac34e19fed4e7085f6aaa342240241182 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241173;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241183 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Proceedings of the Ninth International Conference on Language Resources and Evaluation (LREC'14)" .
+
+_:e6ac34e19fed4e7085f6aaa342240241184 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Semantic Turkey: A Semantic Bookmarking Tool (System Description)";
+  <http://purl.org/dc/terms/identifier> "Griesi2007a";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241188;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241194;
+  <http://purl.org/dc/terms/issued> "2007"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241197;
+  <http://purl.org/ontology/bibo/volume> "4519";
+  <http://purl.org/ontology/bibo/pages> "779-788";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-540-72667-8_56";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/978-3-540-72667-8_56>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-540-72666-1" .
+
+_:e6ac34e19fed4e7085f6aaa342240241185 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Griesi, Donato";
+  <http://xmlns.com/foaf/0.1/givenName> "Donato";
+  <http://xmlns.com/foaf/0.1/familyName> "Griesi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241186 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, MariaTeresa";
+  <http://xmlns.com/foaf/0.1/givenName> "MariaTeresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241187 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241188 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241185;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241189 .
+
+_:e6ac34e19fed4e7085f6aaa342240241189 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241186;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241190 .
+
+_:e6ac34e19fed4e7085f6aaa342240241190 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241187;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241191 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Franconi, Enrico";
+  <http://xmlns.com/foaf/0.1/givenName> "Enrico";
+  <http://xmlns.com/foaf/0.1/familyName> "Franconi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241192 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Kifer, Michael";
+  <http://xmlns.com/foaf/0.1/givenName> "Michael";
+  <http://xmlns.com/foaf/0.1/familyName> "Kifer" .
+
+_:e6ac34e19fed4e7085f6aaa342240241193 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "May, Wolfgang";
+  <http://xmlns.com/foaf/0.1/givenName> "Wolfgang";
+  <http://xmlns.com/foaf/0.1/familyName> "May" .
+
+_:e6ac34e19fed4e7085f6aaa342240241194 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241191;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241195 .
+
+_:e6ac34e19fed4e7085f6aaa342240241195 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241192;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241196 .
+
+_:e6ac34e19fed4e7085f6aaa342240241196 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241193;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241197 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "The Semantic Web: Research and Applications" .
+
+_:e6ac34e19fed4e7085f6aaa342240241198 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Designing Innovative Linked Open Data and Semantic Technologies for Agro-environmental Modelling";
+  <http://purl.org/dc/terms/identifier> "jbibtex-3";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241204;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241212;
+  <http://purl.org/dc/terms/issued> "2014"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/spatial> "San Diego, CA, USA";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241215;
+  <http://xmlns.com/foaf/0.1/page> <http://www.iemss.org/sites/iemss2014/proceedings.php>;
+  <http://purl.org/ontology/bibo/isbn13> "978-88-9035-744-2";
+  <http://www.w3.org/2000/01/rdf-schema#comment> "ISBN dei proceedings: 978-88-9035-744-2" .
+
+_:e6ac34e19fed4e7085f6aaa342240241199 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Lokers, Rob";
+  <http://xmlns.com/foaf/0.1/givenName> "Rob";
+  <http://xmlns.com/foaf/0.1/familyName> "Lokers" .
+
+_:e6ac34e19fed4e7085f6aaa342240241200 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Konstantopoulos, Stasinos";
+  <http://xmlns.com/foaf/0.1/givenName> "Stasinos";
+  <http://xmlns.com/foaf/0.1/familyName> "Konstantopoulos" .
+
+_:e6ac34e19fed4e7085f6aaa342240241201 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241202 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Knapen, Rob";
+  <http://xmlns.com/foaf/0.1/givenName> "Rob";
+  <http://xmlns.com/foaf/0.1/familyName> "Knapen" .
+
+_:e6ac34e19fed4e7085f6aaa342240241203 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Janssen, Sander";
+  <http://xmlns.com/foaf/0.1/givenName> "Sander";
+  <http://xmlns.com/foaf/0.1/familyName> "Janssen" .
+
+_:e6ac34e19fed4e7085f6aaa342240241204 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241199;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241205 .
+
+_:e6ac34e19fed4e7085f6aaa342240241205 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241200;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241206 .
+
+_:e6ac34e19fed4e7085f6aaa342240241206 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241201;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241207 .
+
+_:e6ac34e19fed4e7085f6aaa342240241207 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241202;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241208 .
+
+_:e6ac34e19fed4e7085f6aaa342240241208 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241203;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241209 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Ames, Daniel P.";
+  <http://xmlns.com/foaf/0.1/givenName> "Daniel P.";
+  <http://xmlns.com/foaf/0.1/familyName> "Ames" .
+
+_:e6ac34e19fed4e7085f6aaa342240241210 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Quinn, Nigel W.T.";
+  <http://xmlns.com/foaf/0.1/givenName> "Nigel W.T.";
+  <http://xmlns.com/foaf/0.1/familyName> "Quinn" .
+
+_:e6ac34e19fed4e7085f6aaa342240241211 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Rizzoli, Andrea E.";
+  <http://xmlns.com/foaf/0.1/givenName> "Andrea E.";
+  <http://xmlns.com/foaf/0.1/familyName> "Rizzoli" .
+
+_:e6ac34e19fed4e7085f6aaa342240241212 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241209;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241213 .
+
+_:e6ac34e19fed4e7085f6aaa342240241213 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241210;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241214 .
+
+_:e6ac34e19fed4e7085f6aaa342240241214 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241211;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241215 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "7th Intl. Congress on Env. Modelling and Software" .
+
+_:e6ac34e19fed4e7085f6aaa342240241216 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Ontological support to knowledge management in a hydrogeological information system";
+  <http://purl.org/dc/terms/identifier> "Pazienza2006d";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241220;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241225;
+  <http://purl.org/dc/terms/issued> "2006"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "WITPress";
+  <http://purl.org/dc/terms/spatial> "Prague, Czech Republic,";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241227;
+  <http://purl.org/ontology/bibo/volume> "37";
+  <http://purl.org/ontology/bibo/pages> "429--440";
+  <http://purl.org/ontology/bibo/doi> "10.2495/DATA060431";
+  <http://purl.org/dc/terms/language> "english" .
+
+_:e6ac34e19fed4e7085f6aaa342240241217 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Maria Teresa Pazienza";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241218 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Marco Pennacchiotti";
+  <http://xmlns.com/foaf/0.1/givenName> "Marco";
+  <http://xmlns.com/foaf/0.1/familyName> "Pennacchiotti" .
+
+_:e6ac34e19fed4e7085f6aaa342240241219 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Armando Stellato";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241220 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241217;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241221 .
+
+_:e6ac34e19fed4e7085f6aaa342240241221 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241218;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241222 .
+
+_:e6ac34e19fed4e7085f6aaa342240241222 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241219;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241223 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Alessandro Zanasi";
+  <http://xmlns.com/foaf/0.1/givenName> "Alessandro";
+  <http://xmlns.com/foaf/0.1/familyName> "Zanasi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241224 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "S.A Temis";
+  <http://xmlns.com/foaf/0.1/givenName> "S.A";
+  <http://xmlns.com/foaf/0.1/familyName> "Temis" .
+
+_:e6ac34e19fed4e7085f6aaa342240241225 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241223;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241226 .
+
+_:e6ac34e19fed4e7085f6aaa342240241226 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241224;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241227 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Data Mining VII: Data, Text and Web Mining and their Business Applications" .
+
+_:e6ac34e19fed4e7085f6aaa342240241228 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "An Open and Scalable Framework for Enriching Ontologies with Natural Language Content";
+  <http://purl.org/dc/terms/identifier> "PazAIIA06";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241231;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241235;
+  <http://purl.org/dc/terms/issued> "2006"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241237;
+  <http://purl.org/ontology/bibo/volume> "4031";
+  <http://purl.org/ontology/bibo/pages> "990-999";
+  <http://purl.org/ontology/bibo/doi> "10.1007/11779568_106";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/11779568_106>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-540-35453-6" .
+
+_:e6ac34e19fed4e7085f6aaa342240241229 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, Maria Teresa";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria Teresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241230 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241231 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241229;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241232 .
+
+_:e6ac34e19fed4e7085f6aaa342240241232 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241230;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241233 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Ali, Moonis";
+  <http://xmlns.com/foaf/0.1/givenName> "Moonis";
+  <http://xmlns.com/foaf/0.1/familyName> "Ali" .
+
+_:e6ac34e19fed4e7085f6aaa342240241234 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Dapoigny, Richard";
+  <http://xmlns.com/foaf/0.1/givenName> "Richard";
+  <http://xmlns.com/foaf/0.1/familyName> "Dapoigny" .
+
+_:e6ac34e19fed4e7085f6aaa342240241235 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241233;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241236 .
+
+_:e6ac34e19fed4e7085f6aaa342240241236 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241234;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241237 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Advances in Applied Artificial Intelligence" .
+
+_:e6ac34e19fed4e7085f6aaa342240241238 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "An Environment for Semi-automatic Annotation of Ontological Knowledge with Linguistic Content";
+  <http://purl.org/dc/terms/identifier> "jbibtex-4";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241241;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241245;
+  <http://purl.org/dc/terms/issued> "2006"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer Berlin Heidelberg";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241247;
+  <http://purl.org/ontology/bibo/volume> "4011";
+  <http://purl.org/ontology/bibo/pages> "442-456";
+  <http://purl.org/ontology/bibo/doi> "10.1007/11762256_33";
+  <http://xmlns.com/foaf/0.1/page> <http://dx.doi.org/10.1007/11762256_33>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-540-34544-2" .
+
+_:e6ac34e19fed4e7085f6aaa342240241239 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, Maria Teresa";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria Teresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241240 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241241 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241239;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241242 .
+
+_:e6ac34e19fed4e7085f6aaa342240241242 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241240;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241243 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Sure, York";
+  <http://xmlns.com/foaf/0.1/givenName> "York";
+  <http://xmlns.com/foaf/0.1/familyName> "Sure" .
+
+_:e6ac34e19fed4e7085f6aaa342240241244 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Domingue, John";
+  <http://xmlns.com/foaf/0.1/givenName> "John";
+  <http://xmlns.com/foaf/0.1/familyName> "Domingue" .
+
+_:e6ac34e19fed4e7085f6aaa342240241245 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241243;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241246 .
+
+_:e6ac34e19fed4e7085f6aaa342240241246 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241244;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241247 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "The Semantic Web: Research and Applications" .
+
+_:e6ac34e19fed4e7085f6aaa342240241248 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "An Architecture for Data and Knowledge Acquisition for the Semantic Web: the AGROVOC Use Case";
+  <http://purl.org/dc/terms/identifier> "2108_67583";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241254;
+  <http://purl.org/ontology/bibo/editorList> _:e6ac34e19fed4e7085f6aaa342240241260;
+  <http://purl.org/dc/terms/issued> "2012-09"^^<http://www.w3.org/2001/XMLSchema#gYearMonth>;
+  <http://purl.org/dc/terms/publisher> "Springer-Verlag";
+  <http://purl.org/dc/terms/spatial> "Rome, Italy";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241261;
+  <http://purl.org/ontology/bibo/volume> "7567";
+  <http://purl.org/ontology/bibo/pages> "426-433";
+  <http://purl.org/ontology/bibo/doi> "10.1007/978-3-642-33618-8_58";
+  <http://xmlns.com/foaf/0.1/page> <http://link.springer.com/chapter/10.1007%2F978-3-642-33618-8_58>;
+  <http://purl.org/ontology/bibo/isbn13> "978-3-642-33617-1";
+  <http://purl.org/dc/terms/abstract> "We are surrounded by ever growing volumes of unstructured and weakly-structured information, and for a human being, either domain expert or not, it is nearly impossible to read, understand and categorize it in a fair amount of time. Moreover, different user categories have different expectations: final users need easy to use tools and services for specific tasks, knowledge engineers require robust tools for knowledge acquisition, knowledge categorization and semantic resources development, while semantic applications developers demand for flexible frameworks for fast and easy, standardized development of complex applications. The proposed system is based on CODA open architecture and demonstrates the hands-on experience of building a complete data acquisition workflow, including data extraction and transformation (triplification) for AGROVOC thesaurus enrichment. The system integrates, with an high level of autonomy, different NLP tools and custom libraries, following UIMA standards. In this perspective, the architecture, the implementation and experimental results will be discussed." .
+
+_:e6ac34e19fed4e7085f6aaa342240241249 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Pazienza, Maria Teresa";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria Teresa";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241250 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stellato, Armando";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241251 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Tudorache, Alexandra Gabriela";
+  <http://xmlns.com/foaf/0.1/givenName> "Alexandra Gabriela";
+  <http://xmlns.com/foaf/0.1/familyName> "Tudorache" .
+
+_:e6ac34e19fed4e7085f6aaa342240241252 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Turbati, Andrea";
+  <http://xmlns.com/foaf/0.1/givenName> "Andrea";
+  <http://xmlns.com/foaf/0.1/familyName> "Turbati" .
+
+_:e6ac34e19fed4e7085f6aaa342240241253 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Vagnoni, Flaminia";
+  <http://xmlns.com/foaf/0.1/givenName> "Flaminia";
+  <http://xmlns.com/foaf/0.1/familyName> "Vagnoni" .
+
+_:e6ac34e19fed4e7085f6aaa342240241254 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241249;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241255 .
+
+_:e6ac34e19fed4e7085f6aaa342240241255 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241250;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241256 .
+
+_:e6ac34e19fed4e7085f6aaa342240241256 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241251;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241257 .
+
+_:e6ac34e19fed4e7085f6aaa342240241257 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241252;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241258 .
+
+_:e6ac34e19fed4e7085f6aaa342240241258 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241253;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241259 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Springer Verlag";
+  <http://xmlns.com/foaf/0.1/givenName> "Springer";
+  <http://xmlns.com/foaf/0.1/familyName> "Verlag" .
+
+_:e6ac34e19fed4e7085f6aaa342240241260 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241259;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241261 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Confederated International Workshops on On the Move to Meaningful Internet Systems, OTM 2012: OTM Academy, Industry Case Studies Program, EI2N 2012, INBAST 2012, META4eS 2012, OnToContent 2012, ORM 2012, SeDeS 2012, SINCOM 2012, and SOMOCO 2012" .
+
+_:e6ac34e19fed4e7085f6aaa342240241262 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Chapter>;
+  <http://purl.org/dc/terms/title> "Maskkot – An Entity-centric Annotation Platform";
+  <http://purl.org/dc/terms/identifier> "Stellato2010" .
+
+_:e6ac34e19fed4e7085f6aaa342240241263 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Armando Stellato";
+  <http://xmlns.com/foaf/0.1/givenName> "Armando";
+  <http://xmlns.com/foaf/0.1/familyName> "Stellato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241264 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Heiko Stoermer";
+  <http://xmlns.com/foaf/0.1/givenName> "Heiko";
+  <http://xmlns.com/foaf/0.1/familyName> "Stoermer" .
+
+_:e6ac34e19fed4e7085f6aaa342240241265 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Stefano Bortoli";
+  <http://xmlns.com/foaf/0.1/givenName> "Stefano";
+  <http://xmlns.com/foaf/0.1/familyName> "Bortoli" .
+
+_:e6ac34e19fed4e7085f6aaa342240241266 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Noemi Scarpato";
+  <http://xmlns.com/foaf/0.1/givenName> "Noemi";
+  <http://xmlns.com/foaf/0.1/familyName> "Scarpato" .
+
+_:e6ac34e19fed4e7085f6aaa342240241267 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Andrea Turbati";
+  <http://xmlns.com/foaf/0.1/givenName> "Andrea";
+  <http://xmlns.com/foaf/0.1/familyName> "Turbati" .
+
+_:e6ac34e19fed4e7085f6aaa342240241268 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Paolo Bouquet";
+  <http://xmlns.com/foaf/0.1/givenName> "Paolo";
+  <http://xmlns.com/foaf/0.1/familyName> "Bouquet" .
+
+_:e6ac34e19fed4e7085f6aaa342240241269 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Maria Teresa Pazienza";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria";
+  <http://xmlns.com/foaf/0.1/familyName> "Pazienza" .
+
+_:e6ac34e19fed4e7085f6aaa342240241270 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241263;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241271 .
+
+_:e6ac34e19fed4e7085f6aaa342240241271 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241264;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241272 .
+
+_:e6ac34e19fed4e7085f6aaa342240241272 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241265;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241273 .
+
+_:e6ac34e19fed4e7085f6aaa342240241273 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241266;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241274 .
+
+_:e6ac34e19fed4e7085f6aaa342240241274 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241267;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241275 .
+
+_:e6ac34e19fed4e7085f6aaa342240241275 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241268;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241276 .
+
+_:e6ac34e19fed4e7085f6aaa342240241276 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241269;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241262 <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241270;
+  <http://purl.org/dc/terms/issued> "2010"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "European Language Resources Association (ELRA)";
+  <http://purl.org/dc/terms/spatial> "Mediterranean Conference Centre, Valletta, Malta";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241277;
+  <http://purl.org/ontology/bibo/isbn10> "2-9517408-6-7" .
+
+_:e6ac34e19fed4e7085f6aaa342240241277 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "International Conference on Language Resources and Evaluation (LREC 2010)" .

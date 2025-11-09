@@ -1,0 +1,49 @@
+
+_:e6ac34e19fed4e7085f6aaa342240241290 a <http://purl.org/ontology/bibo/Document>,
+    <http://purl.org/ontology/bibo/Article>;
+  <http://purl.org/dc/terms/title> "Artificial intelligence in medicine";
+  <http://purl.org/dc/terms/identifier> "holmes2004artificial";
+  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241295;
+  <http://purl.org/dc/terms/issued> "2004"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Springer";
+  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241299;
+  <http://purl.org/ontology/bibo/volume> "86";
+  <http://purl.org/ontology/bibo/issue> "86";
+  <http://purl.org/ontology/bibo/pages> "334--8" .
+
+_:e6ac34e19fed4e7085f6aaa342240241291 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Holmes, J";
+  <http://xmlns.com/foaf/0.1/givenName> "J";
+  <http://xmlns.com/foaf/0.1/familyName> "Holmes" .
+
+_:e6ac34e19fed4e7085f6aaa342240241292 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Sacchi, L";
+  <http://xmlns.com/foaf/0.1/givenName> "L";
+  <http://xmlns.com/foaf/0.1/familyName> "Sacchi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241293 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Bellazzi, R";
+  <http://xmlns.com/foaf/0.1/givenName> "R";
+  <http://xmlns.com/foaf/0.1/familyName> "Bellazzi" .
+
+_:e6ac34e19fed4e7085f6aaa342240241294 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "others" .
+
+_:e6ac34e19fed4e7085f6aaa342240241295 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241291;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241296 .
+
+_:e6ac34e19fed4e7085f6aaa342240241296 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241292;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241297 .
+
+_:e6ac34e19fed4e7085f6aaa342240241297 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241293;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241298 .
+
+_:e6ac34e19fed4e7085f6aaa342240241298 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:e6ac34e19fed4e7085f6aaa342240241294;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:e6ac34e19fed4e7085f6aaa342240241299 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Ann R Coll Surg Engl" .

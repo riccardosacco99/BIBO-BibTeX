@@ -19,6 +19,9 @@ L’obiettivo finale è integrare il convertitore come **plugin per la piattafor
 ```
 BIBO-BibTeX/
 ├── pom.xml
+├── bibtex-to-rdf.sh              # Script per conversione BibTeX → RDF
+├── test-roundtrip.sh             # Script per test roundtrip completo
+├── convert-between-rdf-formats.sh # Script conversione Turtle ↔ RDF/XML
 ├── core/
 │   ├── pom.xml
 │   └── src
@@ -27,6 +30,11 @@ BIBO-BibTeX/
 │       │   ├── converter/
 │       │   │   ├── BibTeXBibliographicConverter.java
 │       │   │   └── BibliographicConverter.java
+│       │   ├── examples/
+│       │   │   ├── BatchConversion.java       # Conversione batch BibTeX→RDF (ottimizzato)
+│       │   │   ├── RDFConverter.java         # Conversione tra formati RDF
+│       │   │   ├── ReverseConversion.java    # Conversione RDF→BibTeX
+│       │   │   └── SampleConversion.java     # Conversione BibTeX→RDF
 │       │   └── model/bibo/
 │       │       ├── BiboContributor*.java
 │       │       ├── BiboDocument.java
@@ -49,32 +57,107 @@ BIBO-BibTeX/
 │       │   └── VocBenchRepositoryGateway.java
 │       └── test/java/it/riccardosacco/bibobibtex/vocbench/
 │           └── VocBenchPluginLifecycleTest.java
+├── test-data/
+│   ├── bibtex/              # File BibTeX originali
+│   ├── bibo/                # File RDF convertiti
+│   ├── bibtex-roundtrip/    # BibTeX dopo roundtrip
+│   └── bibo-roundtrip/      # RDF dopo roundtrip
 └── README.md
 ```
 
-- `core`: modulo principale con i convertitori e i modelli BIBO rappresentati in RDF4J.
-- `vocbench-plugin`: scheletro del plugin VocBench, pronto per l'integrazione con i servizi di repository della piattaforma.
+### Moduli Principali
+
+- **`core`**: modulo principale con i convertitori e i modelli BIBO rappresentati in RDF4J
+  - `converter/`: logica di conversione bidirezionale BibTeX ↔ BIBO
+  - `model/bibo/`: modello Java per rappresentare documenti bibliografici BIBO
+  - `examples/`: utility per conversione batch e testing
+- **`vocbench-plugin`**: scheletro del plugin VocBench, pronto per l'integrazione con i servizi di repository della piattaforma
+- **`test-data/`**: directory per file di test e validazione roundtrip
 
 ### Come compilare
 ```bash
 mvn clean package
 ```
 
-### Dataset del professore
-- Gli archivi BibTeX forniti dal professore sono versionati in `test-data/professor-examples/PapersDB_MIUR.bib` e `test-data/professor-examples/PapersDB.bib`.
-- Per verifiche manuali o benchmark di regressione è sufficiente eseguire:
-```bash
-mvn -pl core exec:java \
-    -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.SampleConversion \
-    -Dexec.args="test-data/professor-examples/PapersDB.bib core/target/papersdb-full"
+## Flusso di Conversione e Testing
+
+### Struttura Directory Test Data
 ```
-Per il dataset specifico MIUR basta cambiare l'input e (facoltativamente) la cartella di output:
-```bash
-mvn -pl core exec:java \
-    -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.SampleConversion \
-    -Dexec.args="test-data/professor-examples/PapersDB_MIUR.bib core/target/papersdb-miur"
+test-data/
+├── bibtex/              # File BibTeX originali (input)
+├── bibo/                # File RDF convertiti da BibTeX
+├── bibtex-roundtrip/    # File BibTeX ottenuti da conversione RDF→BibTeX (roundtrip)
+└── bibo-roundtrip/      # File RDF ottenuti da BibTeX roundtrip (per validazione)
 ```
-I Turtle generati finiscono sotto `core/target/…` (ignorato da git) e possono essere confrontati con run futuri.
+
+### Flusso Completo di Conversione
+```
+BibTeX  →   RDF  →     BibTeX        →     RDF
+   ↓         ↓           ↓                  ↓
+bibtex      bibo   bibtex-roundtrip     bibo-roundtrip 
+```
+
+Questo flusso permette di testare la qualità della conversione bidirezionale e identificare eventuali perdite di informazione.
+
+### Script Disponibili
+
+#### 1. Conversione BibTeX → RDF
+Converte tutti i file BibTeX in `test-data/bibtex/` in formato RDF (Turtle):
+```bash
+./bibtex-to-rdf.sh
+```
+Output: file `.ttl` in `test-data/bibo/`
+
+#### 2. Test Roundtrip Completo
+Esegue il ciclo completo di conversione per validare la qualità del convertitore:
+```bash
+./test-roundtrip.sh
+```
+Questo script:
+1. Converte RDF → BibTeX (`test-data/bibo/` → `test-data/bibtex-roundtrip/`)
+2. Converte BibTeX → RDF (`test-data/bibtex-roundtrip/` → `test-data/bibo-roundtrip/`)
+3. Mostra statistiche sui file processati
+
+Per confrontare i risultati originali vs roundtrip:
+```bash
+# Confronta file RDF specifico
+diff test-data/bibo/holmes2004artificial.ttl test-data/bibo-roundtrip/holmes2004artificial.ttl
+
+# Confronta tutti i file (attenzione: output lungo!)
+for file in test-data/bibo/*.ttl; do
+    base=$(basename "$file")
+    if [ -f "test-data/bibo-roundtrip/$base" ]; then
+        echo "=== $base ==="
+        diff "$file" "test-data/bibo-roundtrip/$base" | head -20
+    fi
+done
+```
+
+#### 3. Conversione tra Formati RDF
+Converte tra Turtle (`.ttl`) e RDF/XML (`.rdf`):
+```bash
+./convert-between-rdf-formats.sh
+```
+
+### Dataset del Professore
+Gli archivi BibTeX forniti dal professore sono versionati in `test-data/bibtex/`:
+- `PapersDB.bib` (~325KB, database completo)
+- `PapersDB_MIUR.bib` (~18KB, subset MIUR)
+
+Questi file vengono processati automaticamente dagli script di conversione. Per eseguire manualmente la conversione di un singolo file:
+```bash
+# Conversione batch (consigliato - più veloce)
+mvn -q exec:java -pl core \
+    -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.BatchConversion \
+    -Dexec.args="test-data/bibtex test-data/bibo"
+
+# Conversione singolo file
+mvn -q exec:java -pl core \
+    -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.SampleConversion \
+    -Dexec.args="test-data/bibtex/PapersDB.bib test-data/bibo"
+```
+
+**Nota:** La classe `BatchConversion` processa tutti i file `.bib` in una directory con un'unica esecuzione Maven, creando un file `.ttl` per ogni file `.bib` (mantenendo la struttura originale). Questo approccio è molto più veloce rispetto a chiamate Maven separate per ogni file.
 
 ## Esempio Output RDF
 

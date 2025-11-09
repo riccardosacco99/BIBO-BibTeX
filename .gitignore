@@ -1,5 +1,51 @@
-target/
+# IDE
 /.idea/
 /.vscode/
 *.iml
+*.ipr
+*.iws
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+
+# Test output directories (generati dagli script di roundtrip)
+test-data/bibtex-roundtrip/
+test-data/bibo-roundtrip/
+
+# Backup files
+*.bak
+*.bak2
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Github
+.Github
+
+# Agents
+.claude
