@@ -226,7 +226,7 @@ class ValidationExceptionTest {
             () -> BibliographicValidator.validateBibTeXEntry(entry)
         );
         assertTrue(ex.getMessage().contains("Citation key"));
-        assertTrue(ex.getMessage().contains("letters, numbers, hyphens"));
+        assertTrue(ex.getMessage().contains("invalid characters"));
     }
 
     @Test

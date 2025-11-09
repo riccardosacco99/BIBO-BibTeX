@@ -3,12 +3,10 @@ package it.riccardosacco.bibobibtex.converter;
 import it.riccardosacco.bibobibtex.exception.ValidationException;
 import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifier;
-import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifierType;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
 import org.jbibtex.BibTeXEntry;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.time.Year;
 import java.util.regex.Pattern;
 
@@ -20,7 +18,8 @@ import java.util.regex.Pattern;
 public class BibliographicValidator {
 
     private static final Pattern DOI_PATTERN = Pattern.compile("10\\.\\d{4,}/[^\\s]+");
-    private static final Pattern CITATION_KEY_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
+    // Allow alphanumeric, underscore, hyphen, slash, colon, plus (common in DBLP, arXiv, BibTeX databases)
+    private static final Pattern CITATION_KEY_PATTERN = Pattern.compile("^[a-zA-Z0-9_\\-/:+.]+$");
     private static final int MIN_VALID_YEAR = 1000;
     private static final int MAX_FUTURE_YEARS = 5;
 
@@ -46,12 +45,12 @@ public class BibliographicValidator {
             throw new ValidationException("Title is required", "title", title);
         }
 
-        // Validate citation key format
+        // Validate citation key format (allow common formats: DBLP, arXiv, etc.)
         String citationKey = entry.getKey() != null ? entry.getKey().getValue() : null;
         if (citationKey != null && !citationKey.isBlank()) {
             if (!CITATION_KEY_PATTERN.matcher(citationKey).matches()) {
                 throw new ValidationException(
-                    "Citation key must contain only letters, numbers, hyphens, and underscores",
+                    "Citation key contains invalid characters (allowed: alphanumeric, -_/:+.)",
                     "citation_key",
                     citationKey
                 );
@@ -289,9 +288,10 @@ public class BibliographicValidator {
      * @throws ValidationException if URL is invalid
      */
     private static void validateURL(String url) {
+        // Use URI instead of deprecated URL(String) constructor
         try {
-            new URL(url);
-        } catch (MalformedURLException e) {
+            URI.create(url).toURL();
+        } catch (Exception e) {
             throw new ValidationException(
                 "Invalid URL format",
                 "url",
