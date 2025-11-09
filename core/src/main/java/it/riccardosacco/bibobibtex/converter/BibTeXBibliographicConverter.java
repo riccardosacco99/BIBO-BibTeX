@@ -97,7 +97,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, BibTeXEntry.KEY_PAGES).ifPresent(builder::pages);
 
         extractIdentifiers(source).forEach(builder::addIdentifier);
-        fieldValue(source, BibTeXEntry.KEY_URL).ifPresent(builder::url);
+        fieldValue(source, BibTeXEntry.KEY_URL)
+                .map(BibTeXBibliographicConverter::sanitizeUrl)
+                .ifPresent(builder::url);
         fieldValue(source, FIELD_LANGUAGE).ifPresent(builder::language);
         fieldValue(source, FIELD_ABSTRACT).ifPresent(builder::abstractText);
         fieldValue(source, BibTeXEntry.KEY_NOTE).ifPresent(builder::notes);
@@ -176,6 +178,34 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     private static Optional<String> fieldValue(BibTeXEntry entry, Key primary, Key fallback) {
         return fieldValue(entry, primary).or(() -> fieldValue(entry, fallback));
+    }
+
+    /**
+     * Sanitizes URL by removing newlines and taking only the first line.
+     * Some BibTeX files contain multi-line URLs which are invalid in RDF.
+     */
+    private static String sanitizeUrl(String url) {
+        if (url == null) {
+            return null;
+        }
+        // Take only the first line if URL contains newlines or carriage returns
+        int newlineIndex = url.indexOf('\n');
+        int crIndex = url.indexOf('\r');
+
+        // Find the first line break character
+        int breakIndex = -1;
+        if (newlineIndex > 0 && crIndex > 0) {
+            breakIndex = Math.min(newlineIndex, crIndex);
+        } else if (newlineIndex > 0) {
+            breakIndex = newlineIndex;
+        } else if (crIndex > 0) {
+            breakIndex = crIndex;
+        }
+
+        if (breakIndex > 0) {
+            return url.substring(0, breakIndex).trim();
+        }
+        return url;
     }
 
     private static void putField(BibTeXEntry entry, Key key, String value) {
@@ -283,8 +313,13 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     }
 
     private static BiboPersonName parseName(String rawName) {
-        BiboPersonName.Builder builder = BiboPersonName.builder(rawName);
+        // Remove outer braces that BibTeX uses for capitalization protection
         String normalized = rawName.trim();
+        while (normalized.startsWith("{") && normalized.endsWith("}") && normalized.length() > 2) {
+            normalized = normalized.substring(1, normalized.length() - 1).trim();
+        }
+
+        BiboPersonName.Builder builder = BiboPersonName.builder(normalized);
 
         if (normalized.contains(",")) {
             String[] parts = normalized.split(",", 2);
@@ -366,6 +401,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(entry, BibTeXEntry.KEY_DOI)
                 .ifPresent(value -> identifiers.add(new BiboIdentifier(BiboIdentifierType.DOI, value)));
         fieldValue(entry, BibTeXEntry.KEY_URL)
+                .map(BibTeXBibliographicConverter::sanitizeUrl)
                 .ifPresent(value -> identifiers.add(new BiboIdentifier(BiboIdentifierType.URL, value)));
         fieldValue(entry, FIELD_HANDLE)
                 .ifPresent(value -> identifiers.add(new BiboIdentifier(BiboIdentifierType.HANDLE, value)));

@@ -1,33 +1,33 @@
 
-_:e6ac34e19fed4e7085f6aaa342240241300 a <http://purl.org/ontology/bibo/Document>,
+_:26d9160fb882461582b0d086e4eec193300 a <http://purl.org/ontology/bibo/Document>,
     <http://purl.org/ontology/bibo/Article>;
   <http://purl.org/dc/terms/title> "Improving cycling performance: how should we spend our time and money";
   <http://purl.org/dc/terms/identifier> "jeukendrup2001improving";
-  <http://purl.org/ontology/bibo/authorList> _:e6ac34e19fed4e7085f6aaa342240241303;
+  <http://purl.org/ontology/bibo/authorList> _:26d9160fb882461582b0d086e4eec193303;
   <http://purl.org/dc/terms/issued> "2001"^^<http://www.w3.org/2001/XMLSchema#gYear>;
   <http://purl.org/dc/terms/publisher> "Springer";
-  <http://purl.org/dc/terms/isPartOf> _:e6ac34e19fed4e7085f6aaa342240241305;
+  <http://purl.org/dc/terms/isPartOf> _:26d9160fb882461582b0d086e4eec193305;
   <http://purl.org/ontology/bibo/volume> "31";
   <http://purl.org/ontology/bibo/issue> "7";
   <http://purl.org/ontology/bibo/pages> "559--569" .
 
-_:e6ac34e19fed4e7085f6aaa342240241301 a <http://xmlns.com/foaf/0.1/Person>;
+_:26d9160fb882461582b0d086e4eec193301 a <http://xmlns.com/foaf/0.1/Person>;
   <http://xmlns.com/foaf/0.1/name> "Jeukendrup, Asker E";
   <http://xmlns.com/foaf/0.1/givenName> "Asker E";
   <http://xmlns.com/foaf/0.1/familyName> "Jeukendrup" .
 
-_:e6ac34e19fed4e7085f6aaa342240241302 a <http://xmlns.com/foaf/0.1/Person>;
+_:26d9160fb882461582b0d086e4eec193302 a <http://xmlns.com/foaf/0.1/Person>;
   <http://xmlns.com/foaf/0.1/name> "Martin, James";
   <http://xmlns.com/foaf/0.1/givenName> "James";
   <http://xmlns.com/foaf/0.1/familyName> "Martin" .
 
-_:e6ac34e19fed4e7085f6aaa342240241303 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
-  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:e6ac34e19fed4e7085f6aaa342240241301;
-  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:e6ac34e19fed4e7085f6aaa342240241304 .
+_:26d9160fb882461582b0d086e4eec193303 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:26d9160fb882461582b0d086e4eec193301;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:26d9160fb882461582b0d086e4eec193304 .
 
-_:e6ac34e19fed4e7085f6aaa342240241304 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
-    _:e6ac34e19fed4e7085f6aaa342240241302;
+_:26d9160fb882461582b0d086e4eec193304 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:26d9160fb882461582b0d086e4eec193302;
   <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
 
-_:e6ac34e19fed4e7085f6aaa342240241305 a <http://purl.org/ontology/bibo/Document>;
+_:26d9160fb882461582b0d086e4eec193305 a <http://purl.org/ontology/bibo/Document>;
   <http://purl.org/dc/terms/title> "Sports medicine" .

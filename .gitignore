@@ -29,7 +29,8 @@ buildNumber.properties
 *.log
 hs_err_pid*
 
-# Test output directories (generati dagli script di roundtrip)
+# Generated directories (created by conversion scripts)
+test-data/bibo/
 test-data/bibtex-roundtrip/
 test-data/bibo-roundtrip/
 
@@ -49,3 +50,4 @@ test-data/bibo-roundtrip/
 
 # Agents
 .claude
+CLAUDE.md

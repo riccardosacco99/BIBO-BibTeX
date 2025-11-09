@@ -23,9 +23,9 @@ BIBO_ROUNDTRIP_DIR="test-data/bibo-roundtrip"
 mkdir -p "$BIBTEX_ROUNDTRIP_DIR"
 mkdir -p "$BIBO_ROUNDTRIP_DIR"
 
-# Clean roundtrip directories (optional - uncomment to enable)
-# echo "Cleaning roundtrip directories..."
-# rm -rf "$BIBTEX_ROUNDTRIP_DIR"/* "$BIBO_ROUNDTRIP_DIR"/*
+# Clean roundtrip directories
+echo "Cleaning roundtrip directories..."
+rm -rf "$BIBTEX_ROUNDTRIP_DIR"/* "$BIBO_ROUNDTRIP_DIR"/*
 
 echo ""
 echo "=========================================="

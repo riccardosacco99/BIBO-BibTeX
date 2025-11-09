@@ -58,10 +58,9 @@ BIBO-BibTeX/
 │       └── test/java/it/riccardosacco/bibobibtex/vocbench/
 │           └── VocBenchPluginLifecycleTest.java
 ├── test-data/
-│   ├── bibtex/              # File BibTeX originali
-│   ├── bibo/                # File RDF convertiti
-│   ├── bibtex-roundtrip/    # BibTeX dopo roundtrip
-│   └── bibo-roundtrip/      # RDF dopo roundtrip
+│   └── bibtex/              # File BibTeX originali (input - versionati in git)
+│       # Le altre directory (bibo/, bibtex-roundtrip/, bibo-roundtrip/)
+│       # vengono generate automaticamente dagli script di conversione
 └── README.md
 ```
 
@@ -79,85 +78,131 @@ BIBO-BibTeX/
 mvn clean package
 ```
 
-## Flusso di Conversione e Testing
+## Flusso di Conversione
 
-### Struttura Directory Test Data
+### Panoramica Directory
+
+Il progetto mantiene solo `test-data/bibtex/` versionato in git (punto di partenza). Le altre directory vengono **generate automaticamente** dagli script:
+
 ```
 test-data/
-├── bibtex/              # File BibTeX originali (input)
-├── bibo/                # File RDF convertiti da BibTeX
-├── bibtex-roundtrip/    # File BibTeX ottenuti da conversione RDF→BibTeX (roundtrip)
-└── bibo-roundtrip/      # File RDF ottenuti da BibTeX roundtrip (per validazione)
+├── bibtex/              # [VERSIONATO] File BibTeX originali
+├── bibo/                # [GENERATO] RDF convertiti da BibTeX
+├── bibtex-roundtrip/    # [GENERATO] BibTeX da conversione inversa RDF→BibTeX
+└── bibo-roundtrip/      # [GENERATO] RDF da BibTeX roundtrip (validazione)
 ```
 
-### Flusso Completo di Conversione
+**Importante:** Gli script processano **automaticamente tutti i file** presenti in `test-data/bibtex/`, indipendentemente dal numero o dimensione. Non serve modificare gli script quando si aggiungono nuovi file.
+
+### Flusso di Conversione Completo
+
 ```
-BibTeX  →   RDF  →     BibTeX        →     RDF
-   ↓         ↓           ↓                  ↓
-bibtex      bibo   bibtex-roundtrip     bibo-roundtrip 
+┌─────────┐     Script 1      ┌──────┐     Script 2      ┌──────────────────┐
+│ BibTeX  │ ──────────────→   │ RDF  │ ─────────────→    │ BibTeX roundtrip │
+│ (input) │   bibtex-to-rdf   │(BIBO)│  test-roundtrip   │                  │
+└─────────┘                   └──────┘                   └──────────────────┘
+    ↑                             ↓                                ↓
+  bibtex/                       bibo/                       bibtex-roundtrip/
+                                  │                                │
+                                  │        Script 2                ↓
+                                  └─────  (continua)  ──→    bibo-roundtrip/
+                                        test-roundtrip        (validazione)
 ```
 
-Questo flusso permette di testare la qualità della conversione bidirezionale e identificare eventuali perdite di informazione.
+### Script di Conversione
 
-### Script Disponibili
+#### 1. BibTeX → RDF (Conversione Base)
 
-#### 1. Conversione BibTeX → RDF
-Converte tutti i file BibTeX in `test-data/bibtex/` in formato RDF (Turtle):
+**Script:** `./bibtex-to-rdf.sh`
+
+Converte tutti i file `.bib` in `test-data/bibtex/` in formato RDF Turtle.
+
 ```bash
 ./bibtex-to-rdf.sh
 ```
-Output: file `.ttl` in `test-data/bibo/`
 
-#### 2. Test Roundtrip Completo
-Esegue il ciclo completo di conversione per validare la qualità del convertitore:
+**Output:**
+- Crea `test-data/bibo/` (se non esiste)
+- Genera un file `.ttl` per ogni file `.bib` (stesso nome)
+- Esempio: `PapersDB.bib` → `PapersDB.ttl`
+
+**Quando usarlo:**
+- Prima conversione dopo clonazione repo
+- Dopo aggiunta/modifica di file BibTeX
+- Prima di eseguire il test roundtrip
+
+#### 2. Test Roundtrip Completo (Validazione Bidirezionale)
+
+**Script:** `./test-roundtrip.sh`
+
+Esegue il ciclo completo per validare la conversione bidirezionale:
+
 ```bash
 ./test-roundtrip.sh
 ```
-Questo script:
-1. Converte RDF → BibTeX (`test-data/bibo/` → `test-data/bibtex-roundtrip/`)
-2. Converte BibTeX → RDF (`test-data/bibtex-roundtrip/` → `test-data/bibo-roundtrip/`)
-3. Mostra statistiche sui file processati
 
-Per confrontare i risultati originali vs roundtrip:
+**Flusso interno:**
+1. **Step 1:** RDF → BibTeX
+   `test-data/bibo/*.ttl` → `test-data/bibtex-roundtrip/*.bib`
+
+2. **Step 2:** BibTeX → RDF (roundtrip)
+   `test-data/bibtex-roundtrip/*.bib` → `test-data/bibo-roundtrip/*.ttl`
+
+3. **Output:** Statistiche su file processati ed entries convertite
+
+**Validazione manuale:**
+
+Confronta RDF originale vs roundtrip per verificare perdite di informazione:
+
 ```bash
-# Confronta file RDF specifico
-diff test-data/bibo/holmes2004artificial.ttl test-data/bibo-roundtrip/holmes2004artificial.ttl
+# File specifico
+diff test-data/bibo/PapersDB.ttl test-data/bibo-roundtrip/PapersDB.ttl
 
-# Confronta tutti i file (attenzione: output lungo!)
+# Tutti i file (panoramica)
 for file in test-data/bibo/*.ttl; do
     base=$(basename "$file")
-    if [ -f "test-data/bibo-roundtrip/$base" ]; then
-        echo "=== $base ==="
-        diff "$file" "test-data/bibo-roundtrip/$base" | head -20
-    fi
+    echo "=== $base ==="
+    diff "$file" "test-data/bibo-roundtrip/$base" | head -10
 done
 ```
 
-#### 3. Conversione tra Formati RDF
+#### 3. Conversione tra Formati RDF (Utility)
+
 Converte tra Turtle (`.ttl`) e RDF/XML (`.rdf`):
+
 ```bash
 ./convert-between-rdf-formats.sh
 ```
 
-### Dataset del Professore
-Gli archivi BibTeX forniti dal professore sono versionati in `test-data/bibtex/`:
-- `PapersDB.bib` (~325KB, database completo)
-- `PapersDB_MIUR.bib` (~18KB, subset MIUR)
+### Dataset Test
 
-Questi file vengono processati automaticamente dagli script di conversione. Per eseguire manualmente la conversione di un singolo file:
+Il repository include file BibTeX di test in `test-data/bibtex/`:
+- `PapersDB.bib` (~325KB, 528 entries)
+- `PapersDB_MIUR.bib` (~18KB, 16 entries)
+- File singoli per test unitari (artificialIntelligenceMedicine, cyclingPerformance, etc.)
+
+### Conversione Manuale (Avanzata)
+
+Per eseguire le conversioni senza gli script:
+
 ```bash
-# Conversione batch (consigliato - più veloce)
+# BibTeX → RDF (batch - consigliato)
 mvn -q exec:java -pl core \
     -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.BatchConversion \
     -Dexec.args="test-data/bibtex test-data/bibo"
 
-# Conversione singolo file
+# BibTeX → RDF (singolo file)
 mvn -q exec:java -pl core \
     -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.SampleConversion \
     -Dexec.args="test-data/bibtex/PapersDB.bib test-data/bibo"
+
+# RDF → BibTeX (batch)
+mvn -q exec:java -pl core \
+    -Dexec.mainClass=it.riccardosacco.bibobibtex.examples.ReverseConversion \
+    -Dexec.args="test-data/bibo test-data/bibtex-roundtrip"
 ```
 
-**Nota:** La classe `BatchConversion` processa tutti i file `.bib` in una directory con un'unica esecuzione Maven, creando un file `.ttl` per ogni file `.bib` (mantenendo la struttura originale). Questo approccio è molto più veloce rispetto a chiamate Maven separate per ogni file.
+**Nota:** `BatchConversion` processa tutti i file in una directory con un'unica esecuzione Maven, generando un file `.ttl` per ogni `.bib`. Molto più efficiente per dataset multipli.
 
 ## Esempio Output RDF
 

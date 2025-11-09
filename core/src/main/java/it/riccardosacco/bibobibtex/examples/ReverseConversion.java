@@ -73,10 +73,19 @@ public final class ReverseConversion {
                 .filter(path -> path.toString().endsWith(".rdf") || path.toString().endsWith(".ttl"))) {
             files.forEach(path -> {
                 try {
-                    BiboDocument document = parseDocument(path);
-                    converter.convertFromBibo(document).ifPresentOrElse(
-                            entry -> writeBibTex(outputDir, document, entry),
-                            () -> System.out.println("Documento ignorato perché incompleto: " + path.getFileName()));
+                    List<BiboDocument> documents = parseDocuments(path);
+                    List<BibTeXEntry> entries = new ArrayList<>();
+
+                    for (BiboDocument document : documents) {
+                        converter.convertFromBibo(document).ifPresent(entries::add);
+                    }
+
+                    if (!entries.isEmpty()) {
+                        writeBibTexFile(outputDir, path, entries);
+                        System.out.println("Converted: " + path.getFileName() + " -> " + entries.size() + " entries");
+                    } else {
+                        System.out.println("No valid entries in: " + path.getFileName());
+                    }
                 } catch (IOException ex) {
                     System.err.println("Errore durante la lettura di " + path.getFileName() + ": " + ex.getMessage());
                 }
@@ -84,22 +93,41 @@ public final class ReverseConversion {
         }
     }
 
-    private static BiboDocument parseDocument(Path file) throws IOException {
+    private static List<BiboDocument> parseDocuments(Path file) throws IOException {
         try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
             // Auto-detect format based on file extension
             RDFFormat format = Rio.getParserFormatForFileName(file.toString()).orElse(RDFFormat.RDFXML);
             Model model = Rio.parse(reader, "", format);
-            Resource subject = selectSubject(model);
-            return buildDocument(model, subject);
+            List<Resource> subjects = selectAllSubjects(model);
+
+            List<BiboDocument> documents = new ArrayList<>();
+            for (Resource subject : subjects) {
+                try {
+                    documents.add(buildDocument(model, subject));
+                } catch (Exception ex) {
+                    System.err.println("  Skipping invalid document in " + file.getFileName() + ": " + ex.getMessage());
+                }
+            }
+            return documents;
         } catch (Exception ex) {
             throw new IOException("Impossibile convertire " + file.getFileName(), ex);
         }
     }
 
-    private static Resource selectSubject(Model model) {
-        return Models.subject(model.filter(null, RDF.TYPE, BiboVocabulary.DOCUMENT))
-                .or(() -> Models.subject(model.filter(null, RDF.TYPE, null)))
-                .orElseThrow(() -> new IllegalStateException("Nessun bibo:Document trovato"));
+    private static List<Resource> selectAllSubjects(Model model) {
+        // Find all resources that are bibo:Document or any BIBO subclass
+        return model.filter(null, RDF.TYPE, null)
+                .stream()
+                .filter(statement -> {
+                    // Check if the type is a BIBO document type
+                    if (statement.getObject() instanceof IRI typeIri) {
+                        return typeIri.stringValue().startsWith("http://purl.org/ontology/bibo/");
+                    }
+                    return false;
+                })
+                .map(statement -> statement.getSubject())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private static BiboDocument buildDocument(Model model, Resource subject) {
@@ -321,20 +349,23 @@ public final class ReverseConversion {
         }
     }
 
-    private static void writeBibTex(Path outputDir, BiboDocument document, BibTeXEntry entry) {
-        String baseName =
-                entry.getKey() != null
-                        ? entry.getKey().getValue()
-                        : document.id().orElseGet(() -> document.title().replaceAll("\\s+", "_"));
+    private static void writeBibTexFile(Path outputDir, Path sourceFile, List<BibTeXEntry> entries) {
+        // Use the same filename as the source RDF file, but with .bib extension
+        String baseName = sourceFile.getFileName().toString();
+        int lastDot = baseName.lastIndexOf('.');
+        if (lastDot > 0) {
+            baseName = baseName.substring(0, lastDot);
+        }
 
         Path outputFile = outputDir.resolve(baseName + ".bib");
 
         BibTeXDatabase database = new BibTeXDatabase();
-        database.addObject(entry);
+        for (BibTeXEntry entry : entries) {
+            database.addObject(entry);
+        }
 
         try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
             new BibTeXFormatter().format(database, writer);
-            System.out.println("Generato " + outputFile);
         } catch (IOException ex) {
             System.err.println("Errore nello scrivere " + outputFile.getFileName() + ": " + ex.getMessage());
         }
