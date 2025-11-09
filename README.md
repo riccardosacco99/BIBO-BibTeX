@@ -114,7 +114,7 @@ _:author2 a foaf:Person;
 ```
 
 **Caratteristiche chiave:**
-- ✅ Utilizza `bibo:authorList` (standard BIBO) invece di proprietà inventate
+- ✅ Utilizza `bibo:authorList` (standard BIBO)
 - ✅ RDF Lists (`rdf:first`, `rdf:rest`, `rdf:nil`) preservano l'ordine degli autori
 - ✅ Caratteri Unicode (accenti, simboli) correttamente convertiti da escape sequences BibTeX
 - ✅ Formato Turtle con pretty-print e blank nodes inlinati
