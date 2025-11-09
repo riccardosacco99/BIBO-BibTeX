@@ -204,6 +204,60 @@ mvn -q exec:java -pl core \
 
 **Nota:** `BatchConversion` processa tutti i file in una directory con un'unica esecuzione Maven, generando un file `.ttl` per ogni `.bib`. Molto più efficiente per dataset multipli.
 
+## Testing e Coverage
+
+### Eseguire i Test
+
+```bash
+# Esegui tutti i test
+mvn test
+
+# Esegui solo i test del modulo core
+mvn test -pl core
+```
+
+### Report di Coverage (JaCoCo)
+
+Il progetto usa JaCoCo per il test coverage. Per generare il report:
+
+```bash
+# Genera report di coverage
+mvn clean test jacoco:report -pl core
+```
+
+Il report HTML viene generato in:
+```
+core/target/site/jacoco/index.html
+```
+
+Aprilo nel browser:
+```bash
+open core/target/site/jacoco/index.html
+```
+
+**Coverage attuale:**
+- **Converter package**: 92% instruction coverage
+- **Model package**: 89% instruction coverage
+- **Overall core logic**: >70% coverage target raggiunto
+
+**Note:**
+- La cartella `target/` è nel `.gitignore` (contiene file generati)
+- Dopo aver clonato il progetto, esegui `mvn test jacoco:report` per rigenerare il report
+- Il package `examples/` è escluso dal coverage (utility, non core logic)
+
+### Test Inclusi
+
+Il progetto include 223 test:
+- **Unit tests**: `BibliographicConverterTest`, `BiboDocumentTest`
+- **Detailed tests**: `BibTeXBibliographicConverterDetailedTest` (mapping campi)
+- **Validation tests**: `ValidationExceptionTest` (27 test)
+- **Unicode tests**: `BibTeXUnicodeConverterTest` (133 test, 100+ escape sequences)
+- **Edge case tests**: `BibTeXBibliographicConverterEdgeCaseTest` (42 test)
+  - Name parsing (single tokens, particles, unicode, special chars)
+  - Date parsing (invalid months, leap years, edge dates)
+  - Large entries (10k+ chars, 100+ authors)
+  - Minimal/maximal configurations
+
 ## Esempio Output RDF
 
 Il progetto genera RDF in formato Turtle con la struttura BIBO. Ecco un esempio di articolo convertito che mostra come vengono modellati gli autori usando RDF Lists:
