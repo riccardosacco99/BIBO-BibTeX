@@ -1,5 +1,6 @@
 package it.riccardosacco.bibobibtex.converter;
 
+import it.riccardosacco.bibobibtex.exception.ValidationException;
 import it.riccardosacco.bibobibtex.model.bibo.BiboContributor;
 import it.riccardosacco.bibobibtex.model.bibo.BiboContributorRole;
 import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
@@ -9,6 +10,8 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifierType;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPersonName;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
 import it.riccardosacco.bibobibtex.converter.BibTeXUnicodeConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +28,7 @@ import org.jbibtex.StringValue;
 import org.jbibtex.Value;
 
 public class BibTeXBibliographicConverter implements BibliographicConverter<BibTeXEntry> {
+    private static final Logger logger = LoggerFactory.getLogger(BibTeXBibliographicConverter.class);
     private static final Map<String, Integer> MONTH_ALIASES =
             Map.ofEntries(
                     Map.entry("jan", 1),
@@ -68,16 +72,19 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     @Override
     public Optional<BiboDocument> convertToBibo(BibTeXEntry source) {
-        if (source == null) {
-            return Optional.empty();
-        }
+        logger.info("Starting BibTeX → BIBO conversion for entry: {}", citationKeyValue(source));
+
+        // Validate input
+        BibliographicValidator.validateBibTeXEntry(source);
 
         String title = fieldValue(source, BibTeXEntry.KEY_TITLE).orElseGet(() -> citationKeyValue(source));
         if (title == null || title.isBlank()) {
-            return Optional.empty();
+            throw new ValidationException("Title is required", "title", title);
         }
 
         BiboDocumentType documentType = mapDocumentType(source.getType());
+        logger.debug("Mapped BibTeX type {} to BIBO type {}", source.getType(), documentType);
+
         BiboDocument.Builder builder = BiboDocument.builder(documentType, title).id(citationKeyValue(source));
 
         fieldValue(source, FIELD_SUBTITLE).ifPresent(builder::subtitle);
@@ -104,16 +111,23 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, FIELD_ABSTRACT).ifPresent(builder::abstractText);
         fieldValue(source, BibTeXEntry.KEY_NOTE).ifPresent(builder::notes);
 
-        return Optional.of(builder.build());
+        BiboDocument result = builder.build();
+        logger.info("Successfully converted BibTeX entry to BIBO document: {}", result.title());
+        logger.debug("Document details: type={}, contributors={}, identifiers={}",
+            result.type(), result.contributors().size(), result.identifiers().size());
+
+        return Optional.of(result);
     }
 
     @Override
     public Optional<BibTeXEntry> convertFromBibo(BiboDocument source) {
-        if (source == null) {
-            return Optional.empty();
-        }
+        logger.info("Starting BIBO → BibTeX conversion for document: {}", source.title());
+
+        // Validate input
+        BibliographicValidator.validateBiboDocument(source);
 
         Key entryType = mapEntryType(source.type());
+        logger.debug("Mapped BIBO type {} to BibTeX type {}", source.type(), entryType);
         String citationKey =
                 source.id()
                         .or(() -> generateCitationKey(source.title(), source.authors()))
@@ -147,6 +161,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         source.abstractText().ifPresent(value -> putField(entry, FIELD_ABSTRACT, value));
         source.notes().ifPresent(value -> putField(entry, BibTeXEntry.KEY_NOTE, value));
 
+        logger.info("Successfully converted BIBO document to BibTeX entry: {}", citationKey);
+        logger.debug("Entry type: {}, fields count: {}", entryType, entry.getFields().size());
+
         return Optional.of(entry);
     }
 
@@ -177,7 +194,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     }
 
     private static Optional<String> fieldValue(BibTeXEntry entry, Key primary, Key fallback) {
-        return fieldValue(entry, primary).or(() -> fieldValue(entry, fallback));
+        Optional<String> result = fieldValue(entry, primary);
+        if (result.isEmpty() && fallback != null) {
+            logger.debug("Field {} not found, using fallback {}", primary, fallback);
+            result = fieldValue(entry, fallback);
+        }
+        return result;
     }
 
     /**
