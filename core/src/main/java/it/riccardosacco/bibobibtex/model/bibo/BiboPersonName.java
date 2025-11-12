@@ -7,11 +7,13 @@ public final class BiboPersonName {
     private final String fullName;
     private final String givenName;
     private final String familyName;
+    private final String suffix;
 
     private BiboPersonName(Builder builder) {
         this.fullName = builder.fullName;
         this.givenName = builder.givenName;
         this.familyName = builder.familyName;
+        this.suffix = builder.suffix;
     }
 
     public static Builder builder(String fullName) {
@@ -30,10 +32,15 @@ public final class BiboPersonName {
         return Optional.ofNullable(familyName);
     }
 
+    public Optional<String> suffix() {
+        return Optional.ofNullable(suffix);
+    }
+
     public static final class Builder {
         private final String fullName;
         private String givenName;
         private String familyName;
+        private String suffix;
 
         private Builder(String fullName) {
             this.fullName = normalizeRequired(fullName, "fullName");
@@ -46,6 +53,11 @@ public final class BiboPersonName {
 
         public Builder familyName(String familyName) {
             this.familyName = normalizeOptional(familyName);
+            return this;
+        }
+
+        public Builder suffix(String suffix) {
+            this.suffix = normalizeOptional(suffix);
             return this;
         }
 

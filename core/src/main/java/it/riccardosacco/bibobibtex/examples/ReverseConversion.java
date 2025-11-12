@@ -1,373 +1,67 @@
 package it.riccardosacco.bibobibtex.examples;
 
 import it.riccardosacco.bibobibtex.converter.BibTeXBibliographicConverter;
-import it.riccardosacco.bibobibtex.model.bibo.*;
+import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.eclipse.rdf4j.model.IRI;
-import org.eclipse.rdf4j.model.Literal;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.Resource;
-import org.eclipse.rdf4j.model.util.Models;
-import org.eclipse.rdf4j.model.util.RDFCollections;
-import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
-import org.eclipse.rdf4j.model.vocabulary.FOAF;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
-import org.eclipse.rdf4j.model.vocabulary.RDFS;
-import org.eclipse.rdf4j.model.vocabulary.XSD;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
 import org.jbibtex.BibTeXDatabase;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.BibTeXFormatter;
 
 public final class ReverseConversion {
-    private static final Map<IRI, BiboContributorRole> CONTRIBUTOR_PREDICATES =
-            Map.of(
-                    DCTERMS.CREATOR, BiboContributorRole.AUTHOR,
-                    BiboVocabulary.EDITOR, BiboContributorRole.EDITOR,
-                    BiboVocabulary.TRANSLATOR, BiboContributorRole.TRANSLATOR,
-                    BiboVocabulary.ADVISOR, BiboContributorRole.ADVISOR,
-                    BiboVocabulary.REVIEWER, BiboContributorRole.REVIEWER,
-                    DCTERMS.CONTRIBUTOR, BiboContributorRole.CONTRIBUTOR);
-
-    private static final Map<IRI, BiboIdentifierType> IDENTIFIER_PREDICATES =
-            Arrays.stream(BiboIdentifierType.values())
-                    .filter(type -> type != BiboIdentifierType.URL)
-                    .map(type -> type.predicate().map(predicate -> Map.entry(predicate, type)))
-                    .flatMap(Optional::stream)
-                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
-
-    private ReverseConversion() {
-        // utility class
-    }
+    private ReverseConversion() {}
 
     public static void main(String[] args) throws IOException {
         Path input = args.length > 0 ? Path.of(args[0]) : Path.of("test-data", "bibo");
         Path output = args.length > 1 ? Path.of(args[1]) : Path.of("test-data", "bibtex-roundtrip");
-        convertRdfToBibTex(input, output);
-    }
-
-    private static void convertRdfToBibTex(Path inputDir, Path outputDir) throws IOException {
-        if (!Files.exists(inputDir)) {
-            throw new IOException("Directory RDF non trovata: " + inputDir.toAbsolutePath());
-        }
-        Files.createDirectories(outputDir);
+        Files.createDirectories(output);
 
         BibTeXBibliographicConverter converter = new BibTeXBibliographicConverter();
-
-        try (Stream<Path> files = Files.list(inputDir)
-                .filter(path -> path.toString().endsWith(".rdf") || path.toString().endsWith(".ttl"))) {
-            files.forEach(path -> {
-                try {
-                    List<BiboDocument> documents = parseDocuments(path);
-                    List<BibTeXEntry> entries = new ArrayList<>();
-
-                    for (BiboDocument document : documents) {
-                        converter.convertFromBibo(document).ifPresent(entries::add);
-                    }
-
-                    if (!entries.isEmpty()) {
-                        writeBibTexFile(outputDir, path, entries);
-                        System.out.println("Converted: " + path.getFileName() + " -> " + entries.size() + " entries");
-                    } else {
-                        System.out.println("No valid entries in: " + path.getFileName());
-                    }
-                } catch (IOException ex) {
-                    System.err.println("Errore durante la lettura di " + path.getFileName() + ": " + ex.getMessage());
-                }
-            });
+        try (Stream<Path> files = Files.list(input).filter(ReverseConversion::isRdfFile)) {
+            files.forEach(file -> convertFile(converter, file, output));
         }
     }
 
-    private static List<BiboDocument> parseDocuments(Path file) throws IOException {
-        try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-            // Auto-detect format based on file extension
-            RDFFormat format = Rio.getParserFormatForFileName(file.toString()).orElse(RDFFormat.RDFXML);
-            Model model = Rio.parse(reader, "", format);
-            List<Resource> subjects = selectAllSubjects(model);
-
-            List<BiboDocument> documents = new ArrayList<>();
-            for (Resource subject : subjects) {
-                try {
-                    documents.add(buildDocument(model, subject));
-                } catch (Exception ex) {
-                    System.err.println("  Skipping invalid document in " + file.getFileName() + ": " + ex.getMessage());
-                }
-            }
-            return documents;
-        } catch (Exception ex) {
-            throw new IOException("Impossibile convertire " + file.getFileName(), ex);
-        }
-    }
-
-    private static List<Resource> selectAllSubjects(Model model) {
-        // Find all resources that are bibo:Document or any BIBO subclass
-        return model.filter(null, RDF.TYPE, null)
-                .stream()
-                .filter(statement -> {
-                    // Check if the type is a BIBO document type
-                    if (statement.getObject() instanceof IRI typeIri) {
-                        return typeIri.stringValue().startsWith("http://purl.org/ontology/bibo/");
-                    }
-                    return false;
-                })
-                .map(statement -> statement.getSubject())
-                .distinct()
-                .collect(Collectors.toList());
-    }
-
-    private static BiboDocument buildDocument(Model model, Resource subject) {
-        String title = literal(model, subject, DCTERMS.TITLE)
-                .orElseThrow(() -> new IllegalStateException("Titolo mancante"));
-        BiboDocumentType type =
-                model.filter(subject, RDF.TYPE, null).objects().stream()
-                        .filter(value -> value instanceof IRI)
-                        .map(value -> (IRI) value)
-                        .map(BiboDocumentType::fromIri)
-                        .filter(candidate -> candidate != BiboDocumentType.OTHER)
-                        .findFirst()
-                        .orElse(BiboDocumentType.OTHER);
-
-        BiboDocument.Builder builder = BiboDocument.builder(type, title);
-        literal(model, subject, DCTERMS.IDENTIFIER).ifPresent(builder::id);
-        literal(model, subject, BiboVocabulary.SUBTITLE).ifPresent(builder::subtitle);
-
-        readContributors(model, subject).forEach(builder::addContributor);
-        parsePublicationDate(model, subject).ifPresent(builder::publicationDate);
-
-        literal(model, subject, DCTERMS.PUBLISHER).ifPresent(builder::publisher);
-        literal(model, subject, DCTERMS.SPATIAL).ifPresent(builder::placeOfPublication);
-        literal(model, subject, DCTERMS.LANGUAGE).ifPresent(builder::language);
-        literal(model, subject, DCTERMS.ABSTRACT).ifPresent(builder::abstractText);
-        literal(model, subject, RDFS.COMMENT).ifPresent(builder::notes);
-
-        literal(model, subject, BiboVocabulary.VOLUME).ifPresent(builder::volume);
-        literal(model, subject, BiboVocabulary.ISSUE).ifPresent(builder::issue);
-        literal(model, subject, BiboVocabulary.PAGES).ifPresent(builder::pages);
-        literal(model, subject, BiboVocabulary.SERIES).ifPresent(builder::series);
-        literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
-
-        // Read keywords from dcterms:subject
-        model.filter(subject, DCTERMS.SUBJECT, null).objects().stream()
-                .filter(value -> value instanceof Literal)
-                .map(value -> ((Literal) value).getLabel())
-                .forEach(builder::addKeyword);
-
-        containerTitle(model, subject).ifPresent(builder::containerTitle);
-        iriOrLiteral(model, subject, FOAF.PAGE).ifPresent(builder::url);
-
-        builder.identifiers(readIdentifiers(model, subject));
-
-        return builder.build();
-    }
-
-    private static List<BiboContributor> readContributors(Model model, Resource subject) {
-        List<BiboContributor> contributors = new ArrayList<>();
-
-        // Read authors from RDF List (bibo:authorList)
-        contributors.addAll(readContributorList(model, subject, BiboVocabulary.AUTHOR_LIST, BiboContributorRole.AUTHOR));
-
-        // Read editors from RDF List (bibo:editorList)
-        contributors.addAll(readContributorList(model, subject, BiboVocabulary.EDITOR_LIST, BiboContributorRole.EDITOR));
-
-        // Read other contributor roles individually (not as lists)
-        for (Map.Entry<IRI, BiboContributorRole> entry : CONTRIBUTOR_PREDICATES.entrySet()) {
-            IRI predicate = entry.getKey();
-            BiboContributorRole role = entry.getValue();
-
-            // Skip AUTHOR and EDITOR as they're already handled via RDF Lists
-            if (role == BiboContributorRole.AUTHOR || role == BiboContributorRole.EDITOR) {
-                continue;
-            }
-
-            model.filter(subject, predicate, null).objects().stream()
-                    .filter(value -> value instanceof Resource)
-                    .map(value -> (Resource) value)
-                    .forEach(resource -> {
-                        readPersonName(model, resource).ifPresent(name ->
-                                contributors.add(new BiboContributor(name, role)));
-                    });
-        }
-
-        return contributors;
-    }
-
-    /**
-     * Reads a list of contributors from an RDF Collection (RDF List).
-     *
-     * @param model the RDF model
-     * @param subject the document resource
-     * @param listPredicate the predicate pointing to the RDF List (e.g., bibo:authorList)
-     * @param role the contributor role
-     * @return list of contributors in the order they appear in the RDF List
-     */
-    private static List<BiboContributor> readContributorList(Model model, Resource subject, IRI listPredicate, BiboContributorRole role) {
-        List<BiboContributor> contributors = new ArrayList<>();
-
-        model.filter(subject, listPredicate, null).objects().stream()
-                .filter(value -> value instanceof Resource)
-                .map(value -> (Resource) value)
-                .findFirst()
-                .ifPresent(listHead -> {
-                    List<Resource> personNodes = RDFCollections.asValues(model, listHead, new ArrayList<>())
-                            .stream()
-                            .filter(value -> value instanceof Resource)
-                            .map(value -> (Resource) value)
-                            .collect(Collectors.toList());
-
-                    for (Resource person : personNodes) {
-                        readPersonName(model, person).ifPresent(name ->
-                                contributors.add(new BiboContributor(name, role)));
-                    }
-                });
-
-        return contributors;
-    }
-
-    /**
-     * Reads a person's name from FOAF properties.
-     *
-     * @param model the RDF model
-     * @param person the person resource (blank node or IRI)
-     * @return the person's name, or empty if the name is blank
-     */
-    private static Optional<BiboPersonName> readPersonName(Model model, Resource person) {
-        Optional<String> given = literal(model, person, FOAF.GIVEN_NAME);
-        Optional<String> family = literal(model, person, FOAF.FAMILY_NAME);
-        String fullName = literal(model, person, FOAF.NAME)
-                .orElseGet(() -> Stream.of(given.orElse(null), family.orElse(null))
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.joining(" ")));
-
-        if (fullName.isBlank()) {
-            return Optional.empty();
-        }
-
-        BiboPersonName.Builder nameBuilder = BiboPersonName.builder(fullName);
-        given.ifPresent(nameBuilder::givenName);
-        family.ifPresent(nameBuilder::familyName);
-
-        return Optional.of(nameBuilder.build());
-    }
-
-    private static List<BiboIdentifier> readIdentifiers(Model model, Resource subject) {
-        List<BiboIdentifier> identifiers = new ArrayList<>();
-
-        for (Map.Entry<IRI, BiboIdentifierType> entry : IDENTIFIER_PREDICATES.entrySet()) {
-            IRI predicate = entry.getKey();
-            BiboIdentifierType type = entry.getValue();
-
-            model.filter(subject, predicate, null).objects().forEach(value -> {
-                String text = value.stringValue();
-                if (!text.isBlank()) {
-                    identifiers.add(new BiboIdentifier(type, text));
-                }
-            });
-        }
-
-        return identifiers;
-    }
-
-    private static Optional<BiboPublicationDate> parsePublicationDate(Model model, Resource subject) {
-        return Models.objectLiteral(model.filter(subject, DCTERMS.ISSUED, null)).flatMap(ReverseConversion::parseDate);
-    }
-
-    private static Optional<BiboPublicationDate> parseDate(Literal literal) {
-        String label = literal.getLabel().trim();
-        IRI datatype = literal.getDatatype();
-
+    private static void convertFile(BibTeXBibliographicConverter converter, Path file, Path outputDir) {
         try {
-            if (datatype != null) {
-                if (XSD.DATE.equals(datatype) || XSD.DATETIME.equals(datatype)) {
-                    LocalDate date = LocalDate.parse(label.substring(0, 10));
-                    return Optional.of(BiboPublicationDate.ofFullDate(date.getYear(), date.getMonthValue(),
-                            date.getDayOfMonth()));
-                }
-                if (XSD.GYEARMONTH.equals(datatype)) {
-                    String[] parts = label.split("-");
-                    return Optional.of(BiboPublicationDate.ofYearMonth(Integer.parseInt(parts[0]),
-                            Integer.parseInt(parts[1])));
-                }
-                if (XSD.GYEAR.equals(datatype)) {
-                    return Optional.of(BiboPublicationDate.ofYear(Integer.parseInt(label)));
-                }
+            List<BibTeXEntry> entries = converter.convertFromRDFFile(file).stream()
+                    .map(document -> converter.convertFromBibo(document))
+                    .flatMap(Optional::stream)
+                    .collect(Collectors.toList());
+            if (!entries.isEmpty()) {
+                writeBibTexFile(outputDir, file, entries);
+                System.out.printf("Converted %s (%d entries)%n", file.getFileName(), entries.size());
             }
-
-            if (label.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                LocalDate date = LocalDate.parse(label);
-                return Optional.of(BiboPublicationDate.ofFullDate(date.getYear(), date.getMonthValue(),
-                        date.getDayOfMonth()));
-            }
-            if (label.matches("\\d{4}-\\d{2}")) {
-                String[] parts = label.split("-");
-                return Optional.of(BiboPublicationDate.ofYearMonth(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
-            }
-            if (label.matches("\\d{4}")) {
-                return Optional.of(BiboPublicationDate.ofYear(Integer.parseInt(label)));
-            }
-        } catch (Exception ignored) {
-            // mantieni l'opzione vuota se il parsing fallisce
-        }
-        return Optional.empty();
-    }
-
-    private static Optional<String> containerTitle(Model model, Resource subject) {
-        return model.filter(subject, DCTERMS.IS_PART_OF, null).objects().stream()
-                .filter(value -> value instanceof Resource)
-                .map(value -> (Resource) value)
-                .map(container -> literal(model, container, DCTERMS.TITLE))
-                .flatMap(Optional::stream)
-                .findFirst();
-    }
-
-    private static Optional<String> literal(Model model, Resource subject, IRI predicate) {
-        return Models.objectLiteral(model.filter(subject, predicate, null))
-                .map(Literal::getLabel)
-                .map(String::trim)
-                .filter(text -> !text.isEmpty());
-    }
-
-    private static Optional<String> iriOrLiteral(Model model, Resource subject, IRI predicate) {
-        return model.filter(subject, predicate, null).objects().stream()
-                .map(value -> value instanceof Literal literal ? literal.getLabel() : value.stringValue())
-                .map(String::trim)
-                .filter(text -> !text.isEmpty())
-                .findFirst();
-    }
-
-    private static void writeBibTexFile(Path outputDir, Path sourceFile, List<BibTeXEntry> entries) {
-        // Use the same filename as the source RDF file, but with .bib extension
-        String baseName = sourceFile.getFileName().toString();
-        int lastDot = baseName.lastIndexOf('.');
-        if (lastDot > 0) {
-            baseName = baseName.substring(0, lastDot);
-        }
-
-        Path outputFile = outputDir.resolve(baseName + ".bib");
-
-        BibTeXDatabase database = new BibTeXDatabase();
-        for (BibTeXEntry entry : entries) {
-            database.addObject(entry);
-        }
-
-        try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
-            new BibTeXFormatter().format(database, writer);
         } catch (IOException ex) {
-            System.err.println("Errore nello scrivere " + outputFile.getFileName() + ": " + ex.getMessage());
+            throw new UncheckedIOException("Failed to convert " + file.getFileName(), ex);
+        }
+    }
+
+    private static boolean isRdfFile(Path path) {
+        String name = path.getFileName().toString().toLowerCase();
+        return name.endsWith(".ttl") || name.endsWith(".rdf") || name.endsWith(".jsonld");
+    }
+
+    private static void writeBibTexFile(Path outputDir, Path source, List<BibTeXEntry> entries) throws IOException {
+        String baseName = source.getFileName().toString();
+        int dot = baseName.lastIndexOf('.');
+        if (dot > 0) {
+            baseName = baseName.substring(0, dot);
+        }
+        Path output = outputDir.resolve(baseName + ".bib");
+        BibTeXDatabase database = new BibTeXDatabase();
+        entries.forEach(database::addObject);
+
+        try (Writer writer = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
+            new BibTeXFormatter().format(database, writer);
         }
     }
 }

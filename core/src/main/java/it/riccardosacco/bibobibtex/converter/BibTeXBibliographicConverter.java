@@ -9,22 +9,49 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifier;
 import it.riccardosacco.bibobibtex.model.bibo.BiboIdentifierType;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPersonName;
 import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import it.riccardosacco.bibobibtex.model.bibo.BiboVocabulary;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.Normalizer;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.util.Models;
+import org.eclipse.rdf4j.model.util.RDFCollections;
+import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
+import org.eclipse.rdf4j.model.vocabulary.FOAF;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.RDFS;
+import org.eclipse.rdf4j.model.vocabulary.XSD;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.Rio;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.Key;
 import org.jbibtex.StringValue;
 import org.jbibtex.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BibTeXBibliographicConverter implements BibliographicConverter<BibTeXEntry> {
     private static final Logger logger = LoggerFactory.getLogger(BibTeXBibliographicConverter.class);
@@ -58,6 +85,25 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s+and\\s+", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTI_VALUE_SEPARATOR = Pattern.compile("[,;]");
     private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^a-z0-9]+");
+    private static final Pattern VALID_CITATION_KEY = Pattern.compile("^[a-zA-Z0-9_-]{3,64}$");
+    private static final Set<String> PARTICLE_TOKENS =
+            Set.of("von", "van", "der", "den", "de", "del", "della", "di", "da", "dos", "das", "du", "le", "la", "ter", "ibn", "bin", "al");
+    private static final Set<String> SUFFIX_TOKENS = Set.of("jr", "sr", "iii", "iv", "ii", "v", "phd", "md", "esq");
+    private static final Map<IRI, BiboContributorRole> CONTRIBUTOR_PREDICATES =
+            Map.of(
+                    DCTERMS.CREATOR, BiboContributorRole.AUTHOR,
+                    BiboVocabulary.EDITOR, BiboContributorRole.EDITOR,
+                    BiboVocabulary.TRANSLATOR, BiboContributorRole.TRANSLATOR,
+                    BiboVocabulary.ADVISOR, BiboContributorRole.ADVISOR,
+                    BiboVocabulary.REVIEWER, BiboContributorRole.REVIEWER,
+                    DCTERMS.CONTRIBUTOR, BiboContributorRole.CONTRIBUTOR);
+
+    private static final Map<IRI, BiboIdentifierType> IDENTIFIER_PREDICATES =
+            Arrays.stream(BiboIdentifierType.values())
+                    .filter(type -> type != BiboIdentifierType.URL)
+                    .map(type -> type.predicate().map(predicate -> Map.entry(predicate, type)))
+                    .flatMap(Optional::stream)
+                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
 
     private static final Key FIELD_SUBTITLE = new Key("subtitle");
     private static final Key FIELD_DAY = new Key("day");
@@ -72,6 +118,16 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_KEYWORDS = new Key("keywords");
     private static final Key FIELD_ADVISOR = new Key("advisor");
     private static final Key TYPE_ONLINE = new Key("online");
+    private final Set<String> usedCitationKeys = new HashSet<>();
+    private final KeyGenerationStrategy keyStrategy;
+
+    public BibTeXBibliographicConverter() {
+        this(KeyGenerationStrategy.AUTHOR_YEAR);
+    }
+
+    public BibTeXBibliographicConverter(KeyGenerationStrategy keyStrategy) {
+        this.keyStrategy = Objects.requireNonNull(keyStrategy, "keyStrategy");
+    }
 
     @Override
     public Optional<BiboDocument> convertToBibo(BibTeXEntry source) {
@@ -144,10 +200,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         Key entryType = mapEntryType(source.type());
         logger.debug("Mapped BIBO type {} to BibTeX type {}", source.type(), entryType);
-        String citationKey =
-                source.id()
-                        .or(() -> generateCitationKey(source.title(), source.authors()))
-                        .orElse("untitled");
+        String citationKey = resolveCitationKey(source);
 
         BibTeXEntry entry = new BibTeXEntry(entryType, new Key(citationKey));
         putField(entry, BibTeXEntry.KEY_TITLE, source.title());
@@ -191,6 +244,214 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         return Optional.of(entry);
     }
 
+    /**
+     * Converts a batch of {@link BiboDocument} instances to BibTeX entries while maintaining citation-key uniqueness.
+     *
+     * @param documents documents to convert
+     * @return list of converted entries (skipping documents that fail validation)
+     */
+    public List<BibTeXEntry> convertFromBiboBatch(List<BiboDocument> documents) {
+        Objects.requireNonNull(documents, "documents");
+        List<BibTeXEntry> entries = new ArrayList<>();
+        for (BiboDocument document : documents) {
+            convertFromBibo(document).ifPresent(entries::add);
+        }
+        return entries;
+    }
+
+    /**
+     * Converts every BIBO document contained in the provided RDF model.
+     *
+     * @param model RDF4J model containing BIBO resources
+     * @return list of converted documents, skipping malformed resources
+     */
+    public List<BiboDocument> convertAllFromRDF(Model model) {
+        Objects.requireNonNull(model, "model");
+        List<BiboDocument> documents = new ArrayList<>();
+
+        for (Resource resource : selectDocumentSubjects(model)) {
+            try {
+                documents.add(buildDocumentFromModel(model, resource));
+            } catch (Exception ex) {
+                logger.warn("Skipping RDF resource {}: {}", resource, ex.getMessage());
+            }
+        }
+        return documents;
+    }
+
+    /**
+     * Converts a single BIBO document identified by its URI inside the RDF model.
+     *
+     * @param model RDF4J model containing the document
+     * @param documentUri resource IRI to convert
+     * @return converted {@link BiboDocument}
+     */
+    public BiboDocument convertFromRDF(Model model, String documentUri) {
+        Objects.requireNonNull(model, "model");
+        Objects.requireNonNull(documentUri, "documentUri");
+
+        Resource resource = createResource(documentUri);
+        if (!model.contains(resource, null, null)) {
+            throw new IllegalArgumentException("Document not found in RDF model: " + documentUri);
+        }
+        return buildDocumentFromModel(model, resource);
+    }
+
+    /**
+     * Reads an RDF file (Turtle / RDFXML / JSON-LD) and converts all contained documents.
+     *
+     * @param file path to the RDF file
+     * @return list of converted documents
+     * @throws IOException if the file cannot be read or parsed
+     */
+    public List<BiboDocument> convertFromRDFFile(Path file) throws IOException {
+        Objects.requireNonNull(file, "file");
+        if (!Files.exists(file)) {
+            throw new IOException("RDF file not found: " + file.toAbsolutePath());
+        }
+        RDFFormat format = Rio.getParserFormatForFileName(file.toString()).orElse(RDFFormat.TURTLE);
+        try (InputStream stream = Files.newInputStream(file)) {
+            Model model = Rio.parse(stream, "", format);
+            return convertAllFromRDF(model);
+        }
+    }
+
+    private String resolveCitationKey(BiboDocument source) {
+        return providedCitationKey(source).orElseGet(() -> generateUniqueKey(source));
+    }
+
+    private Optional<String> providedCitationKey(BiboDocument source) {
+        return source.id()
+                .map(String::trim)
+                .filter(value -> !value.isEmpty())
+                .filter(value -> {
+                    if (!isValidCitationKey(value)) {
+                        logger.warn("Invalid citation key '{}' for document '{}', regenerating.", value, source.title());
+                        return false;
+                    }
+                    return true;
+                })
+                .map(this::registerProvidedKey);
+    }
+
+    private String registerProvidedKey(String key) {
+        String candidate = key;
+        int counter = 2;
+        while (usedCitationKeys.contains(candidate)) {
+            candidate = appendSuffix(key, counter++);
+        }
+        if (!candidate.equals(key)) {
+            logger.warn("Citation key '{}' already used, assigned '{}'.", key, candidate);
+        }
+        usedCitationKeys.add(candidate);
+        return candidate;
+    }
+
+    private static String appendSuffix(String base, int counter) {
+        String suffix = "_" + counter;
+        if (base.length() + suffix.length() > 64) {
+            int maxBaseLength = Math.max(3, 64 - suffix.length());
+            base = base.substring(0, Math.min(base.length(), maxBaseLength));
+        }
+        return base + suffix;
+    }
+
+    private String generateUniqueKey(BiboDocument document) {
+        String base = baseKeyForStrategy(document).orElse(document.title());
+        return registerGeneratedKey(base);
+    }
+
+    private String registerGeneratedKey(String rawBase) {
+        String base = clampCitationKey(rawBase);
+        String candidate = base;
+        int counter = 2;
+        while (usedCitationKeys.contains(candidate)) {
+            candidate = clampCitationKey(base + "_" + counter++);
+        }
+        usedCitationKeys.add(candidate);
+        return candidate;
+    }
+
+    private Optional<String> baseKeyForStrategy(BiboDocument document) {
+        return switch (keyStrategy) {
+            case AUTHOR_YEAR -> authorYearKey(document);
+            case AUTHOR_TITLE -> authorTitleKey(document);
+            case HASH -> Optional.of(hashKey(document));
+        };
+    }
+
+    private Optional<String> authorYearKey(BiboDocument document) {
+        Optional<String> family = firstAuthorToken(document);
+        Optional<Integer> year = document.publicationDate().map(BiboPublicationDate::year);
+        if (family.isEmpty() && year.isEmpty()) {
+            return Optional.empty();
+        }
+        String yearToken = year.map(Object::toString).orElse("nd");
+        String authorToken = family.orElse(document.title());
+        return Optional.of(authorToken + "_" + yearToken);
+    }
+
+    private Optional<String> authorTitleKey(BiboDocument document) {
+        String titleToken = sanitizeForKey(document.title());
+        if (titleToken.isEmpty()) {
+            titleToken = "entry";
+        }
+        String firstWord = Arrays.stream(titleToken.split("_"))
+                .filter(part -> !part.isBlank())
+                .findFirst()
+                .orElse(titleToken);
+        String authorToken = firstAuthorToken(document).orElse(document.title());
+        return Optional.of(authorToken + "_" + firstWord);
+    }
+
+    private static Optional<String> firstAuthorToken(BiboDocument document) {
+        return document.authors().stream()
+                .map(BiboContributor::name)
+                .map(name -> name.familyName().orElse(name.fullName()))
+                .findFirst();
+    }
+
+    private static String hashKey(BiboDocument document) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(document.title().getBytes(StandardCharsets.UTF_8));
+            document.authors().forEach(contributor ->
+                    digest.update(contributor.name().fullName().getBytes(StandardCharsets.UTF_8)));
+            document.publicationDate().ifPresent(date ->
+                    digest.update(Integer.toString(date.year()).getBytes(StandardCharsets.UTF_8)));
+            digest.update(document.type().name().getBytes(StandardCharsets.UTF_8));
+            byte[] hash = digest.digest();
+            StringBuilder builder = new StringBuilder();
+            for (byte value : hash) {
+                builder.append(String.format("%02x", value));
+                if (builder.length() >= 8) {
+                    break;
+                }
+            }
+            while (builder.length() < 8) {
+                builder.append('0');
+            }
+            return builder.substring(0, 8);
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IllegalStateException("MD5 algorithm not available", ex);
+        }
+    }
+
+    private static boolean isValidCitationKey(String key) {
+        return key != null && VALID_CITATION_KEY.matcher(key).matches();
+    }
+
+    private static String clampCitationKey(String value) {
+        String sanitized = sanitizeForKey(value);
+        if (sanitized.length() > 64) {
+            sanitized = sanitized.substring(0, 64);
+        }
+        while (sanitized.length() < 3) {
+            sanitized = sanitized + "_x";
+        }
+        return sanitized;
+    }
+
     private static String citationKeyValue(BibTeXEntry entry) {
         Key key = entry.getKey();
         return key != null ? key.getValue() : null;
@@ -200,7 +461,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (key == null) {
             return Optional.empty();
         }
-        Value value;
+        org.jbibtex.Value value;
         try {
             value = entry.getField(key);
         } catch (ClassCastException e) {
@@ -385,27 +646,343 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .toList();
     }
 
+    /**
+     * Parses a BibTeX person name according to Patashnik's grammar:
+     * <pre>
+     *   First von Last
+     *   von Last, Jr, First
+     *   von Last, First
+     * </pre>
+     * Lowercase tokens before the family portion are treated as particles,
+     * suffix tokens (e.g., Jr, PhD) are preserved, and braces are stripped before parsing.
+     */
     private static BiboPersonName parseName(String rawName) {
-        // Remove outer braces that BibTeX uses for capitalization protection
+        String normalized = normalizeBibTeXName(rawName);
+        NameComponents components = parseAdvancedName(normalized);
+        BiboPersonName.Builder builder = BiboPersonName.builder(normalized);
+        if (components.givenName != null) {
+            builder.givenName(components.givenName);
+        }
+        if (components.familyName != null) {
+            builder.familyName(components.familyName);
+        }
+        if (components.suffix != null) {
+            builder.suffix(components.suffix);
+        }
+        return builder.build();
+    }
+
+    private static String normalizeBibTeXName(String rawName) {
+        if (rawName == null) {
+            return "";
+        }
         String normalized = rawName.trim();
         while (normalized.startsWith("{") && normalized.endsWith("}") && normalized.length() > 2) {
             normalized = normalized.substring(1, normalized.length() - 1).trim();
         }
+        return normalized.replaceAll("\\s+", " ").trim();
+    }
 
-        BiboPersonName.Builder builder = BiboPersonName.builder(normalized);
-
-        if (normalized.contains(",")) {
-            String[] parts = normalized.split(",", 2);
-            builder.familyName(parts[0].trim());
-            builder.givenName(parts.length > 1 ? parts[1].trim() : null);
-        } else {
-            String[] tokens = normalized.split("\\s+");
-            if (tokens.length > 1) {
-                builder.givenName(tokens[0]);
-                builder.familyName(tokens[tokens.length - 1]);
-            }
+    /**
+     * Splits BibTeX names into components by handling comma-separated segments first and
+     * falling back to free-form parsing when commas are absent.
+     */
+    private static NameComponents parseAdvancedName(String normalized) {
+        if (normalized.isEmpty()) {
+            return new NameComponents(null, null, null);
         }
+        String[] commaParts = normalized.split(",");
+        if (commaParts.length == 1) {
+            return parseFreeFormName(normalized);
+        }
+
+        if (commaParts.length == 2) {
+            String firstSegment = commaParts[0].trim();
+            String secondSegment = commaParts[1].trim();
+            if (looksLikeSuffix(secondSegment)) {
+                NameComponents base = parseFreeFormName(firstSegment);
+                return base.withSuffix(secondSegment);
+            }
+            return new NameComponents(
+                    secondSegment.isBlank() ? null : secondSegment,
+                    normalizeFamilySegment(firstSegment),
+                    null);
+        }
+
+        // Three part format: von Last, Jr, First
+        String familySegment = commaParts[0].trim();
+        String suffixSegment = commaParts[1].trim();
+        String givenSegment =
+                Arrays.stream(commaParts).skip(2).map(String::trim).filter(token -> !token.isEmpty()).collect(Collectors.joining(" "));
+        return new NameComponents(
+                givenSegment.isBlank() ? null : givenSegment,
+                normalizeFamilySegment(familySegment),
+                suffixSegment.isBlank() ? null : suffixSegment);
+    }
+
+    private static NameComponents parseFreeFormName(String value) {
+        List<String> tokens = Arrays.stream(value.split("\\s+"))
+                .map(String::trim)
+                .filter(token -> !token.isEmpty())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (tokens.isEmpty()) {
+            return new NameComponents(null, value, null);
+        }
+
+        List<String> familyTokens = new ArrayList<>();
+        int index = tokens.size() - 1;
+        familyTokens.add(tokens.get(index));
+        index--;
+
+        while (index >= 0 && isParticleToken(tokens.get(index))) {
+            familyTokens.add(0, tokens.get(index));
+            index--;
+        }
+
+        String given = index >= 0 ? tokens.subList(0, index + 1).stream().collect(Collectors.joining(" ")) : null;
+        String family = String.join(" ", familyTokens);
+        return new NameComponents(
+                given == null || given.isBlank() ? null : given.trim(),
+                family.isBlank() ? null : family.trim(),
+                null);
+    }
+
+    private static String normalizeFamilySegment(String segment) {
+        if (segment == null) {
+            return null;
+        }
+        String trimmed = segment.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        return Arrays.stream(trimmed.split("\\s+"))
+                .map(String::trim)
+                .filter(token -> !token.isEmpty())
+                .collect(Collectors.joining(" "));
+    }
+
+    private static boolean looksLikeSuffix(String segment) {
+        if (segment == null || segment.isBlank()) {
+            return false;
+        }
+        String key = segment.replace(".", "").trim().toLowerCase(Locale.ROOT);
+        if (SUFFIX_TOKENS.contains(key)) {
+            return true;
+        }
+        return Arrays.stream(segment.split("\\s+"))
+                .map(token -> token.toLowerCase(Locale.ROOT))
+                .anyMatch(PARTICLE_TOKENS::contains);
+    }
+
+    private static boolean isParticleToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+        String normalized = token.toLowerCase(Locale.ROOT);
+        return PARTICLE_TOKENS.contains(normalized) || Character.isLowerCase(token.charAt(0));
+    }
+
+    private record NameComponents(String givenName, String familyName, String suffix) {
+        NameComponents withSuffix(String newSuffix) {
+            return new NameComponents(givenName, familyName, newSuffix == null || newSuffix.isBlank() ? suffix : newSuffix);
+        }
+    }
+
+    private static Resource createResource(String identifier) {
+        SimpleValueFactory vf = SimpleValueFactory.getInstance();
+        if (identifier.startsWith("_:")) {
+            return vf.createBNode(identifier.substring(2));
+        }
+        return vf.createIRI(identifier);
+    }
+
+    private static List<Resource> selectDocumentSubjects(Model model) {
+        LinkedHashSet<Resource> subjects = new LinkedHashSet<>();
+        model.filter(null, RDF.TYPE, null).forEach(statement -> {
+            org.eclipse.rdf4j.model.Value object = statement.getObject();
+            if (object instanceof IRI type && type.stringValue().startsWith(BiboVocabulary.NAMESPACE)) {
+                subjects.add((Resource) statement.getSubject());
+            }
+        });
+        return new ArrayList<>(subjects);
+    }
+
+    private static BiboDocument buildDocumentFromModel(Model model, Resource subject) {
+        String title = literal(model, subject, DCTERMS.TITLE)
+                .orElseThrow(() -> new ValidationException("Document title is required in RDF source"));
+
+        BiboDocumentType type =
+                model.filter(subject, RDF.TYPE, null).objects().stream()
+                        .filter(value -> value instanceof IRI)
+                        .map(value -> (IRI) value)
+                        .map(BiboDocumentType::fromIri)
+                        .filter(candidate -> candidate != BiboDocumentType.OTHER)
+                        .findFirst()
+                        .orElse(BiboDocumentType.OTHER);
+
+        BiboDocument.Builder builder = BiboDocument.builder(type, title);
+        literal(model, subject, DCTERMS.IDENTIFIER).ifPresent(builder::id);
+        literal(model, subject, BiboVocabulary.SUBTITLE).ifPresent(builder::subtitle);
+
+        builder.contributors(readContributors(model, subject));
+        parsePublicationDate(model, subject).ifPresent(builder::publicationDate);
+
+        literal(model, subject, DCTERMS.PUBLISHER).ifPresent(builder::publisher);
+        literal(model, subject, DCTERMS.SPATIAL).ifPresent(builder::placeOfPublication);
+        literal(model, subject, DCTERMS.LANGUAGE).ifPresent(builder::language);
+        literal(model, subject, DCTERMS.ABSTRACT).ifPresent(builder::abstractText);
+        literal(model, subject, RDFS.COMMENT).ifPresent(builder::notes);
+
+        literal(model, subject, BiboVocabulary.VOLUME).ifPresent(builder::volume);
+        literal(model, subject, BiboVocabulary.ISSUE).ifPresent(builder::issue);
+        literal(model, subject, BiboVocabulary.PAGES).ifPresent(builder::pages);
+        literal(model, subject, BiboVocabulary.SERIES).ifPresent(builder::series);
+        literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
+
+        containerTitle(model, subject).ifPresent(builder::containerTitle);
+        iriOrLiteral(model, subject, FOAF.PAGE).ifPresent(builder::url);
+
+        builder.identifiers(readIdentifiers(model, subject));
+        model.filter(subject, DCTERMS.SUBJECT, null).objects().stream()
+                .filter(value -> value instanceof Literal)
+                .map(value -> ((Literal) value).getLabel().trim())
+                .filter(keyword -> !keyword.isEmpty())
+                .forEach(builder::addKeyword);
+
         return builder.build();
+    }
+
+    private static List<BiboContributor> readContributors(Model model, Resource subject) {
+        List<BiboContributor> contributors = new ArrayList<>();
+        contributors.addAll(readContributorList(model, subject, BiboVocabulary.AUTHOR_LIST, BiboContributorRole.AUTHOR));
+        contributors.addAll(readContributorList(model, subject, BiboVocabulary.EDITOR_LIST, BiboContributorRole.EDITOR));
+
+        for (Map.Entry<IRI, BiboContributorRole> entry : CONTRIBUTOR_PREDICATES.entrySet()) {
+            if (entry.getValue() == BiboContributorRole.AUTHOR || entry.getValue() == BiboContributorRole.EDITOR) {
+                continue;
+            }
+            model.filter(subject, entry.getKey(), null).objects().stream()
+                    .filter(value -> value instanceof Resource)
+                    .map(value -> (Resource) value)
+                    .forEach(resource ->
+                            readPersonName(model, resource).ifPresent(name ->
+                                    contributors.add(new BiboContributor(name, entry.getValue()))));
+        }
+        return contributors;
+    }
+
+    private static List<BiboContributor> readContributorList(
+            Model model, Resource subject, IRI predicate, BiboContributorRole role) {
+        List<BiboContributor> contributors = new ArrayList<>();
+        model.filter(subject, predicate, null).objects().stream()
+                .filter(value -> value instanceof Resource)
+                .map(value -> (Resource) value)
+                .findFirst()
+                .ifPresent(listHead -> {
+                    List<org.eclipse.rdf4j.model.Value> values =
+                            RDFCollections.asValues(model, listHead, new ArrayList<>());
+                    for (org.eclipse.rdf4j.model.Value value : values) {
+                        if (value instanceof Resource person) {
+                            readPersonName(model, person)
+                                    .ifPresent(name -> contributors.add(new BiboContributor(name, role)));
+                        }
+                    }
+                });
+        return contributors;
+    }
+
+    private static Optional<BiboPersonName> readPersonName(Model model, Resource person) {
+        Optional<String> given = literal(model, person, FOAF.GIVEN_NAME);
+        Optional<String> family = literal(model, person, FOAF.FAMILY_NAME);
+        String label = literal(model, person, FOAF.NAME)
+                .orElseGet(() -> Stream.of(given.orElse(null), family.orElse(null))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.joining(" ")));
+
+        if (label.isBlank()) {
+            return Optional.empty();
+        }
+
+        BiboPersonName.Builder builder = BiboPersonName.builder(label);
+        given.ifPresent(builder::givenName);
+        family.ifPresent(builder::familyName);
+        return Optional.of(builder.build());
+    }
+
+    private static List<BiboIdentifier> readIdentifiers(Model model, Resource subject) {
+        List<BiboIdentifier> identifiers = new ArrayList<>();
+        for (Map.Entry<IRI, BiboIdentifierType> entry : IDENTIFIER_PREDICATES.entrySet()) {
+            model.filter(subject, entry.getKey(), null).objects().forEach(value -> {
+                String text = value.stringValue().trim();
+                if (!text.isEmpty()) {
+                    identifiers.add(new BiboIdentifier(entry.getValue(), text));
+                }
+            });
+        }
+        return identifiers;
+    }
+
+    private static Optional<BiboPublicationDate> parsePublicationDate(Model model, Resource subject) {
+        return Models.objectLiteral(model.filter(subject, DCTERMS.ISSUED, null)).flatMap(BibTeXBibliographicConverter::parseIssuedLiteral);
+    }
+
+    private static Optional<BiboPublicationDate> parseIssuedLiteral(Literal literal) {
+        String label = literal.getLabel().trim();
+        IRI datatype = literal.getDatatype();
+        try {
+            if (datatype != null) {
+                if (XSD.DATE.equals(datatype) || XSD.DATETIME.equals(datatype)) {
+                    LocalDate date = LocalDate.parse(label.substring(0, 10));
+                    return Optional.of(BiboPublicationDate.ofFullDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()));
+                }
+                if (XSD.GYEARMONTH.equals(datatype)) {
+                    String[] parts = label.split("-");
+                    return Optional.of(BiboPublicationDate.ofYearMonth(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+                }
+                if (XSD.GYEAR.equals(datatype)) {
+                    return Optional.of(BiboPublicationDate.ofYear(Integer.parseInt(label)));
+                }
+            }
+            if (label.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                LocalDate date = LocalDate.parse(label);
+                return Optional.of(BiboPublicationDate.ofFullDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth()));
+            }
+            if (label.matches("\\d{4}-\\d{2}")) {
+                String[] parts = label.split("-");
+                return Optional.of(BiboPublicationDate.ofYearMonth(Integer.parseInt(parts[0]), Integer.parseInt(parts[1])));
+            }
+            if (label.matches("\\d{4}")) {
+                return Optional.of(BiboPublicationDate.ofYear(Integer.parseInt(label)));
+            }
+        } catch (Exception ignored) {
+            // ignore invalid date literal
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<String> containerTitle(Model model, Resource subject) {
+        return model.filter(subject, DCTERMS.IS_PART_OF, null).objects().stream()
+                .filter(value -> value instanceof Resource)
+                .map(value -> (Resource) value)
+                .map(container -> literal(model, container, DCTERMS.TITLE))
+                .flatMap(Optional::stream)
+                .findFirst();
+    }
+
+    private static Optional<String> literal(Model model, Resource subject, IRI predicate) {
+        return Models.objectLiteral(model.filter(subject, predicate, null))
+                .map(Literal::getLabel)
+                .map(String::trim)
+                .filter(text -> !text.isEmpty());
+    }
+
+    private static Optional<String> iriOrLiteral(Model model, Resource subject, IRI predicate) {
+        return model.filter(subject, predicate, null).objects().stream()
+                .map(value -> value instanceof Literal literal ? literal.getLabel() : value.stringValue())
+                .map(String::trim)
+                .filter(text -> !text.isEmpty())
+                .findFirst();
     }
 
     private static Optional<BiboPublicationDate> parsePublicationDate(BibTeXEntry entry) {
@@ -552,31 +1129,21 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     private static String formatName(BiboContributor contributor) {
         BiboPersonName name = contributor.name();
-        if (name.familyName().isPresent() && name.givenName().isPresent()) {
-            return name.familyName().get() + ", " + name.givenName().get();
+        Optional<String> family = name.familyName();
+        Optional<String> given = name.givenName();
+        Optional<String> suffix = name.suffix();
+
+        if (family.isPresent() && given.isPresent()) {
+            if (suffix.isPresent()) {
+                return family.get() + ", " + suffix.get() + ", " + given.get();
+            }
+            return family.get() + ", " + given.get();
+        }
+
+        if (suffix.isPresent() && given.isPresent()) {
+            return name.fullName() + ", " + suffix.get();
         }
         return name.fullName();
-    }
-
-    private static Optional<String> generateCitationKey(String title, List<BiboContributor> contributors) {
-        if (title == null || title.isBlank()) {
-            return Optional.empty();
-        }
-
-        String base = sanitizeForKey(title);
-
-        if (contributors != null && !contributors.isEmpty()) {
-            String family =
-                    contributors.stream()
-                            .map(BiboContributor::name)
-                            .map(BiboPersonName::familyName)
-                            .filter(Optional::isPresent)
-                            .map(Optional::get)
-                            .findFirst()
-                            .orElseGet(() -> contributors.get(0).name().fullName());
-            base = sanitizeForKey(family) + "_" + base;
-        }
-        return Optional.of(base);
     }
 
     private static String sanitizeForKey(String value) {
@@ -595,5 +1162,11 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElse(Integer.toString(month));
+    }
+
+    public enum KeyGenerationStrategy {
+        AUTHOR_YEAR,
+        AUTHOR_TITLE,
+        HASH
     }
 }

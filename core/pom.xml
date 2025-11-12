@@ -66,6 +66,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <useModulePath>false</useModulePath>
+                    <argLine>${jacocoArgLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -78,6 +79,12 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <propertyName>jacocoArgLine</propertyName>
+                            <includes>
+                                <include>it/riccardosacco/bibobibtex/**/*</include>
+                            </includes>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>report</id>
