@@ -8,7 +8,9 @@ import it.riccardosacco.bibobibtex.model.bibo.BiboPublicationDate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.Key;
 import org.jbibtex.StringValue;
@@ -22,13 +24,14 @@ class VocBenchPluginLifecycleTest {
     @TempDir
     Path tempDir;
 
+    private Path repositoryDir;
     private RDF4JRepositoryGateway gateway;
     private VocBenchPluginLifecycle lifecycle;
 
     @BeforeEach
     void setUp() throws IOException {
-        Path dataDir = Files.createDirectory(tempDir.resolve("vocbench-repo"));
-        gateway = new RDF4JRepositoryGateway(dataDir.toString());
+        repositoryDir = Files.createDirectory(tempDir.resolve("vocbench-repo"));
+        gateway = new RDF4JRepositoryGateway(repositoryDir.toString());
         lifecycle = new VocBenchPluginLifecycle(new VocBenchPluginBootstrap(), gateway);
     }
 
@@ -71,5 +74,32 @@ class VocBenchPluginLifecycleTest {
 
         // Verify repository is functional
         assertTrue(gateway.isAvailable());
+    }
+
+    @Test
+    void importEntryAppliesNamespacePrefix() {
+        Properties properties = configurationProperties("http://example.org/custom/");
+        VocBenchPluginConfiguration configuration = new VocBenchPluginConfiguration(properties, Map.of());
+        lifecycle = new VocBenchPluginLifecycle(new VocBenchPluginBootstrap(), gateway, configuration);
+
+        BibTeXEntry entry = new BibTeXEntry(BibTeXEntry.TYPE_ARTICLE, new Key("CustomKey2024"));
+        entry.addField(BibTeXEntry.KEY_TITLE, new StringValue("Namespace Example", StringValue.Style.BRACED));
+        entry.addField(BibTeXEntry.KEY_AUTHOR, new StringValue("Doe, Jane", StringValue.Style.BRACED));
+        entry.addField(BibTeXEntry.KEY_YEAR, new StringValue("2024", StringValue.Style.BRACED));
+
+        Optional<BiboDocument> document = lifecycle.importEntry(entry);
+
+        assertTrue(document.isPresent());
+        assertTrue(document.get().id().orElseThrow().startsWith("http://example.org/custom/"));
+    }
+
+    private Properties configurationProperties(String namespace) {
+        Properties properties = new Properties();
+        properties.setProperty("repository.type", "native");
+        properties.setProperty("repository.dataDir", repositoryDir.toString());
+        properties.setProperty("namespace.prefix", namespace);
+        properties.setProperty("field.mapping.strict", "false");
+        properties.setProperty("identifier.strategy", "author-year-title");
+        return properties;
     }
 }
