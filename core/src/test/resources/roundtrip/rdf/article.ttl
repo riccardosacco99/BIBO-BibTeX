@@ -1,0 +1,36 @@
+
+_:eb1c79dc299f44f98a4a34db073a6fbf4 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Article>;
+  <http://purl.org/dc/terms/title> "Round-Trip Testing for Articles";
+  <http://purl.org/dc/terms/identifier> "roundtripArticle2024";
+  <http://purl.org/ontology/bibo/authorList> _:eb1c79dc299f44f98a4a34db073a6fbf7;
+  <http://purl.org/dc/terms/issued> "2024-03"^^<http://www.w3.org/2001/XMLSchema#gYearMonth>;
+  <http://purl.org/dc/terms/isPartOf> _:eb1c79dc299f44f98a4a34db073a6fbf9;
+  <http://purl.org/ontology/bibo/volume> "58";
+  <http://purl.org/ontology/bibo/issue> "2";
+  <http://purl.org/ontology/bibo/pages> "100-120";
+  <http://purl.org/ontology/bibo/doi> "10.5555/article-2024";
+  <http://xmlns.com/foaf/0.1/page> <https://example.org/articles/roundtrip>;
+  <http://purl.org/ontology/bibo/issn> "1234-5678";
+  <http://purl.org/dc/terms/language> "en";
+  <http://www.w3.org/2000/01/rdf-schema#comment> "Accepted version" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf5 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Smith, Alice";
+  <http://xmlns.com/foaf/0.1/givenName> "Alice";
+  <http://xmlns.com/foaf/0.1/familyName> "Smith" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf6 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Doe, Bob";
+  <http://xmlns.com/foaf/0.1/givenName> "Bob";
+  <http://xmlns.com/foaf/0.1/familyName> "Doe" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf7 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:eb1c79dc299f44f98a4a34db073a6fbf5;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:eb1c79dc299f44f98a4a34db073a6fbf8 .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf8 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:eb1c79dc299f44f98a4a34db073a6fbf6;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf9 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Journal of Bidirectional Conversion" .

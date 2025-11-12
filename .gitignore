@@ -51,6 +51,7 @@ test-data/bibo-roundtrip/
 # Agents
 .claude
 CLAUDE.md
+AGENTS.md
 
 # Sprint execution plans
 sprints/*-EXECUTION-PLAN.md

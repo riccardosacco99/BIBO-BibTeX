@@ -1,0 +1,31 @@
+
+_:eb1c79dc299f44f98a4a34db073a6fbf19 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Book>;
+  <http://purl.org/dc/terms/title> "Semantic Conversion Patterns";
+  <http://purl.org/dc/terms/identifier> "roundtripBook2022";
+  <http://purl.org/ontology/bibo/authorList> _:eb1c79dc299f44f98a4a34db073a6fbf22;
+  <http://purl.org/dc/terms/issued> "2022"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/publisher> "Data Press";
+  <http://purl.org/dc/terms/spatial> "London";
+  <http://xmlns.com/foaf/0.1/page> <https://example.org/books/conversion>;
+  <http://purl.org/ontology/bibo/isbn13> "978-1-4028-9462-6";
+  <http://purl.org/ontology/bibo/series> "Linked Data Series";
+  <http://purl.org/ontology/bibo/edition> "2";
+  <http://purl.org/dc/terms/subject> "conversion", "rdf", "bibtex" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf20 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Garcia, Maria";
+  <http://xmlns.com/foaf/0.1/givenName> "Maria";
+  <http://xmlns.com/foaf/0.1/familyName> "Garcia" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf21 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Brown, Ethan";
+  <http://xmlns.com/foaf/0.1/givenName> "Ethan";
+  <http://xmlns.com/foaf/0.1/familyName> "Brown" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf22 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:eb1c79dc299f44f98a4a34db073a6fbf20;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:eb1c79dc299f44f98a4a34db073a6fbf23 .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:eb1c79dc299f44f98a4a34db073a6fbf21;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .

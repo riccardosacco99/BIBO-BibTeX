@@ -1,0 +1,17 @@
+
+_:eb1c79dc299f44f98a4a34db073a6fbf16 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/Thesis>;
+  <http://purl.org/dc/terms/title> "Trusted Round-Trip Conversions";
+  <http://purl.org/dc/terms/identifier> "roundtripThesis2021";
+  <http://purl.org/ontology/bibo/authorList> _:eb1c79dc299f44f98a4a34db073a6fbf18;
+  <http://purl.org/dc/terms/issued> "2021-07"^^<http://www.w3.org/2001/XMLSchema#gYearMonth>;
+  <http://purl.org/dc/terms/spatial> "Paris";
+  <http://xmlns.com/foaf/0.1/page> <https://example.org/thesis/roundtrip> .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf17 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Nguyen, Linh";
+  <http://xmlns.com/foaf/0.1/givenName> "Linh";
+  <http://xmlns.com/foaf/0.1/familyName> "Nguyen" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf18 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:eb1c79dc299f44f98a4a34db073a6fbf17;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .

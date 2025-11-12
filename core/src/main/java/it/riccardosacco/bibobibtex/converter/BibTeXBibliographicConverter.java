@@ -70,6 +70,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_SERIES = new Key("series");
     private static final Key FIELD_EDITION = new Key("edition");
     private static final Key FIELD_KEYWORDS = new Key("keywords");
+    private static final Key FIELD_ADVISOR = new Key("advisor");
     private static final Key TYPE_ONLINE = new Key("online");
 
     @Override
@@ -94,10 +95,14 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .forEach(builder::addContributor);
         parseContributors(fieldValue(source, BibTeXEntry.KEY_EDITOR), BiboContributorRole.EDITOR)
                 .forEach(builder::addContributor);
+        parseContributors(fieldValue(source, FIELD_ADVISOR), BiboContributorRole.ADVISOR)
+                .forEach(builder::addContributor);
 
         parsePublicationDate(source).ifPresent(builder::publicationDate);
 
-        fieldValue(source, BibTeXEntry.KEY_PUBLISHER).ifPresent(builder::publisher);
+        fieldValue(source, BibTeXEntry.KEY_PUBLISHER)
+                .or(() -> inferPublisher(source))
+                .ifPresent(builder::publisher);
         fieldValue(source, BibTeXEntry.KEY_ADDRESS).ifPresent(builder::placeOfPublication);
 
         fieldValue(source, BibTeXEntry.KEY_JOURNAL, BibTeXEntry.KEY_BOOKTITLE).ifPresent(builder::containerTitle);
@@ -150,6 +155,8 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         formatContributors(source.authors()).ifPresent(value -> putField(entry, BibTeXEntry.KEY_AUTHOR, value));
         formatContributors(source.editors()).ifPresent(value -> putField(entry, BibTeXEntry.KEY_EDITOR, value));
+        formatContributors(source.contributorsByRole(BiboContributorRole.ADVISOR))
+                .ifPresent(value -> putField(entry, FIELD_ADVISOR, value));
 
         source.publicationDate().ifPresent(date -> {
             putField(entry, BibTeXEntry.KEY_YEAR, Integer.toString(date.year()));
@@ -217,6 +224,20 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             result = fieldValue(entry, fallback);
         }
         return result;
+    }
+
+    private static Optional<String> inferPublisher(BibTeXEntry entry) {
+        if (entry == null || entry.getType() == null) {
+            return Optional.empty();
+        }
+        Key type = entry.getType();
+        if (BibTeXEntry.TYPE_PHDTHESIS.equals(type) || BibTeXEntry.TYPE_MASTERSTHESIS.equals(type)) {
+            return fieldValue(entry, BibTeXEntry.KEY_SCHOOL);
+        }
+        if (BibTeXEntry.TYPE_TECHREPORT.equals(type)) {
+            return fieldValue(entry, BibTeXEntry.KEY_INSTITUTION);
+        }
+        return Optional.empty();
     }
 
     /**

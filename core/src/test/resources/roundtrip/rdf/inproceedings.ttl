@@ -1,0 +1,32 @@
+
+_:eb1c79dc299f44f98a4a34db073a6fbf10 a <http://purl.org/ontology/bibo/Document>, <http://purl.org/ontology/bibo/ConferencePaper>;
+  <http://purl.org/dc/terms/title> "Conference Conversion Scenarios";
+  <http://purl.org/dc/terms/identifier> "roundtripConf2023";
+  <http://purl.org/ontology/bibo/authorList> _:eb1c79dc299f44f98a4a34db073a6fbf13;
+  <http://purl.org/dc/terms/issued> "2023"^^<http://www.w3.org/2001/XMLSchema#gYear>;
+  <http://purl.org/dc/terms/isPartOf> _:eb1c79dc299f44f98a4a34db073a6fbf15;
+  <http://purl.org/ontology/bibo/pages> "55-64";
+  <http://purl.org/ontology/bibo/doi> "10.5555/conf-2023";
+  <http://xmlns.com/foaf/0.1/page> <https://example.org/papers/conversion>;
+  <http://www.w3.org/2000/01/rdf-schema#comment> "Best student paper" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf11 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Lee, Hannah";
+  <http://xmlns.com/foaf/0.1/givenName> "Hannah";
+  <http://xmlns.com/foaf/0.1/familyName> "Lee" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf12 a <http://xmlns.com/foaf/0.1/Person>;
+  <http://xmlns.com/foaf/0.1/name> "Patel, Rohan";
+  <http://xmlns.com/foaf/0.1/givenName> "Rohan";
+  <http://xmlns.com/foaf/0.1/familyName> "Patel" .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf13 a <http://www.w3.org/1999/02/22-rdf-syntax-ns#List>;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:eb1c79dc299f44f98a4a34db073a6fbf11;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:eb1c79dc299f44f98a4a34db073a6fbf14 .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first>
+    _:eb1c79dc299f44f98a4a34db073a6fbf12;
+  <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+
+_:eb1c79dc299f44f98a4a34db073a6fbf15 a <http://purl.org/ontology/bibo/Document>;
+  <http://purl.org/dc/terms/title> "Proceedings of the Conversion Summit" .
