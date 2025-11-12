@@ -1,6 +1,7 @@
 package it.riccardosacco.bibobibtex.examples;
 
 import it.riccardosacco.bibobibtex.converter.BibTeXBibliographicConverter;
+import it.riccardosacco.bibobibtex.exception.ValidationException;
 import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -94,12 +95,21 @@ public final class BatchConversion {
             // Create a single RDF model for all entries in this file
             Model combinedModel = new org.eclipse.rdf4j.model.impl.LinkedHashModel();
             int converted = 0;
+            int skipped = 0;
 
             for (BibTeXEntry entry : entries) {
-                Optional<BiboDocument> document = converter.convertToBibo(entry);
-                if (document.isPresent()) {
-                    combinedModel.addAll(document.get().rdfModel());
-                    converted++;
+                try {
+                    Optional<BiboDocument> document = converter.convertToBibo(entry);
+                    if (document.isPresent()) {
+                        combinedModel.addAll(document.get().rdfModel());
+                        converted++;
+                    }
+                } catch (ValidationException validationException) {
+                    skipped++;
+                    System.err.println("  Warning: skipping entry "
+                            + citationKey(entry)
+                            + " - "
+                            + validationException.getMessage());
                 }
             }
 
@@ -109,6 +119,9 @@ public final class BatchConversion {
             }
 
             System.out.println("  Converted: " + converted + " entries");
+            if (skipped > 0) {
+                System.out.println("  Skipped: " + skipped + " entries due to validation errors");
+            }
             return converted;
         }
     }
@@ -122,5 +135,9 @@ public final class BatchConversion {
         try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
             Rio.write(model, writer, RDFFormat.TURTLE);
         }
+    }
+
+    private static String citationKey(BibTeXEntry entry) {
+        return entry.getKey() == null ? "<unknown>" : entry.getKey().getValue();
     }
 }

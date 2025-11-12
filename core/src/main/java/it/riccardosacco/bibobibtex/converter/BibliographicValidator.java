@@ -8,6 +8,7 @@ import org.jbibtex.BibTeXEntry;
 
 import java.net.URI;
 import java.time.Year;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -288,22 +289,29 @@ public class BibliographicValidator {
      * @throws ValidationException if URL is invalid
      */
     private static void validateURL(String url) {
+        if (url == null || url.isBlank()) {
+            throw new ValidationException("URL cannot be null or blank", "url", url);
+        }
+
+        String normalized = url.trim();
+
         // Use URI instead of deprecated URL(String) constructor
         try {
-            URI.create(url).toURL();
+            URI.create(normalized).toURL();
         } catch (Exception e) {
             throw new ValidationException(
                 "Invalid URL format",
                 "url",
-                url
+                normalized
             );
         }
 
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        String lowerCase = normalized.toLowerCase(Locale.ROOT);
+        if (!lowerCase.startsWith("http://") && !lowerCase.startsWith("https://")) {
             throw new ValidationException(
                 "URL must start with http:// or https://",
                 "url",
-                url
+                normalized
             );
         }
     }

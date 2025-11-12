@@ -220,31 +220,44 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     }
 
     /**
-     * Sanitizes URL by removing newlines and taking only the first line.
-     * Some BibTeX files contain multi-line URLs which are invalid in RDF.
+     * Sanitizes URL by keeping only the first line and ensuring it is a fully qualified HTTP(S) URL.
+     * Some BibTeX files contain multi-line URLs or omit the protocol, which leads to invalid RDF identifiers.
      */
     private static String sanitizeUrl(String url) {
         if (url == null) {
             return null;
         }
+        String sanitized = url.strip();
+
         // Take only the first line if URL contains newlines or carriage returns
-        int newlineIndex = url.indexOf('\n');
-        int crIndex = url.indexOf('\r');
+        int newlineIndex = sanitized.indexOf('\n');
+        int crIndex = sanitized.indexOf('\r');
 
         // Find the first line break character
         int breakIndex = -1;
-        if (newlineIndex > 0 && crIndex > 0) {
+        if (newlineIndex >= 0 && crIndex >= 0) {
             breakIndex = Math.min(newlineIndex, crIndex);
-        } else if (newlineIndex > 0) {
+        } else if (newlineIndex >= 0) {
             breakIndex = newlineIndex;
-        } else if (crIndex > 0) {
+        } else if (crIndex >= 0) {
             breakIndex = crIndex;
         }
 
-        if (breakIndex > 0) {
-            return url.substring(0, breakIndex).trim();
+        if (breakIndex >= 0) {
+            sanitized = sanitized.substring(0, breakIndex).trim();
         }
-        return url;
+
+        if (sanitized.startsWith("//")) {
+            sanitized = "https:" + sanitized;
+        } else if (sanitized.regionMatches(true, 0, "http://", 0, 7)) {
+            sanitized = "http://" + sanitized.substring(7);
+        } else if (sanitized.regionMatches(true, 0, "https://", 0, 8)) {
+            sanitized = "https://" + sanitized.substring(8);
+        } else if (!sanitized.contains("://")) {
+            sanitized = "https://" + sanitized;
+        }
+
+        return sanitized;
     }
 
     private static void putField(BibTeXEntry entry, Key key, String value) {
