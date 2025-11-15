@@ -122,6 +122,10 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key FIELD_KEYWORDS = new Key("keywords");
     private static final Key FIELD_ADVISOR = new Key("advisor");
     private static final Key TYPE_ONLINE = new Key("online");
+    private static final Key TYPE_BOOKLET = new Key("booklet");
+    private static final Key TYPE_MANUAL = new Key("manual");
+    private static final Key TYPE_UNPUBLISHED = new Key("unpublished");
+    private static final Key TYPE_CONFERENCE = new Key("conference");
     private final Set<String> usedCitationKeys = new HashSet<>();
     private final KeyGenerationStrategy keyStrategy;
 
@@ -149,6 +153,14 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         logger.debug("Mapped BibTeX type {} to BIBO type {}", source.getType(), documentType);
 
         BiboDocument.Builder builder = BiboDocument.builder(documentType, title).id(citationKeyValue(source));
+
+        // Set degree type for thesis entries (only if custom type field present or for mastersthesis)
+        if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(source.getType())) {
+            // Always set for master's thesis to distinguish from PhD
+            builder.degreeType("Master's thesis");
+        }
+        // Allow custom degree type override via "type" field
+        fieldValue(source, BibTeXEntry.KEY_TYPE).ifPresent(builder::degreeType);
 
         fieldValue(source, FIELD_SUBTITLE).ifPresent(builder::subtitle);
         parseContributors(fieldValue(source, BibTeXEntry.KEY_AUTHOR), BiboContributorRole.AUTHOR)
@@ -220,13 +232,32 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         // Validate input (lenient mode to allow roundtrip of malformed identifiers)
         BibliographicValidator.validateBiboDocument(source, true);
 
-        Key entryType = mapEntryType(source.type());
+        // Determine entry type, with special handling for thesis
+        Key entryType;
+        if (source.type() == BiboDocumentType.THESIS && source.degreeType().isPresent()) {
+            String degree = source.degreeType().get().toLowerCase();
+            if (degree.contains("master")) {
+                entryType = BibTeXEntry.TYPE_MASTERSTHESIS;
+            } else if (degree.contains("phd") || degree.contains("doctor")) {
+                entryType = BibTeXEntry.TYPE_PHDTHESIS;
+            } else {
+                entryType = BibTeXEntry.TYPE_PHDTHESIS;  // Default to PhD
+            }
+        } else {
+            entryType = mapEntryType(source.type());
+        }
+
         logger.debug("Mapped BIBO type {} to BibTeX type {}", source.type(), entryType);
         String citationKey = resolveCitationKey(source);
 
         BibTeXEntry entry = new BibTeXEntry(entryType, new Key(citationKey));
         putField(entry, BibTeXEntry.KEY_TITLE, source.title());
         source.subtitle().ifPresent(value -> putField(entry, FIELD_SUBTITLE, value));
+
+        // Export degreeType for thesis entries
+        if (source.type() == BiboDocumentType.THESIS) {
+            source.degreeType().ifPresent(value -> putField(entry, BibTeXEntry.KEY_TYPE, value));
+        }
 
         formatContributors(source.authors()).ifPresent(value -> putField(entry, BibTeXEntry.KEY_AUTHOR, value));
         formatContributors(source.editors()).ifPresent(value -> putField(entry, BibTeXEntry.KEY_EDITOR, value));
@@ -695,6 +726,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
      * Maps BibTeX entry type to BIBO document type.
      * Note: @inbook and @incollection both map to BOOK_SECTION as they represent
      * the same concept (chapter/section in edited collection) with identical field sets.
+     * @conference is an alias for @inproceedings and maps to CONFERENCE_PAPER.
      *
      * @param type the BibTeX entry type
      * @return the corresponding BIBO document type
@@ -709,7 +741,8 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         } else if (BibTeXEntry.TYPE_INBOOK.equals(type) || BibTeXEntry.TYPE_INCOLLECTION.equals(type)) {
             // FIX-04: Both @inbook and @incollection map to BOOK_SECTION
             return BiboDocumentType.BOOK_SECTION;
-        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type)) {
+        } else if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type) || TYPE_CONFERENCE.equals(type)) {
+            // @conference is an alias for @inproceedings
             return BiboDocumentType.CONFERENCE_PAPER;
         } else if (BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
             return BiboDocumentType.PROCEEDINGS;
@@ -719,6 +752,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             return BiboDocumentType.REPORT;
         } else if (TYPE_ONLINE.equals(type)) {
             return BiboDocumentType.WEBPAGE;
+        } else if (TYPE_BOOKLET.equals(type)) {
+            return BiboDocumentType.BOOKLET;
+        } else if (TYPE_MANUAL.equals(type)) {
+            return BiboDocumentType.MANUAL;
+        } else if (TYPE_UNPUBLISHED.equals(type)) {
+            return BiboDocumentType.MANUSCRIPT;
         }
         return BiboDocumentType.OTHER;
     }
@@ -727,6 +766,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
      * Maps BIBO document type to BibTeX entry type.
      * Note: BOOK_SECTION maps to @incollection (preferred over @inbook for
      * chapters in edited collections, as commonly used in academic databases).
+     * THESIS mapping depends on degreeType field (checked separately).
      *
      * @param type the BIBO document type
      * @return the corresponding BibTeX entry type
@@ -741,9 +781,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             case BOOK_SECTION -> BibTeXEntry.TYPE_INCOLLECTION;  // FIX-04: prefer @incollection
             case CONFERENCE_PAPER -> BibTeXEntry.TYPE_INPROCEEDINGS;
             case PROCEEDINGS -> BibTeXEntry.TYPE_PROCEEDINGS;
-            case THESIS -> BibTeXEntry.TYPE_PHDTHESIS;
+            case THESIS -> BibTeXEntry.TYPE_PHDTHESIS;  // Default, may be overridden by degreeType
             case REPORT -> BibTeXEntry.TYPE_TECHREPORT;
             case WEBPAGE -> TYPE_ONLINE;
+            case BOOKLET -> TYPE_BOOKLET;
+            case MANUAL -> TYPE_MANUAL;
+            case MANUSCRIPT -> TYPE_UNPUBLISHED;
             default -> BibTeXEntry.TYPE_MISC;
         };
     }
@@ -988,6 +1031,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         literal(model, subject, BiboVocabulary.PAGES).ifPresent(builder::pages);
         literal(model, subject, BiboVocabulary.SERIES).ifPresent(builder::series);
         literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
+        literal(model, subject, BiboVocabulary.DEGREE_TYPE).ifPresent(builder::degreeType);
 
         containerTitle(model, subject).ifPresent(builder::containerTitle);
         conferenceLocation(model, subject).ifPresent(builder::conferenceLocation);
