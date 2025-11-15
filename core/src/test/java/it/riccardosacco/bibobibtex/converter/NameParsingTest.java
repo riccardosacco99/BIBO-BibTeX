@@ -33,42 +33,49 @@ class NameParsingTest {
     void particleVanGogh() {
         BiboPersonName name = parseSingleAuthor("Vincent van Gogh");
         assertEquals("Vincent", name.givenName().orElseThrow());
-        assertEquals("van Gogh", name.familyName().orElseThrow());
+        assertEquals("van", name.nameParticle().orElseThrow());
+        assertEquals("Gogh", name.familyName().orElseThrow());
     }
 
     @Test
     void particleVonNeumann() {
         BiboPersonName name = parseSingleAuthor("John von Neumann");
         assertEquals("John", name.givenName().orElseThrow());
-        assertEquals("von Neumann", name.familyName().orElseThrow());
+        assertEquals("von", name.nameParticle().orElseThrow());
+        assertEquals("Neumann", name.familyName().orElseThrow());
     }
 
     @Test
     void particleDeGaulle() {
         BiboPersonName name = parseSingleAuthor("Charles de Gaulle");
         assertEquals("Charles", name.givenName().orElseThrow());
-        assertEquals("de Gaulle", name.familyName().orElseThrow());
+        assertEquals("de", name.nameParticle().orElseThrow());
+        assertEquals("Gaulle", name.familyName().orElseThrow());
     }
 
     @Test
     void particleDellaFrancesca() {
         BiboPersonName name = parseSingleAuthor("Piero della Francesca");
         assertEquals("Piero", name.givenName().orElseThrow());
-        assertEquals("della Francesca", name.familyName().orElseThrow());
+        assertEquals("della", name.nameParticle().orElseThrow());
+        assertEquals("Francesca", name.familyName().orElseThrow());
     }
 
     @Test
     void particleIbnSina() {
         BiboPersonName name = parseSingleAuthor("Abu Ali ibn Sina");
-        assertEquals("Abu Ali", name.givenName().orElseThrow());
-        assertEquals("ibn Sina", name.familyName().orElseThrow());
+        assertEquals("Abu", name.givenName().orElseThrow());
+        assertEquals("Ali", name.middleName().orElseThrow());
+        assertEquals("ibn", name.nameParticle().orElseThrow());
+        assertEquals("Sina", name.familyName().orElseThrow());
     }
 
     @Test
     void suffixThreePartFormat() {
         BiboPersonName name = parseSingleAuthor("von Braun, Jr, Wernher");
         assertEquals("Wernher", name.givenName().orElseThrow());
-        assertEquals("von Braun", name.familyName().orElseThrow());
+        assertEquals("von", name.nameParticle().orElseThrow());
+        assertEquals("Braun", name.familyName().orElseThrow());
         assertEquals("Jr", name.suffix().orElseThrow());
     }
 
@@ -91,22 +98,26 @@ class NameParsingTest {
     @Test
     void suffixBaronExampleFromPlan() {
         BiboPersonName name = parseSingleAuthor("Charles Louis de Secondat, Baron de Montesquieu");
-        assertEquals("Charles Louis", name.givenName().orElseThrow());
-        assertEquals("de Secondat", name.familyName().orElseThrow());
+        assertEquals("Charles", name.givenName().orElseThrow());
+        assertEquals("Louis", name.middleName().orElseThrow());
+        assertEquals("de", name.nameParticle().orElseThrow());
+        assertEquals("Secondat", name.familyName().orElseThrow());
         assertEquals("Baron de Montesquieu", name.suffix().orElseThrow());
     }
 
     @Test
     void middleNameMultiWord() {
         BiboPersonName name = parseSingleAuthor("Mary Anne Johnson");
-        assertEquals("Mary Anne", name.givenName().orElseThrow());
+        assertEquals("Mary", name.givenName().orElseThrow());
+        assertEquals("Anne", name.middleName().orElseThrow());
         assertEquals("Johnson", name.familyName().orElseThrow());
     }
 
     @Test
     void middleNameUnicode() {
         BiboPersonName name = parseSingleAuthor("Ana María López");
-        assertEquals("Ana María", name.givenName().orElseThrow());
+        assertEquals("Ana", name.givenName().orElseThrow());
+        assertEquals("María", name.middleName().orElseThrow());
         assertEquals("López", name.familyName().orElseThrow());
     }
 
@@ -121,7 +132,8 @@ class NameParsingTest {
     void combinedParticleAndSuffix() {
         BiboPersonName name = parseSingleAuthor("Miguel de Cervantes, Conde de Esquivias");
         assertEquals("Miguel", name.givenName().orElseThrow());
-        assertEquals("de Cervantes", name.familyName().orElseThrow());
+        assertEquals("de", name.nameParticle().orElseThrow());
+        assertEquals("Cervantes", name.familyName().orElseThrow());
         assertEquals("Conde de Esquivias", name.suffix().orElseThrow());
     }
 
@@ -129,7 +141,8 @@ class NameParsingTest {
     void bracesAreStripped() {
         BiboPersonName name = parseSingleAuthor("{Ludwig van Beethoven}");
         assertEquals("Ludwig", name.givenName().orElseThrow());
-        assertEquals("van Beethoven", name.familyName().orElseThrow());
+        assertEquals("van", name.nameParticle().orElseThrow());
+        assertEquals("Beethoven", name.familyName().orElseThrow());
     }
 
     @Test
@@ -142,8 +155,10 @@ class NameParsingTest {
     @Test
     void longNamesSplitCorrectly() {
         BiboPersonName name = parseSingleAuthor("Juan Carlos Alberto de la Vega");
-        assertEquals("Juan Carlos Alberto", name.givenName().orElseThrow());
-        assertEquals("de la Vega", name.familyName().orElseThrow());
+        assertEquals("Juan Carlos", name.givenName().orElseThrow());
+        assertEquals("Alberto", name.middleName().orElseThrow());
+        assertEquals("de la", name.nameParticle().orElseThrow());
+        assertEquals("Vega", name.familyName().orElseThrow());
     }
 
     @Test
@@ -161,6 +176,124 @@ class NameParsingTest {
         assertEquals("First", first.familyName().orElseThrow());
         assertEquals("Bob", second.givenName().orElseThrow());
         assertEquals("Second", second.familyName().orElseThrow());
+    }
+
+    // Tests for new middleName field
+    @Test
+    void middleNameExtractedFromThreeTokenName() {
+        BiboPersonName name = parseSingleAuthor("John Sebastian Bach");
+        assertEquals("John", name.givenName().orElseThrow());
+        assertEquals("Sebastian", name.middleName().orElseThrow());
+        assertEquals("Bach", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void middleNameExtractedFromFourTokenName() {
+        BiboPersonName name = parseSingleAuthor("Ludwig Wilhelm van Beethoven");
+        assertEquals("Ludwig", name.givenName().orElseThrow());
+        assertEquals("Wilhelm", name.middleName().orElseThrow());
+        assertEquals("van", name.nameParticle().orElseThrow());
+        assertEquals("Beethoven", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void middleNameWithSuffix() {
+        BiboPersonName name = parseSingleAuthor("Martin Luther King, Jr.");
+        assertEquals("Martin", name.givenName().orElseThrow());
+        assertEquals("Luther", name.middleName().orElseThrow());
+        assertEquals("King", name.familyName().orElseThrow());
+        assertEquals("Jr.", name.suffix().orElseThrow());
+    }
+
+    // Tests for nameParticle field separately
+    @Test
+    void nameParticleExtractedSeparately_van() {
+        BiboPersonName name = parseSingleAuthor("Vincent van Gogh");
+        assertEquals("Vincent", name.givenName().orElseThrow());
+        assertEquals("van", name.nameParticle().orElseThrow());
+        assertEquals("Gogh", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void nameParticleExtractedSeparately_von() {
+        BiboPersonName name = parseSingleAuthor("John von Neumann");
+        assertEquals("John", name.givenName().orElseThrow());
+        assertEquals("von", name.nameParticle().orElseThrow());
+        assertEquals("Neumann", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void nameParticleExtractedSeparately_de() {
+        BiboPersonName name = parseSingleAuthor("Charles de Gaulle");
+        assertEquals("Charles", name.givenName().orElseThrow());
+        assertEquals("de", name.nameParticle().orElseThrow());
+        assertEquals("Gaulle", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void nameParticleExtractedSeparately_della() {
+        BiboPersonName name = parseSingleAuthor("Piero della Francesca");
+        assertEquals("Piero", name.givenName().orElseThrow());
+        assertEquals("della", name.nameParticle().orElseThrow());
+        assertEquals("Francesca", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void multipleParticles_dela() {
+        BiboPersonName name = parseSingleAuthor("Juan Carlos de la Vega");
+        assertEquals("Juan", name.givenName().orElseThrow());
+        assertEquals("Carlos", name.middleName().orElseThrow());
+        assertEquals("de la", name.nameParticle().orElseThrow());
+        assertEquals("Vega", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void suffixIII() {
+        BiboPersonName name = parseSingleAuthor("John Smith, III");
+        assertEquals("John", name.givenName().orElseThrow());
+        assertEquals("Smith", name.familyName().orElseThrow());
+        assertEquals("III", name.suffix().orElseThrow());
+    }
+
+    @Test
+    void suffixSr() {
+        BiboPersonName name = parseSingleAuthor("Robert Brown, Sr");
+        assertEquals("Robert", name.givenName().orElseThrow());
+        assertEquals("Brown", name.familyName().orElseThrow());
+        assertEquals("Sr", name.suffix().orElseThrow());
+    }
+
+    @Test
+    void hyphenatedFamilyName_SaintExupery() {
+        BiboPersonName name = parseSingleAuthor("Antoine de Saint-Exupéry");
+        assertEquals("Antoine", name.givenName().orElseThrow());
+        assertEquals("de", name.nameParticle().orElseThrow());
+        assertEquals("Saint-Exupéry", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void complexNameWithAllComponents() {
+        BiboPersonName name = parseSingleAuthor("Johann Wolfgang von Goethe");
+        assertEquals("Johann", name.givenName().orElseThrow());
+        assertEquals("Wolfgang", name.middleName().orElseThrow());
+        assertEquals("von", name.nameParticle().orElseThrow());
+        assertEquals("Goethe", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void particleWithCommaFormat() {
+        BiboPersonName name = parseSingleAuthor("van der Waals, Johannes");
+        assertEquals("Johannes", name.givenName().orElseThrow());
+        assertEquals("van der", name.nameParticle().orElseThrow());
+        assertEquals("Waals", name.familyName().orElseThrow());
+    }
+
+    @Test
+    void arabicNameWithBin() {
+        BiboPersonName name = parseSingleAuthor("Mohammed bin Rashid");
+        assertEquals("Mohammed", name.givenName().orElseThrow());
+        assertEquals("bin", name.nameParticle().orElseThrow());
+        assertEquals("Rashid", name.familyName().orElseThrow());
     }
 
     private BiboPersonName parseSingleAuthor(String authorField) {

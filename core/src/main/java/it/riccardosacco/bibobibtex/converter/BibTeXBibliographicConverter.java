@@ -842,6 +842,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (components.givenName != null) {
             builder.givenName(components.givenName);
         }
+        if (components.middleName != null) {
+            builder.middleName(components.middleName);
+        }
+        if (components.nameParticle != null) {
+            builder.nameParticle(components.nameParticle);
+        }
         if (components.familyName != null) {
             builder.familyName(components.familyName);
         }
@@ -868,7 +874,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
      */
     private static NameComponents parseAdvancedName(String normalized) {
         if (normalized.isEmpty()) {
-            return new NameComponents(null, null, null);
+            return new NameComponents(null, null, null, null, null);
         }
         String[] commaParts = normalized.split(",");
         if (commaParts.length == 1) {
@@ -882,9 +888,13 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 NameComponents base = parseFreeFormName(firstSegment);
                 return base.withSuffix(secondSegment);
             }
+            // Format: "von Last, First"
+            NameParticlePair familyParts = extractParticleAndFamily(firstSegment);
             return new NameComponents(
                     secondSegment.isBlank() ? null : secondSegment,
-                    normalizeFamilySegment(firstSegment),
+                    null, // no middle name
+                    familyParts.particle,
+                    familyParts.family,
                     null);
         }
 
@@ -893,9 +903,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         String suffixSegment = commaParts[1].trim();
         String givenSegment =
                 Arrays.stream(commaParts).skip(2).map(String::trim).filter(token -> !token.isEmpty()).collect(Collectors.joining(" "));
+        NameParticlePair familyParts = extractParticleAndFamily(familySegment);
         return new NameComponents(
                 givenSegment.isBlank() ? null : givenSegment,
-                normalizeFamilySegment(familySegment),
+                null, // no middle name in this format
+                familyParts.particle,
+                familyParts.family,
                 suffixSegment.isBlank() ? null : suffixSegment);
     }
 
@@ -906,39 +919,54 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .collect(Collectors.toCollection(ArrayList::new));
 
         if (tokens.isEmpty()) {
-            return new NameComponents(null, value, null);
+            return new NameComponents(null, null, null, value, null);
         }
 
+        // Single token = family name only
+        if (tokens.size() == 1) {
+            return new NameComponents(null, null, null, tokens.get(0), null);
+        }
+
+        // Extract family name + particle from the end
+        List<String> particleTokens = new ArrayList<>();
         List<String> familyTokens = new ArrayList<>();
         int index = tokens.size() - 1;
+
+        // Last token is always part of family name
         familyTokens.add(tokens.get(index));
         index--;
 
+        // Collect particles (lowercase words before family name)
         while (index >= 0 && isParticleToken(tokens.get(index))) {
-            familyTokens.add(0, tokens.get(index));
+            particleTokens.add(0, tokens.get(index));
             index--;
         }
 
-        String given = index >= 0 ? tokens.subList(0, index + 1).stream().collect(Collectors.joining(" ")) : null;
+        // Extract given name and middle name
+        String givenName = null;
+        String middleName = null;
+
+        if (index >= 0) {
+            List<String> givenTokens = tokens.subList(0, index + 1);
+            if (givenTokens.size() == 1) {
+                givenName = givenTokens.get(0);
+            } else if (givenTokens.size() >= 2) {
+                // Last token of given tokens is middle name
+                givenName = givenTokens.subList(0, givenTokens.size() - 1).stream()
+                        .collect(Collectors.joining(" "));
+                middleName = givenTokens.get(givenTokens.size() - 1);
+            }
+        }
+
+        String particle = particleTokens.isEmpty() ? null : String.join(" ", particleTokens);
         String family = String.join(" ", familyTokens);
+
         return new NameComponents(
-                given == null || given.isBlank() ? null : given.trim(),
+                givenName == null || givenName.isBlank() ? null : givenName.trim(),
+                middleName == null || middleName.isBlank() ? null : middleName.trim(),
+                particle == null || particle.isBlank() ? null : particle.trim(),
                 family.isBlank() ? null : family.trim(),
                 null);
-    }
-
-    private static String normalizeFamilySegment(String segment) {
-        if (segment == null) {
-            return null;
-        }
-        String trimmed = segment.trim();
-        if (trimmed.isEmpty()) {
-            return null;
-        }
-        return Arrays.stream(trimmed.split("\\s+"))
-                .map(String::trim)
-                .filter(token -> !token.isEmpty())
-                .collect(Collectors.joining(" "));
     }
 
     private static boolean looksLikeSuffix(String segment) {
@@ -962,10 +990,61 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         return PARTICLE_TOKENS.contains(normalized) || Character.isLowerCase(token.charAt(0));
     }
 
-    private record NameComponents(String givenName, String familyName, String suffix) {
+    private record NameComponents(String givenName, String middleName, String nameParticle, String familyName, String suffix) {
         NameComponents withSuffix(String newSuffix) {
-            return new NameComponents(givenName, familyName, newSuffix == null || newSuffix.isBlank() ? suffix : newSuffix);
+            return new NameComponents(givenName, middleName, nameParticle, familyName, newSuffix == null || newSuffix.isBlank() ? suffix : newSuffix);
         }
+    }
+
+    private record NameParticlePair(String particle, String family) {}
+
+    /**
+     * Extracts name particle (von, van, de, etc.) and family name from a segment.
+     * Particles are lowercase words before the family name portion.
+     */
+    private static NameParticlePair extractParticleAndFamily(String segment) {
+        if (segment == null || segment.isBlank()) {
+            return new NameParticlePair(null, null);
+        }
+
+        List<String> tokens = Arrays.stream(segment.split("\\s+"))
+                .map(String::trim)
+                .filter(token -> !token.isEmpty())
+                .toList();
+
+        if (tokens.isEmpty()) {
+            return new NameParticlePair(null, null);
+        }
+
+        if (tokens.size() == 1) {
+            return new NameParticlePair(null, tokens.get(0));
+        }
+
+        List<String> particleTokens = new ArrayList<>();
+        List<String> familyTokens = new ArrayList<>();
+
+        // Start from the end: last token is always family name
+        familyTokens.add(tokens.get(tokens.size() - 1));
+
+        // Work backwards to find particles
+        for (int i = tokens.size() - 2; i >= 0; i--) {
+            if (isParticleToken(tokens.get(i))) {
+                particleTokens.add(0, tokens.get(i));
+            } else {
+                // Non-particle tokens at the start are part of family name
+                for (int j = 0; j <= i; j++) {
+                    familyTokens.add(0, tokens.get(j));
+                }
+                break;
+            }
+        }
+
+        String particle = particleTokens.isEmpty() ? null : String.join(" ", particleTokens);
+        String family = String.join(" ", familyTokens);
+
+        return new NameParticlePair(
+                particle == null || particle.isBlank() ? null : particle.trim(),
+                family.isBlank() ? null : family.trim());
     }
 
     private static Resource createResource(String identifier) {
