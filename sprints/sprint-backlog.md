@@ -60,10 +60,12 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 ---
 
 ### Release 0.8.0 - Production Quality (Sprint 02)
-**Goal:** Production-quality code ready for broader use
+**Goal:** Complete BibTeX coverage + gap analysis + production-quality code
 
 **Included:**
-- Complete BibTeX type support (US-08)
+- Complete BibTeX type support - all 14 standard types (US-08 EXTENDED)
+- BibTeX.com field conventions implementation (US-24 NEW)
+- BIBO→BibTeX information gap documentation (US-23 NEW)
 - Advanced name parsing (US-09)
 - Date validation (US-10)
 - Identifier validation (US-11)
@@ -72,7 +74,10 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 - Conversion statistics (US-14)
 
 **Success Criteria:**
-- All 14 BibTeX types supported
+- All 14 BibTeX types supported with proper conventions
+- LIMITATIONS.md document created with gap analysis
+- Thesis chapter material drafted (Italian)
+- BibTeX.com conventions implemented (address, organization context-aware)
 - Code quality metrics met (>70% coverage, JavaDoc >90%)
 - Performance targets met (1000 entries < 10s)
 - Ready for beta testing
@@ -111,13 +116,14 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 | US-01 | VocBench Repository Integration | P0 | 13 | Planned | Sprint 01 |
 | US-02 | Robust Input Validation | P0 | 5 | Planned | Sprint 01 |
 | US-03 | Extended BibTeX Field Support | P1 | 8 | Planned | Sprint 01 |
-| US-08 | Complete BibTeX Type Support | P1 | 8 | Planned | Sprint 02 |
+| US-08 | Complete BibTeX Type Support (EXTENDED: all 14 types) | P1 | 13 | Planned | Sprint 02 |
+| US-24 | BibTeX.com Field Conventions (NEW) | P1 | 5 | Planned | Sprint 02 |
 | US-09 | Advanced Name Parsing | P1 | 8 | Planned | Sprint 02 |
 | US-10 | Enhanced Date Validation | P2 | 5 | Planned | Sprint 02 |
 | US-11 | Identifier Validation Library | P2 | 5 | Planned | Sprint 02 |
 | US-16 | Extended BIBO Metadata Support | P2 | 8 | Planned | Sprint 03 |
 
-**Total Story Points:** 60
+**Total Story Points:** 70 (was 60, +5 for US-08 extension, +5 for US-24)
 
 ---
 
@@ -143,9 +149,10 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 |----|-----------|----------|--------------|--------|--------|
 | US-06 | Field Mapping Documentation | P2 | 3 | Planned | Sprint 01 |
 | US-07 | VocBench Plugin Configuration | P2 | 5 | Planned | Sprint 01 |
+| US-23 | BIBO→BibTeX Gap Analysis Documentation (NEW) | P2 | 8 | Planned | Sprint 02 |
 | US-14 | Conversion Statistics and Reports | P3 | 5 | Planned | Sprint 02 |
 
-**Total Story Points:** 13
+**Total Story Points:** 21 (was 13, +8 for US-23)
 
 ---
 
@@ -170,10 +177,10 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 | ID | User Story | Priority | Story Points | Status | Sprint |
 |----|-----------|----------|--------------|--------|--------|
 | US-20 | Multi-Format RDF Support | P3 | 5 | Planned | Sprint 03 |
-| US-23 | Support for Zotero RDF | P3 | 13 | Backlog | Future |
-| US-24 | Support for CSL-JSON | P3 | 8 | Backlog | Future |
-| US-25 | Microsoft Word Bibliography Integration | P2 | 13 | Backlog | Future |
-| US-26 | Mendeley API Integration | P3 | 13 | Backlog | Future |
+| US-27 | Support for Zotero RDF | P3 | 13 | Backlog | Future |
+| US-28 | Support for CSL-JSON | P3 | 8 | Backlog | Future |
+| US-29 | Microsoft Word Bibliography Integration | P2 | 13 | Backlog | Future |
+| US-30 | Mendeley API Integration | P3 | 13 | Backlog | Future |
 
 **Total Story Points:** 52
 
@@ -181,7 +188,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ## Future Backlog Items (Post-1.0)
 
-### US-23: Zotero RDF Support
+### US-27: Zotero RDF Support
 **As a** Zotero user
 **I want** to import/export Zotero RDF
 **So that** I can migrate data between Zotero and BIBO
@@ -198,7 +205,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-24: CSL-JSON Support
+### US-28: CSL-JSON Support
 **As a** user of Citation Style Language tools
 **I want** to convert CSL-JSON to BIBO
 **So that** I can use CSL bibliographies
@@ -215,7 +222,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-25: Microsoft Word Bibliography Integration
+### US-29: Microsoft Word Bibliography Integration
 **As a** Microsoft Word user
 **I want** to import Word bibliography XML
 **So that** I can convert Word bibliographies to BIBO/BibTeX
@@ -232,7 +239,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-26: Mendeley API Integration
+### US-30: Mendeley API Integration
 **As a** Mendeley user
 **I want** to sync my Mendeley library to BIBO
 **So that** I can use Mendeley as source
@@ -249,7 +256,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-27: Web Interface
+### US-31: Web Interface
 **As a** casual user
 **I want** a web interface for conversion
 **So that** I don't need to install software
@@ -267,7 +274,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-28: Command-Line Tool
+### US-32: Command-Line Tool
 **As a** power user
 **I want** a CLI tool for batch conversions
 **So that** I can script conversions
@@ -284,7 +291,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-29: GraphQL API
+### US-33: GraphQL API
 **As a** API consumer
 **I want** a GraphQL API for flexible queries
 **So that** I can fetch exactly the data I need
@@ -301,7 +308,7 @@ Create a robust, production-ready bibliographic converter that uses BIBO (Biblio
 
 ---
 
-### US-30: Bibliography Merging
+### US-34: Bibliography Merging
 **As a** researcher
 **I want** to merge multiple bibliographies
 **So that** I can combine sources without duplicates

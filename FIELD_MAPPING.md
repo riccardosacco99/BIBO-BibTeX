@@ -200,6 +200,150 @@ Different entry types use different fields for publisher:
 
 **Converter handles this automatically** via `fieldForPublisher()` method.
 
+## BibTeX.com Field Conventions (Sprint 02 - US-24)
+
+### Context-Dependent Field Semantics
+
+**Important:** BibTeX field meanings are **context-dependent** on entry type. The same field name can have different semantic meanings depending on the document type. This follows conventions documented at [BibTeX.com](https://www.bibtex.com/).
+
+The converter implements these conventions to ensure semantically correct mappings.
+
+### Address Field Context
+
+The `address` field has **different meanings** in different entry types:
+
+| Entry Type | Semantic Meaning | BIBO Mapping | Example |
+|------------|------------------|--------------|---------|
+| `@book` | **Publisher's location** | `dcterms:spatial` (publisher address) | `address = {New York, NY}` |
+| `@inproceedings` | **Conference location** | `dcterms:spatial` (conference venue) | `address = {Berlin, Germany}` |
+| `@proceedings` | **Conference location** | `dcterms:spatial` (conference venue) | `address = {Paris, France}` |
+| `@manual` | **Organization location** | `dcterms:spatial` (publisher address) | `address = {Cambridge, MA}` |
+| `@phdthesis` | **University location** | `dcterms:spatial` (institution address) | `address = {Stanford, CA}` |
+| `@mastersthesis` | **University location** | `dcterms:spatial` (institution address) | `address = {Oxford, UK}` |
+| `@techreport` | **Institution location** | `dcterms:spatial` (institution address) | `address = {Berkeley, CA}` |
+
+**Implementation Note:** The converter applies these semantics when converting BIBO→BibTeX, selecting the appropriate address field based on document type.
+
+**Example:**
+```turtle
+# BIBO Conference Paper
+:paper a bibo:ConferencePaper ;
+    dcterms:isPartOf :conference .
+
+:conference a bibo:Conference ;
+    dcterms:spatial "Berlin, Germany" .
+```
+↓ converts to ↓
+```bibtex
+@inproceedings{paper,
+  address = {Berlin, Germany}  % Conference location (NOT publisher)
+}
+```
+
+### Organization Field Context
+
+The `organization` field semantics vary by entry type:
+
+| Entry Type | Semantic Meaning | BIBO Mapping | Example |
+|------------|------------------|--------------|---------|
+| `@manual` | **Publishing organization** | `dcterms:publisher` | `organization = {GNU Project}` |
+| `@proceedings` | **Conference sponsor** (optional) | `bibo:organizer` or `note` | `organization = {ACM}` |
+| `@inproceedings` | **Conference sponsor** (rare) | `bibo:organizer` or `note` | `organization = {IEEE}` |
+
+**Implementation Note:** For `@manual`, `organization` is the primary publisher field (preferred over `publisher`). For conference types, it represents sponsoring organizations.
+
+**Example:**
+```bibtex
+@manual{gnu_make,
+  title = {GNU Make Manual},
+  organization = {Free Software Foundation},
+  address = {Boston, MA},
+  year = {2024}
+}
+```
+↓ converts to ↓
+```turtle
+:gnu_make a bibo:Manual ;
+    dcterms:title "GNU Make Manual" ;
+    dcterms:publisher "Free Software Foundation" ;
+    dcterms:spatial "Boston, MA" ;
+    dcterms:issued "2024"^^xsd:gYear .
+```
+
+### Institution Field Context
+
+The `institution` field appears only in specific entry types:
+
+| Entry Type | Semantic Meaning | BIBO Mapping | Example |
+|------------|------------------|--------------|---------|
+| `@techreport` | **Issuing institution** | `dcterms:publisher` | `institution = {MIT Computer Science Lab}` |
+| `@phdthesis` | Not used | N/A | Use `school` instead |
+| `@mastersthesis` | Not used | N/A | Use `school` instead |
+
+**Note:** For theses, use `school` field, not `institution`.
+
+### Type Field Context
+
+The `type` field provides additional type information:
+
+| Entry Type | Semantic Meaning | BIBO Handling | Example |
+|------------|------------------|---------------|---------|
+| `@phdthesis` | Thesis type override | Encoded in `rdf:type` | `type = {PhD dissertation}` |
+| `@mastersthesis` | Thesis type override | Encoded in `rdf:type` | `type = {Master's thesis}` |
+| `@techreport` | Report type | `note` field | `type = {Technical Report}` |
+| `@inbook` | Chapter/section type | `note` field | `type = {Chapter}` |
+
+**Default Values:**
+- `@phdthesis`: `type = {PhD thesis}` (implied)
+- `@mastersthesis`: `type = {Master's thesis}` (implied)
+
+### School Field Context
+
+The `school` field is specific to thesis entry types:
+
+| Entry Type | Semantic Meaning | BIBO Mapping | Example |
+|------------|------------------|--------------|---------|
+| `@phdthesis` | **Granting university** | `dcterms:publisher` | `school = {Stanford University}` |
+| `@mastersthesis` | **Granting university** | `dcterms:publisher` | `school = {MIT}` |
+
+**Implementation Note:** `school` is the **preferred** field for theses. If `publisher` also appears, `school` takes precedence.
+
+### Booktitle Field Context
+
+The `booktitle` field represents different container types:
+
+| Entry Type | Container Type | BIBO Mapping | Example |
+|------------|----------------|--------------|---------|
+| `@inproceedings` | **Proceedings title** | `dcterms:isPartOf` (Proceedings) | `booktitle = {Proc. ICML 2024}` |
+| `@incollection` | **Anthology/book title** | `dcterms:isPartOf` (Book) | `booktitle = {Handbook of AI}` |
+| `@inbook` | **Book title** | `dcterms:isPartOf` (Book) | `booktitle = {The RDF Primer}` |
+
+**Note:** `@article` uses `journal` instead of `booktitle`.
+
+### Convention Summary Table
+
+Quick reference for context-dependent field mappings:
+
+| Field | @book | @inproceedings | @proceedings | @manual | @thesis | @techreport |
+|-------|-------|----------------|--------------|---------|---------|-------------|
+| `address` | Publisher loc | Conference loc | Conference loc | Org loc | University loc | Institution loc |
+| `publisher` | Publisher | Proc publisher | Publisher | (optional) | (optional) | (optional) |
+| `organization` | N/A | Sponsor | Sponsor | **Publisher** | N/A | N/A |
+| `institution` | N/A | N/A | N/A | N/A | N/A | **Publisher** |
+| `school` | N/A | N/A | N/A | N/A | **Publisher** | N/A |
+| `booktitle` | N/A | Proceedings | N/A | N/A | N/A | N/A |
+| `journal` | N/A | N/A | N/A | N/A | N/A | N/A |
+
+**Legend:**
+- **Bold** = Primary/preferred field for publisher information
+- N/A = Not applicable for this entry type
+
+### Implementation Status
+
+- ✅ **Sprint 00-01:** Basic field mappings implemented
+- 🔄 **Sprint 02 (US-24):** Context-aware semantics implementation in progress
+- 📋 **Future:** Full validation against BibTeX.com reference documentation
+
 ## Round-Trip Considerations
 
 ### Lossy Conversions
@@ -271,6 +415,6 @@ Potential improvements for future sprints:
 
 ---
 
-**Document Version:** Sprint 01 Phase 3 Complete
-**Last Updated:** November 2025
-**Status:** Extended fields (series, edition, keywords) implemented and fully bidirectional
+**Document Version:** Sprint 02 (US-24 Conventions Added)
+**Last Updated:** 2025-11-15
+**Status:** Extended fields and BibTeX.com conventions documented

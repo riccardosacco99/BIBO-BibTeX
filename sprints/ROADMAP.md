@@ -209,17 +209,33 @@ Post-Release
 
 ### 🎯 v0.8.0 - Production Quality (Sprint 02)
 
-**Goal:** Production-ready code
+**Goal:** Complete BibTeX coverage + gap analysis + production-ready code
 
 **Must Have:**
-- All 14 BibTeX entry types supported
+- **All 14 BibTeX entry types supported** (US-08 EXTENDED)
+  - @article, @book, @inproceedings, @proceedings, @incollection
+  - @phdthesis, @mastersthesis, @techreport
+  - @booklet, @manual, @unpublished, @inbook
+  - @misc, @conference (alias)
+- **BibTeX.com field conventions** (US-24 NEW)
+  - Context-aware field semantics (address, organization per entry type)
+  - @inproceedings address = conference location
+  - @book address = publisher location
+  - Type-specific mappings documented
+- **BIBO→BibTeX gap analysis documentation** (US-23 NEW)
+  - LIMITATIONS.md with practical examples
+  - Thesis chapter material (Italian)
+  - Comparison tables BIBO vs BibTeX expressiveness
 - Robust name parsing (particles, suffixes)
 - Identifier validation with checksums
 - Complete JavaDoc (>90%)
 - Performance optimization (1000 entries < 10s)
 
 **Success Criteria:**
-- ✅ All standard BibTeX types work
+- ✅ All 14 standard BibTeX types work correctly
+- ✅ BibTeX.com conventions implemented (tested)
+- ✅ LIMITATIONS.md document created
+- ✅ Thesis chapter drafted (gap analysis)
 - ✅ Complex names handled correctly
 - ✅ JavaDoc coverage > 90%
 - ✅ Performance benchmarks met
@@ -229,6 +245,8 @@ Post-Release
 - Beta release JAR
 - JavaDoc HTML
 - Performance benchmark report
+- **LIMITATIONS.md** - BIBO→BibTeX gap documentation
+- **Thesis material** - Gap analysis chapter (Italian)
 
 ---
 
