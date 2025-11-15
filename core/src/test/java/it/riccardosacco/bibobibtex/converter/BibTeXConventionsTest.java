@@ -154,7 +154,7 @@ class BibTeXConventionsTest {
     }
 
     /**
-     * Tests that type field in @phdthesis maps to degree type.
+     * Tests that @phdthesis without explicit type field does NOT set degreeType (it's the default).
      */
     @Test
     void testPhdThesisDegreeType() {
@@ -166,8 +166,8 @@ class BibTeXConventionsTest {
 
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
-        assertTrue(doc.degreeType().isPresent());
-        assertEquals("PhD dissertation", doc.degreeType().orElseThrow());
+        // PhD thesis without explicit type field should NOT have degreeType (it's the default)
+        assertTrue(doc.degreeType().isEmpty());
     }
 
     /**

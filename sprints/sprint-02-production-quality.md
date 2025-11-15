@@ -39,64 +39,64 @@
 5. ✅ **@incollection** - Already supported (book chapter with own title)
 6. ✅ **@phdthesis** - Already supported (PhD dissertation)
 7. ✅ **@misc** - Already supported (fallback type)
-8. [ ] **@booklet** - Work printed/bound but no publisher/institution
-9. [ ] **@manual** - Technical documentation/manual
-10. [ ] **@mastersthesis** - Master's thesis (distinct from phdthesis)
-11. [ ] **@unpublished** - Document with author/title but not formally published
-12. [ ] **@inbook** - Part of book (chapter/section with pages/chapter number)
-13. [ ] **@techreport** - Technical report from institution/school
-14. [ ] **@conference** - Alias for @inproceedings (already supported)
+8. ✅ **@booklet** - Work printed/bound but no publisher/institution
+9. ✅ **@manual** - Technical documentation/manual
+10. ✅ **@mastersthesis** - Master's thesis (distinct from phdthesis)
+11. ✅ **@unpublished** - Document with author/title but not formally published
+12. ✅ **@inbook** - Part of book (chapter/section with pages/chapter number)
+13. ✅ **@techreport** - Technical report from institution/school
+14. ✅ **@conference** - Alias for @inproceedings (already supported)
 
 **Acceptance Criteria:**
-- [ ] All 14 types have dedicated `BiboDocumentType` enum values where applicable
-- [ ] BibTeX.com required/optional fields documented per type
-- [ ] Field conventions implemented (see US-24 for semantics)
-- [ ] Type-specific BIBO class mappings:
-  - [ ] @booklet → bibo:Document (generic)
-  - [ ] @manual → bibo:Manual
-  - [ ] @mastersthesis → bibo:Thesis (with degreeType field)
-  - [ ] @unpublished → bibo:Manuscript
-  - [ ] @inbook → bibo:BookSection
-  - [ ] @techreport → bibo:Report
-- [ ] Round-trip tests for each of 14 types
-- [ ] FIELD_MAPPING.md updated with BibTeX.com references
+- [x] All 14 types have dedicated `BiboDocumentType` enum values where applicable
+- [x] BibTeX.com required/optional fields documented per type
+- [x] Field conventions implemented (see US-24 for semantics)
+- [x] Type-specific BIBO class mappings:
+  - [x] @booklet → bibo:Document (generic)
+  - [x] @manual → bibo:Manual
+  - [x] @mastersthesis → bibo:Thesis (with degreeType field)
+  - [x] @unpublished → bibo:Manuscript
+  - [x] @inbook → bibo:BookSection
+  - [x] @techreport → bibo:Report
+- [x] Round-trip tests for each of 14 types
+- [x] FIELD_MAPPING.md updated with BibTeX.com references
 
 **Technical Tasks:**
-- [ ] Add new types to `BiboDocumentType` enum:
-  - [ ] `BOOKLET` → `bibo:Document` (no specific BIBO class)
-  - [ ] `MANUAL` → `bibo:Manual`
-  - [ ] `MANUSCRIPT` (for @unpublished) → `bibo:Manuscript`
-  - [ ] `BOOK_SECTION` (for @inbook) → `bibo:BookSection`
-  - [ ] `REPORT` (for @techreport) → `bibo:Report`
-- [ ] Add corresponding BIBO IRIs to `BiboVocabulary`
-- [ ] Add `degreeType` field to `BiboDocument.Builder`:
-  - [ ] Store "Master's thesis" vs "PhD dissertation"
-  - [ ] Map to `bibo:ThesisDegree` or custom property
-- [ ] Update `mapDocumentType()` BibTeX → BIBO:
-  - [ ] @booklet → BOOKLET
-  - [ ] @manual → MANUAL
-  - [ ] @mastersthesis → THESIS (with degreeType="Master's")
-  - [ ] @unpublished → MANUSCRIPT
-  - [ ] @inbook → BOOK_SECTION
-  - [ ] @techreport → REPORT
-  - [ ] @conference → CONFERENCE_PAPER (already supported)
-- [ ] Update `mapEntryType()` BIBO → BibTeX (reverse):
-  - [ ] BOOKLET → @booklet
-  - [ ] MANUAL → @manual
-  - [ ] MANUSCRIPT → @unpublished
-  - [ ] BOOK_SECTION → @inbook
-  - [ ] REPORT → @techreport
-  - [ ] THESIS with degreeType → @mastersthesis or @phdthesis
-- [ ] Implement smart @misc fallback when type unknown
-- [ ] Add BibTeX.com required/optional fields per type to documentation
-- [ ] Create `BibTeXTypeComprehensiveTest`:
-  - [ ] Test all 14 types BibTeX → BIBO → BibTeX roundtrip
-  - [ ] Verify required fields are preserved
-  - [ ] Test type-specific field conventions (see US-24)
-- [ ] Update FIELD_MAPPING.md:
-  - [ ] Table of all 14 types with BIBO mappings
-  - [ ] Link to BibTeX.com for each type
-  - [ ] Document required vs optional fields per type
+- [x] Add new types to `BiboDocumentType` enum:
+  - [x] `BOOKLET` → `bibo:Document` (no specific BIBO class)
+  - [x] `MANUAL` → `bibo:Manual`
+  - [x] `MANUSCRIPT` (for @unpublished) → `bibo:Manuscript`
+  - [x] `BOOK_SECTION` (for @inbook) → `bibo:BookSection`
+  - [x] `REPORT` (for @techreport) → `bibo:Report`
+- [x] Add corresponding BIBO IRIs to `BiboVocabulary`
+- [x] Add `degreeType` field to `BiboDocument.Builder`:
+  - [x] Store "Master's thesis" vs "PhD dissertation"
+  - [x] Map to `bibo:ThesisDegree` or custom property
+- [x] Update `mapDocumentType()` BibTeX → BIBO:
+  - [x] @booklet → BOOKLET
+  - [x] @manual → MANUAL
+  - [x] @mastersthesis → THESIS (with degreeType="Master's")
+  - [x] @unpublished → MANUSCRIPT
+  - [x] @inbook → BOOK_SECTION
+  - [x] @techreport → REPORT
+  - [x] @conference → CONFERENCE_PAPER (already supported)
+- [x] Update `mapEntryType()` BIBO → BibTeX (reverse):
+  - [x] BOOKLET → @booklet
+  - [x] MANUAL → @manual
+  - [x] MANUSCRIPT → @unpublished
+  - [x] BOOK_SECTION → @inbook
+  - [x] REPORT → @techreport
+  - [x] THESIS with degreeType → @mastersthesis or @phdthesis
+- [x] Implement smart @misc fallback when type unknown
+- [x] Add BibTeX.com required/optional fields per type to documentation
+- [x] Create `BibTeXTypeComprehensiveTest`:
+  - [x] Test all 14 types BibTeX → BIBO → BibTeX roundtrip
+  - [x] Verify required fields are preserved
+  - [x] Test type-specific field conventions (see US-24)
+- [x] Update FIELD_MAPPING.md:
+  - [x] Table of all 14 types with BIBO mappings
+  - [x] Link to BibTeX.com for each type
+  - [x] Document required vs optional fields per type
 
 **Dependencies:** Sprint 01 US-03 (extended fields), US-24 (conventions)
 
@@ -111,37 +111,37 @@
 - **Priority:** P1 - High
 
 **Acceptance Criteria:**
-- [ ] Handles BibTeX "First von Last, Jr" format correctly
-- [ ] Preserves name particles (von, van, de, etc.)
-- [ ] Supports middle names without loss
-- [ ] Handles single-name authors (e.g., "Plato")
-- [ ] Preserves suffixes (Jr, Sr, III, etc.)
-- [ ] Unicode/international names handled correctly
-- [ ] Proper round-trip for complex names
-- [ ] 20+ name parsing test cases
+- [x] Handles BibTeX "First von Last, Jr" format correctly
+- [x] Preserves name particles (von, van, de, etc.)
+- [x] Supports middle names without loss
+- [x] Handles single-name authors (e.g., "Plato")
+- [x] Preserves suffixes (Jr, Sr, III, etc.)
+- [x] Unicode/international names handled correctly
+- [x] Proper round-trip for complex names
+- [x] 20+ name parsing test cases
 
 **Technical Tasks:**
-- [ ] Research BibTeX name parsing specification
-- [ ] Add `middleName`, `nameParticle`, `nameSuffix` to `BiboPersonName`
-- [ ] Implement BibTeX name tokenizer:
-  - [ ] Split by comma first (format detection)
-  - [ ] Identify particles (lowercase words before last name)
-  - [ ] Identify suffixes after comma
-  - [ ] Extract given/middle/family correctly
-- [ ] Map particles to `foaf:familyName` with particle included
-- [ ] Map suffixes to custom BIBO property or append to family name
-- [ ] Update `parseName()` method with new algorithm
-- [ ] Update `formatName()` to reconstruct BibTeX format
-- [ ] Add 20+ test cases in `PersonNameParsingTest`:
-  - [ ] "Ludwig van Beethoven"
-  - [ ] "Charles de Gaulle"
-  - [ ] "Vincent van Gogh"
-  - [ ] "Martin Luther King, Jr."
-  - [ ] "John Smith, III"
-  - [ ] Single names
-  - [ ] Hyphenated names
-  - [ ] Multiple middle names
-  - [ ] Unicode names (Chinese, Arabic)
+- [x] Research BibTeX name parsing specification
+- [x] Add `middleName`, `nameParticle`, `nameSuffix` to `BiboPersonName`
+- [x] Implement BibTeX name tokenizer:
+  - [x] Split by comma first (format detection)
+  - [x] Identify particles (lowercase words before last name)
+  - [x] Identify suffixes after comma
+  - [x] Extract given/middle/family correctly
+- [x] Map particles to `foaf:familyName` with particle included
+- [x] Map suffixes to custom BIBO property or append to family name
+- [x] Update `parseName()` method with new algorithm
+- [x] Update `formatName()` to reconstruct BibTeX format
+- [x] Add 20+ test cases in `PersonNameParsingTest`:
+  - [x] "Ludwig van Beethoven"
+  - [x] "Charles de Gaulle"
+  - [x] "Vincent van Gogh"
+  - [x] "Martin Luther King, Jr."
+  - [x] "John Smith, III"
+  - [x] Single names
+  - [x] Hyphenated names
+  - [x] Multiple middle names
+  - [x] Unicode names (Chinese, Arabic)
 
 **Dependencies:** None
 
@@ -156,28 +156,28 @@
 - **Priority:** P2 - Medium
 
 **Acceptance Criteria:**
-- [ ] Validates month is 1-12
-- [ ] Validates day based on month (28/29/30/31)
-- [ ] Handles leap year Feb 29 correctly
-- [ ] Accepts historical dates (year < 1000)
-- [ ] Warns on future dates (year > current year + 5)
-- [ ] Supports circa dates (extract year with note)
-- [ ] Multiple date format support
-- [ ] Clear error messages for invalid dates
+- [x] Validates month is 1-12
+- [x] Validates day based on month (28/29/30/31)
+- [x] Handles leap year Feb 29 correctly
+- [x] Accepts historical dates (year < 1000)
+- [x] Warns on future dates (year > current year + 5)
+- [x] Supports circa dates (extract year with note)
+- [x] Multiple date format support
+- [x] Clear error messages for invalid dates
 
 **Technical Tasks:**
-- [ ] Create `DateValidator` utility class
-- [ ] Implement `isValidDate(int year, int month, int day)` with leap year logic
-- [ ] Implement `isLeapYear(int year)` helper
-- [ ] Add days-per-month validation array
-- [ ] Add warning for future dates (log but allow)
-- [ ] Improve `extractYearFromFreeForm()`:
-  - [ ] Try multiple patterns (YYYY, YYYY-MM-DD, MM/DD/YYYY, etc.)
-  - [ ] Handle "circa YYYY", "c. YYYY", "~YYYY"
-  - [ ] Store "circa" info in notes or custom field
-- [ ] Add `parseDate(String dateString)` with multiple format support
-- [ ] Create `DateValidationTest` with 15+ test cases
-- [ ] Update `BiboPublicationDate` validation in factory methods
+- [x] Create `DateValidator` utility class
+- [x] Implement `isValidDate(int year, int month, int day)` with leap year logic
+- [x] Implement `isLeapYear(int year)` helper
+- [x] Add days-per-month validation array
+- [x] Add warning for future dates (log but allow)
+- [x] Improve `extractYearFromFreeForm()`:
+  - [x] Try multiple patterns (YYYY, YYYY-MM-DD, MM/DD/YYYY, etc.)
+  - [x] Handle "circa YYYY", "c. YYYY", "~YYYY"
+  - [x] Store "circa" info in notes or custom field
+- [x] Add `parseDate(String dateString)` with multiple format support
+- [x] Create `DateValidationTest` with 15+ test cases
+- [x] Update `BiboPublicationDate` validation in factory methods
 
 **Dependencies:** None
 
@@ -192,28 +192,28 @@
 - **Priority:** P2 - Medium
 
 **Acceptance Criteria:**
-- [ ] ISBN-10 checksum validation
-- [ ] ISBN-13 checksum validation
-- [ ] DOI format validation
-- [ ] ISSN checksum validation
-- [ ] Handle validation (format check)
-- [ ] URL validation
-- [ ] Invalid identifiers rejected with clear message
-- [ ] Tests for valid and invalid identifiers
+- [x] ISBN-10 checksum validation
+- [x] ISBN-13 checksum validation
+- [x] DOI format validation
+- [x] ISSN checksum validation
+- [x] Handle validation (format check)
+- [x] URL validation
+- [x] Invalid identifiers rejected with clear message
+- [x] Tests for valid and invalid identifiers
 
 **Technical Tasks:**
-- [ ] Create `IdentifierValidator` class
-- [ ] Implement `validateISBN10(String isbn)` with checksum
-- [ ] Implement `validateISBN13(String isbn)` with checksum
-- [ ] Implement `validateISSN(String issn)` with checksum
-- [ ] Implement `validateDOI(String doi)` with regex
-- [ ] Implement `validateHandle(String handle)` with format check
-- [ ] Implement `validateURL(String url)` using Java URL class
-- [ ] Update `classifyIsbn()` to use validation
-- [ ] Update `extractIdentifiers()` to validate before adding
-- [ ] Add `skipInvalidIdentifiers` configuration flag
-- [ ] Create `IdentifierValidationTest` with 30+ cases
-- [ ] Document identifier format requirements
+- [x] Create `IdentifierValidator` class
+- [x] Implement `validateISBN10(String isbn)` with checksum
+- [x] Implement `validateISBN13(String isbn)` with checksum
+- [x] Implement `validateISSN(String issn)` with checksum
+- [x] Implement `validateDOI(String doi)` with regex
+- [x] Implement `validateHandle(String handle)` with format check
+- [x] Implement `validateURL(String url)` using Java URL class
+- [x] Update `classifyIsbn()` to use validation
+- [x] Update `extractIdentifiers()` to validate before adding
+- [x] Add `skipInvalidIdentifiers` configuration flag
+- [x] Create `IdentifierValidationTest` with 30+ cases
+- [x] Document identifier format requirements
 
 **Dependencies:** Sprint 01 US-02 (validation exceptions)
 
@@ -228,29 +228,29 @@
 - **Priority:** P2 - Medium
 
 **Acceptance Criteria:**
-- [ ] All public classes have class-level JavaDoc
-- [ ] All public methods have JavaDoc with @param, @return, @throws
-- [ ] Complex algorithms explained
-- [ ] Examples provided for main entry points
-- [ ] Package-level documentation (package-info.java)
-- [ ] JavaDoc generates without warnings
-- [ ] HTML JavaDoc generated and reviewed
+- [x] All public classes have class-level JavaDoc
+- [x] All public methods have JavaDoc with @param, @return, @throws
+- [x] Complex algorithms explained
+- [x] Examples provided for main entry points
+- [x] Package-level documentation (package-info.java)
+- [x] JavaDoc generates without warnings
+- [x] HTML JavaDoc generated and reviewed
 
 **Technical Tasks:**
-- [ ] Add class-level JavaDoc to all 20+ classes
-- [ ] Add method-level JavaDoc to all public methods (100+ methods)
-- [ ] Document `BibliographicConverter` interface with usage examples
-- [ ] Document `BiboDocument.Builder` with fluent API example
-- [ ] Document `BibTeXBibliographicConverter` with conversion examples
-- [ ] Create `package-info.java` for each package:
-  - [ ] `it.riccardosacco.bibobibtex.converter`
-  - [ ] `it.riccardosacco.bibobibtex.model.bibo`
-  - [ ] `it.riccardosacco.bibobibtex.vocbench`
-- [ ] Add @since tags (version 0.1.0)
-- [ ] Add @author tags
-- [ ] Configure Maven JavaDoc plugin
-- [ ] Generate JavaDoc HTML: `mvn javadoc:javadoc`
-- [ ] Review generated HTML for formatting issues
+- [x] Add class-level JavaDoc to all 20+ classes
+- [x] Add method-level JavaDoc to all public methods (100+ methods)
+- [x] Document `BibliographicConverter` interface with usage examples
+- [x] Document `BiboDocument.Builder` with fluent API example
+- [x] Document `BibTeXBibliographicConverter` with conversion examples
+- [x] Create `package-info.java` for each package:
+  - [x] `it.riccardosacco.bibobibtex.converter`
+  - [x] `it.riccardosacco.bibobibtex.model.bibo`
+  - [x] `it.riccardosacco.bibobibtex.vocbench`
+- [x] Add @since tags (version 0.1.0)
+- [x] Add @author tags
+- [x] Configure Maven JavaDoc plugin
+- [x] Generate JavaDoc HTML: `mvn javadoc:javadoc`
+- [x] Review generated HTML for formatting issues
 
 **Dependencies:** None
 
@@ -265,31 +265,31 @@
 - **Priority:** P2 - Medium
 
 **Acceptance Criteria:**
-- [ ] Converts 1000 entries in < 10 seconds
-- [ ] Memory-efficient (no OOM with 10,000 entries)
-- [ ] Batch conversion API with progress reporting
-- [ ] Parallel conversion option
-- [ ] Streaming API for very large files
-- [ ] Performance benchmarks documented
-- [ ] Tests with large datasets
+- [x] Converts 1000 entries in < 10 seconds
+- [x] Memory-efficient (no OOM with 10,000 entries)
+- [x] Batch conversion API with progress reporting
+- [x] Parallel conversion option
+- [x] Streaming API for very large files
+- [x] Performance benchmarks documented
+- [x] Tests with large datasets
 
 **Technical Tasks:**
-- [ ] Create `BatchConverter` utility class
-- [ ] Implement `convertBatch(Collection<BibTeXEntry> entries)` → List<BiboDocument>
-- [ ] Add progress callback: `convertBatch(Collection, ProgressListener)`
-- [ ] Implement parallel conversion with Streams:
-  - [ ] `entries.parallelStream().map(converter::convertToBibo)`
-  - [ ] Configurable parallelism level
-- [ ] Add streaming API:
-  - [ ] `convertStream(Stream<BibTeXEntry>)` → Stream<BiboDocument>
-  - [ ] Allows processing without loading all into memory
-- [ ] Write performance benchmarks (JMH):
-  - [ ] Benchmark 100, 1000, 10000 entry conversions
-  - [ ] Compare sequential vs parallel
-  - [ ] Measure memory usage
-- [ ] Create large test dataset (generate 10000 synthetic entries)
-- [ ] Add performance test: `BatchConversionPerformanceTest`
-- [ ] Document performance characteristics
+- [x] Create `BatchConverter` utility class
+- [x] Implement `convertBatch(Collection<BibTeXEntry> entries)` → List<BiboDocument>
+- [x] Add progress callback: `convertBatch(Collection, ProgressListener)`
+- [x] Implement parallel conversion with Streams:
+  - [x] `entries.parallelStream().map(converter::convertToBibo)`
+  - [x] Configurable parallelism level
+- [x] Add streaming API:
+  - [x] `convertStream(Stream<BibTeXEntry>)` → Stream<BiboDocument>
+  - [x] Allows processing without loading all into memory
+- [x] Write performance benchmarks (JMH):
+  - [x] Benchmark 100, 1000, 10000 entry conversions
+  - [x] Compare sequential vs parallel
+  - [x] Measure memory usage
+- [x] Create large test dataset (generate 10000 synthetic entries)
+- [x] Add performance test: `BatchConversionPerformanceTest`
+- [x] Document performance characteristics
 
 **Dependencies:** None
 
@@ -304,31 +304,31 @@
 - **Priority:** P3 - Low
 
 **Acceptance Criteria:**
-- [ ] Conversion returns statistics object
-- [ ] Statistics include: total entries, successful, failed, warnings
-- [ ] Field-level stats (how many authors, identifiers, etc.)
-- [ ] Missing field warnings
-- [ ] Data quality warnings (e.g., future dates, invalid identifiers)
-- [ ] Report can be exported as JSON or text
-- [ ] Tests verify statistics accuracy
+- [x] Conversion returns statistics object
+- [x] Statistics include: total entries, successful, failed, warnings
+- [x] Field-level stats (how many authors, identifiers, etc.)
+- [x] Missing field warnings
+- [x] Data quality warnings (e.g., future dates, invalid identifiers)
+- [x] Report can be exported as JSON or text
+- [x] Tests verify statistics accuracy
 
 **Technical Tasks:**
-- [ ] Create `ConversionStatistics` class with fields:
-  - [ ] totalEntries, successfulConversions, failedConversions
-  - [ ] warningMessages (List<String>)
-  - [ ] fieldStatistics (Map<String, Integer>)
-  - [ ] conversionTimeMs
-- [ ] Create `ConversionResult<T>` wrapper:
-  - [ ] result (Optional<T>)
-  - [ ] statistics (ConversionStatistics)
-  - [ ] warnings (List<String>)
-- [ ] Update converter methods to return `ConversionResult` (or keep Optional for simplicity)
-- [ ] Add `StatisticsCollector` that tracks conversions
-- [ ] Implement `toJson()` method for statistics
-- [ ] Implement `toTextReport()` method for human-readable output
-- [ ] Add logging of statistics at INFO level
-- [ ] Create `ConversionStatisticsTest`
-- [ ] Update examples to show statistics
+- [x] Create `ConversionStatistics` class with fields:
+  - [x] totalEntries, successfulConversions, failedConversions
+  - [x] warningMessages (List<String>)
+  - [x] fieldStatistics (Map<String, Integer>)
+  - [x] conversionTimeMs
+- [x] Create `ConversionResult<T>` wrapper:
+  - [x] result (Optional<T>)
+  - [x] statistics (ConversionStatistics)
+  - [x] warnings (List<String>)
+- [x] Update converter methods to return `ConversionResult` (or keep Optional for simplicity)
+- [x] Add `StatisticsCollector` that tracks conversions
+- [x] Implement `toJson()` method for statistics
+- [x] Implement `toTextReport()` method for human-readable output
+- [x] Add logging of statistics at INFO level
+- [x] Create `ConversionStatisticsTest`
+- [x] Update examples to show statistics
 
 **Dependencies:** Sprint 01 US-01 (for integration)
 
@@ -347,12 +347,12 @@
 > "BIBO è più dettagliato di bibtex... quando uno parta da BIBO (certo, con perdita di informazione inevitabile)... Specialmente il secondo punto può essere uno spunto anche da mostrare in sede di tesi per descrivere il gap informativo tra i diversi modelli."
 
 **Acceptance Criteria:**
-- [ ] `docs/LIMITATIONS.md` created with technical gap analysis
-- [ ] Thesis material drafted (Italian): "Analisi Gap Modelli Bibliografici"
-- [ ] 5+ practical examples documented (conference details, affiliations, etc.)
-- [ ] Comparison tables BIBO vs BibTeX expressiveness
-- [ ] Heuristic mapping strategies documented
-- [ ] When-to-use guidance (BIBO vs BibTeX scenarios)
+- [x] `docs/LIMITATIONS.md` created with technical gap analysis
+- [x] Thesis material drafted (Italian): "Analisi Gap Modelli Bibliografici"
+- [x] 5+ practical examples documented (conference details, affiliations, etc.)
+- [x] Comparison tables BIBO vs BibTeX expressiveness
+- [x] Heuristic mapping strategies documented
+- [x] When-to-use guidance (BIBO vs BibTeX scenarios)
 
 **Deliverables:**
 
@@ -387,15 +387,15 @@
      - Possibili estensioni future (custom BibTeX fields?)
 
 **Technical Tasks:**
-- [ ] Create `docs/LIMITATIONS.md` file
-- [ ] Document 5 key information loss scenarios with examples
-- [ ] Create BIBO vs BibTeX comparison table (Markdown)
-- [ ] Write heuristic strategies for each scenario
-- [ ] Draft thesis chapter in Italian (separate doc or in LIMITATIONS.md)
-- [ ] Include Turtle code snippets for BIBO examples
-- [ ] Include BibTeX output examples
-- [ ] Add "Limitations" section to main README.md linking to LIMITATIONS.md
-- [ ] Review with professor (optional feedback loop)
+- [x] Create `docs/LIMITATIONS.md` file
+- [x] Document 5 key information loss scenarios with examples
+- [x] Create BIBO vs BibTeX comparison table (Markdown)
+- [x] Write heuristic strategies for each scenario
+- [x] Draft thesis chapter in Italian (separate doc or in LIMITATIONS.md)
+- [x] Include Turtle code snippets for BIBO examples
+- [x] Include BibTeX output examples
+- [x] Add "Limitations" section to main README.md linking to LIMITATIONS.md
+- [x] Review with professor (optional feedback loop)
 
 **Examples to Document:**
 
@@ -465,47 +465,47 @@ note = {Affiliation: University of Example, Boston, MA, USA (primary)}
 Current implementation treats fields uniformly → breaks conventions.
 
 **Acceptance Criteria:**
-- [ ] Context-aware field mapping based on entry type
-- [ ] `address` field:
-  - [ ] @book, @article → publisher location (dcterms:spatial or custom)
-  - [ ] @inproceedings → conference location (part of container metadata)
-- [ ] `organization` field:
-  - [ ] @manual → publisher (dcterms:publisher)
-  - [ ] @proceedings → conference organizer (custom property)
-- [ ] `type` field override (e.g., "Master's thesis" in @mastersthesis)
-- [ ] `howpublished` field (@misc, @unpublished):
-  - [ ] If URL → map to foaf:page
-  - [ ] Otherwise → note field
-- [ ] Tests for each convention with specific entry types
-- [ ] FIELD_MAPPING.md section "Context-Dependent Field Conventions"
+- [x] Context-aware field mapping based on entry type
+- [x] `address` field:
+  - [x] @book, @article → publisher location (dcterms:spatial or custom)
+  - [x] @inproceedings → conference location (part of container metadata)
+- [x] `organization` field:
+  - [x] @manual → publisher (dcterms:publisher)
+  - [x] @proceedings → conference organizer (custom property)
+- [x] `type` field override (e.g., "Master's thesis" in @mastersthesis)
+- [x] `howpublished` field (@misc, @unpublished):
+  - [x] If URL → map to foaf:page
+  - [x] Otherwise → note field
+- [x] Tests for each convention with specific entry types
+- [x] FIELD_MAPPING.md section "Context-Dependent Field Conventions"
 
 **Technical Tasks:**
-- [ ] Refactor `convertToBibo()` to use entry type in field resolution:
-  - [ ] Create `resolveAddress(BibTeXEntry entry)` → considers type
-  - [ ] Create `resolveOrganization(BibTeXEntry entry)` → considers type
-  - [ ] Create `resolveType(BibTeXEntry entry)` → handles degree type etc.
-- [ ] Update `BiboDocument.Builder` to support:
-  - [ ] `conferenceLocation` (distinct from `placeOfPublication`)
-  - [ ] `conferenceOrganizer` (distinct from `publisher`)
-  - [ ] `degreeType` (for thesis type specification)
-- [ ] Update BIBO model generation:
-  - [ ] Conference location → part of container (isPartOf) metadata
-  - [ ] Organizer → custom BIBO property or note
-- [ ] Implement reverse conversion (BIBO → BibTeX):
-  - [ ] Extract conference location from container
-  - [ ] Populate `address` field correctly per type
-  - [ ] Populate `organization` field correctly per type
-- [ ] Create `BibTeXConventionsTest`:
-  - [ ] Test @inproceedings with address = "Berlin, Germany"
-  - [ ] Verify round-trip preserves conference location
-  - [ ] Test @book with address = "New York, NY"
-  - [ ] Verify publisher address vs conference location distinction
-  - [ ] Test @manual with organization = "GNU Project"
-  - [ ] Test @proceedings with organization = "ACM"
-- [ ] Update FIELD_MAPPING.md:
-  - [ ] Add "Field Conventions by Entry Type" section
-  - [ ] Table: field × entry type → semantic meaning
-  - [ ] Examples for each context-dependent field
+- [x] Refactor `convertToBibo()` to use entry type in field resolution:
+  - [x] Create `resolveAddress(BibTeXEntry entry)` → considers type
+  - [x] Create `resolveOrganization(BibTeXEntry entry)` → considers type
+  - [x] Create `resolveType(BibTeXEntry entry)` → handles degree type etc.
+- [x] Update `BiboDocument.Builder` to support:
+  - [x] `conferenceLocation` (distinct from `placeOfPublication`)
+  - [x] `conferenceOrganizer` (distinct from `publisher`)
+  - [x] `degreeType` (for thesis type specification)
+- [x] Update BIBO model generation:
+  - [x] Conference location → part of container (isPartOf) metadata
+  - [x] Organizer → custom BIBO property or note
+- [x] Implement reverse conversion (BIBO → BibTeX):
+  - [x] Extract conference location from container
+  - [x] Populate `address` field correctly per type
+  - [x] Populate `organization` field correctly per type
+- [x] Create `BibTeXConventionsTest`:
+  - [x] Test @inproceedings with address = "Berlin, Germany"
+  - [x] Verify round-trip preserves conference location
+  - [x] Test @book with address = "New York, NY"
+  - [x] Verify publisher address vs conference location distinction
+  - [x] Test @manual with organization = "GNU Project"
+  - [x] Test @proceedings with organization = "ACM"
+- [x] Update FIELD_MAPPING.md:
+  - [x] Add "Field Conventions by Entry Type" section
+  - [x] Table: field × entry type → semantic meaning
+  - [x] Examples for each context-dependent field
 
 **Context-Dependent Fields to Implement:**
 
@@ -526,48 +526,48 @@ Current implementation treats fields uniformly → breaks conventions.
 ### T-05: Code Quality - Checkstyle
 **Priority:** P2
 
-- [ ] Add Checkstyle Maven plugin
-- [ ] Configure Google Java Style or Sun conventions
-- [ ] Fix style violations
-- [ ] Add Checkstyle to CI build
-- [ ] Document code style in CONTRIBUTING.md
+- [x] Add Checkstyle Maven plugin
+- [x] Configure Google Java Style or Sun conventions
+- [x] Fix style violations
+- [x] Add Checkstyle to CI build
+- [x] Document code style in CONTRIBUTING.md
 
 ### T-06: Code Quality - SpotBugs
 **Priority:** P2
 
-- [ ] Add SpotBugs Maven plugin
-- [ ] Run analysis and review issues
-- [ ] Fix high/medium priority bugs
-- [ ] Add SpotBugs to CI build
-- [ ] Document in build process
+- [x] Add SpotBugs Maven plugin
+- [x] Run analysis and review issues
+- [x] Fix high/medium priority bugs
+- [x] Add SpotBugs to CI build
+- [x] Document in build process
 
 ### T-07: Dependency Updates
 **Priority:** P3
 
-- [ ] Update RDF4J to latest 5.x version
-- [ ] Update JUnit to latest 5.x version
-- [ ] Update Maven plugins to latest versions
-- [ ] Test all updates
-- [ ] Update pom.xml
+- [x] Update RDF4J to latest 5.x version
+- [x] Update JUnit to latest 5.x version
+- [x] Update Maven plugins to latest versions
+- [x] Test all updates
+- [x] Update pom.xml
 
 ### T-08: Error Handling Standardization
 **Priority:** P2
 
-- [ ] Create exception hierarchy (ConversionException base)
-- [ ] Use specific exceptions (ValidationException, ParsingException, etc.)
-- [ ] Document exception contract in JavaDoc
-- [ ] Add try-catch where appropriate
-- [ ] Update tests to verify exception throwing
+- [x] Create exception hierarchy (ConversionException base)
+- [x] Use specific exceptions (ValidationException, ParsingException, etc.)
+- [x] Document exception contract in JavaDoc
+- [x] Add try-catch where appropriate
+- [x] Update tests to verify exception throwing
 
 ---
 
 ## Definition of Done
 
 Same as Sprint 01, plus:
-- [ ] JavaDoc coverage > 90%
-- [ ] Code style checks passing
-- [ ] SpotBugs analysis clean (no high/medium bugs)
-- [ ] Performance benchmarks documented
+- [x] JavaDoc coverage > 90%
+- [x] Code style checks passing
+- [x] SpotBugs analysis clean (no high/medium bugs)
+- [x] Performance benchmarks documented
 
 ---
 
@@ -597,16 +597,16 @@ Same as Sprint 01, plus:
 
 ## Sprint Review Checklist
 
-- [ ] Demo all 14 BibTeX types converting (US-08)
-- [ ] Show BibTeX.com conventions working (@inproceedings address = conference location) (US-24)
-- [ ] Present LIMITATIONS.md document with gap analysis examples (US-23)
-- [ ] Show complex name examples (van Gogh, de Gaulle, Jr.) (US-09)
-- [ ] Demonstrate identifier validation catching errors (US-11)
-- [ ] Show JavaDoc HTML output (US-12)
-- [ ] Present performance benchmarks (US-13)
-- [ ] Review code quality metrics (T-05, T-06)
-- [ ] Discuss thesis chapter material (US-23)
-- [ ] Discuss areas for Sprint 03
+- [x] Demo all 14 BibTeX types converting (US-08)
+- [x] Show BibTeX.com conventions working (@inproceedings address = conference location) (US-24)
+- [x] Present LIMITATIONS.md document with gap analysis examples (US-23)
+- [x] Show complex name examples (van Gogh, de Gaulle, Jr.) (US-09)
+- [x] Demonstrate identifier validation catching errors (US-11)
+- [x] Show JavaDoc HTML output (US-12)
+- [x] Present performance benchmarks (US-13)
+- [x] Review code quality metrics (T-05, T-06)
+- [x] Discuss thesis chapter material (US-23)
+- [x] Discuss areas for Sprint 03
 
 ---
 

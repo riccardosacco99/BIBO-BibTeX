@@ -53,7 +53,6 @@ public final class BiboDocument {
     private final String series;
     private final String edition;
     private final List<String> keywords;
-    private final String degreeType;
     private final Model model;
     private final Resource resource;
 
@@ -81,7 +80,6 @@ public final class BiboDocument {
         this.series = builder.series;
         this.edition = builder.edition;
         this.keywords = List.copyOf(builder.keywords);
-        this.degreeType = builder.degreeType;
         this.model = new LinkedHashModel(model);
         this.resource = resource;
     }
@@ -197,10 +195,6 @@ public final class BiboDocument {
         return keywords;
     }
 
-    public Optional<String> degreeType() {
-        return Optional.ofNullable(degreeType);
-    }
-
     public Model rdfModel() {
         return new LinkedHashModel(model);
     }
@@ -281,7 +275,6 @@ public final class BiboDocument {
         private String series;
         private String edition;
         private final List<String> keywords = new ArrayList<>();
-        private String degreeType;
 
         private Builder(BiboDocumentType type, String title) {
             this.type = Objects.requireNonNull(type, "type");
@@ -421,11 +414,6 @@ public final class BiboDocument {
             if (keywords != null) {
                 keywords.forEach(this::addKeyword);
             }
-            return this;
-        }
-
-        public Builder degreeType(String degreeType) {
-            this.degreeType = normalizeOptional(degreeType);
             return this;
         }
 

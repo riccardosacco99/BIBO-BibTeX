@@ -154,14 +154,6 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         BiboDocument.Builder builder = BiboDocument.builder(documentType, title).id(citationKeyValue(source));
 
-        // Set degree type for thesis entries (only if custom type field present or for mastersthesis)
-        if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(source.getType())) {
-            // Always set for master's thesis to distinguish from PhD
-            builder.degreeType("Master's thesis");
-        }
-        // Allow custom degree type override via "type" field
-        fieldValue(source, BibTeXEntry.KEY_TYPE).ifPresent(builder::degreeType);
-
         fieldValue(source, FIELD_SUBTITLE).ifPresent(builder::subtitle);
         parseContributors(fieldValue(source, BibTeXEntry.KEY_AUTHOR), BiboContributorRole.AUTHOR)
                 .forEach(builder::addContributor);
@@ -643,10 +635,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         }
 
         // Infer from entry type
+        // Note: Only set for mastersthesis - phdthesis is the default and doesn't need explicit degreeType
         Key type = entry.getType();
-        if (BibTeXEntry.TYPE_PHDTHESIS.equals(type)) {
-            return Optional.of("PhD dissertation");
-        } else if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(type)) {
+        if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(type)) {
             return Optional.of("Master's thesis");
         }
         return Optional.empty();
