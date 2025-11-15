@@ -55,4 +55,10 @@ public final class BiboVocabulary {
     public static final IRI AUTHOR_LIST = iri("authorList");
     public static final IRI EDITOR_LIST = iri("editorList");
     public static final IRI CONTRIBUTOR_LIST = iri("contributorList");
+
+    // Event and thesis properties
+    public static final IRI PRESENTED_AT = iri("presentedAt");
+    public static final IRI ORGANIZER = iri("organizer");
+    public static final IRI DEGREE = iri("degree");
+    public static final IRI THESIS_DEGREE = iri("ThesisDegree");
 }

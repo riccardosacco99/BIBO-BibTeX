@@ -38,6 +38,9 @@ public final class BiboDocument {
     private final BiboPublicationDate publicationDate;
     private final String publisher;
     private final String placeOfPublication;
+    private final String conferenceLocation;
+    private final String conferenceOrganizer;
+    private final String degreeType;
     private final String containerTitle;
     private final String volume;
     private final String issue;
@@ -62,6 +65,9 @@ public final class BiboDocument {
         this.publicationDate = builder.publicationDate;
         this.publisher = builder.publisher;
         this.placeOfPublication = builder.placeOfPublication;
+        this.conferenceLocation = builder.conferenceLocation;
+        this.conferenceOrganizer = builder.conferenceOrganizer;
+        this.degreeType = builder.degreeType;
         this.containerTitle = builder.containerTitle;
         this.volume = builder.volume;
         this.issue = builder.issue;
@@ -127,6 +133,18 @@ public final class BiboDocument {
 
     public Optional<String> placeOfPublication() {
         return Optional.ofNullable(placeOfPublication);
+    }
+
+    public Optional<String> conferenceLocation() {
+        return Optional.ofNullable(conferenceLocation);
+    }
+
+    public Optional<String> conferenceOrganizer() {
+        return Optional.ofNullable(conferenceOrganizer);
+    }
+
+    public Optional<String> degreeType() {
+        return Optional.ofNullable(degreeType);
     }
 
     public Optional<String> containerTitle() {
@@ -242,6 +260,9 @@ public final class BiboDocument {
         private BiboPublicationDate publicationDate;
         private String publisher;
         private String placeOfPublication;
+        private String conferenceLocation;
+        private String conferenceOrganizer;
+        private String degreeType;
         private String containerTitle;
         private String volume;
         private String issue;
@@ -302,6 +323,21 @@ public final class BiboDocument {
 
         public Builder placeOfPublication(String placeOfPublication) {
             this.placeOfPublication = normalizeOptional(placeOfPublication);
+            return this;
+        }
+
+        public Builder conferenceLocation(String conferenceLocation) {
+            this.conferenceLocation = normalizeOptional(conferenceLocation);
+            return this;
+        }
+
+        public Builder conferenceOrganizer(String conferenceOrganizer) {
+            this.conferenceOrganizer = normalizeOptional(conferenceOrganizer);
+            return this;
+        }
+
+        public Builder degreeType(String degreeType) {
+            this.degreeType = normalizeOptional(degreeType);
             return this;
         }
 
@@ -417,6 +453,19 @@ public final class BiboDocument {
                 model.add(subject, DCTERMS.IS_PART_OF, container);
                 model.add(container, RDF.TYPE, BiboVocabulary.DOCUMENT);
                 model.add(container, DCTERMS.TITLE, VF.createLiteral(containerTitle));
+
+                // Add conference-specific metadata to container
+                if (conferenceLocation != null) {
+                    model.add(container, DCTERMS.SPATIAL, VF.createLiteral(conferenceLocation));
+                }
+                if (conferenceOrganizer != null) {
+                    model.add(container, BiboVocabulary.ORGANIZER, VF.createLiteral(conferenceOrganizer));
+                }
+            }
+
+            // Add thesis degree type
+            if (degreeType != null) {
+                model.add(subject, BiboVocabulary.DEGREE, VF.createLiteral(degreeType));
             }
 
             if (volume != null) {
