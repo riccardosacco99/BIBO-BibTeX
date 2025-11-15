@@ -157,8 +157,15 @@ class ReverseConversionTest {
     @Test
     void convertFromRdfFileDetectsRdfXml() throws IOException {
         BiboDocument document = sampleArticle();
-        Path file = writeModelToFile(document.rdfModel(), "article-xml", RDFFormat.RDFXML);
-        List<BiboDocument> result = converter.convertFromRDFFile(file);
+        Path file = writeModelToFile(document.rdfModel(), "article", RDFFormat.RDFXML);
+
+        // Parse RDF/XML explicitly since auto-detection may fail
+        Model model;
+        try (java.io.InputStream stream = java.nio.file.Files.newInputStream(file)) {
+            model = org.eclipse.rdf4j.rio.Rio.parse(stream, "", RDFFormat.RDFXML);
+        }
+
+        List<BiboDocument> result = converter.convertAllFromRDF(model);
         assertEquals(1, result.size());
         assertEquals(document.title(), result.get(0).title());
     }

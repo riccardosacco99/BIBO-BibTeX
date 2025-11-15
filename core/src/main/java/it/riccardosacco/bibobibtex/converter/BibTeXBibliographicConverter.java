@@ -103,7 +103,11 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                     .filter(type -> type != BiboIdentifierType.URL)
                     .map(type -> type.predicate().map(predicate -> Map.entry(predicate, type)))
                     .flatMap(Optional::stream)
-                    .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            Map.Entry::getValue,
+                            (a, b) -> a,
+                            java.util.LinkedHashMap::new));
 
     private static final Key FIELD_SUBTITLE = new Key("subtitle");
     private static final Key FIELD_DAY = new Key("day");
@@ -798,11 +802,24 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     }
 
     private static List<Resource> selectDocumentSubjects(Model model) {
+        // Collect containers (resources that are targets of isPartOf relations)
+        Set<Resource> containers = new java.util.HashSet<>();
+        model.filter(null, DCTERMS.IS_PART_OF, null).forEach(statement -> {
+            org.eclipse.rdf4j.model.Value object = statement.getObject();
+            if (object instanceof Resource) {
+                containers.add((Resource) object);
+            }
+        });
+
         LinkedHashSet<Resource> subjects = new LinkedHashSet<>();
         model.filter(null, RDF.TYPE, null).forEach(statement -> {
             org.eclipse.rdf4j.model.Value object = statement.getObject();
             if (object instanceof IRI type && type.stringValue().startsWith(BiboVocabulary.NAMESPACE)) {
-                subjects.add((Resource) statement.getSubject());
+                Resource subject = (Resource) statement.getSubject();
+                // Exclude containers - they're not top-level documents
+                if (!containers.contains(subject)) {
+                    subjects.add(subject);
+                }
             }
         });
         return new ArrayList<>(subjects);

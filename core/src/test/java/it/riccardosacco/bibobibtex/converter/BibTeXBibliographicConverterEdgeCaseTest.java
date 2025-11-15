@@ -33,10 +33,10 @@ class BibTeXBibliographicConverterEdgeCaseTest {
 
         assertEquals(1, doc.contributors().size());
         BiboPersonName name = doc.contributors().get(0).name();
-        // Single token names only set fullName, not givenName/familyName
+        // Single token names are treated as family names for bibliographic sorting
         assertEquals("Madonna", name.fullName());
         assertFalse(name.givenName().isPresent());
-        assertFalse(name.familyName().isPresent());
+        assertEquals("Madonna", name.familyName().orElse(""));
     }
 
     @Test
@@ -49,10 +49,10 @@ class BibTeXBibliographicConverterEdgeCaseTest {
 
         assertEquals(1, doc.contributors().size());
         BiboPersonName name = doc.contributors().get(0).name();
-        // Single token names only set fullName, not givenName/familyName
+        // Single token names are treated as family names for bibliographic sorting
         assertEquals("Plato", name.fullName());
         assertFalse(name.givenName().isPresent());
-        assertFalse(name.familyName().isPresent());
+        assertEquals("Plato", name.familyName().orElse(""));
     }
 
     @Test
