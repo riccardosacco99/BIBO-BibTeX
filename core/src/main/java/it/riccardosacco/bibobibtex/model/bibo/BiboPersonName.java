@@ -6,12 +6,16 @@ import java.util.Optional;
 public final class BiboPersonName {
     private final String fullName;
     private final String givenName;
+    private final String middleName;
+    private final String nameParticle;
     private final String familyName;
     private final String suffix;
 
     private BiboPersonName(Builder builder) {
         this.fullName = builder.fullName;
         this.givenName = builder.givenName;
+        this.middleName = builder.middleName;
+        this.nameParticle = builder.nameParticle;
         this.familyName = builder.familyName;
         this.suffix = builder.suffix;
     }
@@ -28,6 +32,14 @@ public final class BiboPersonName {
         return Optional.ofNullable(givenName);
     }
 
+    public Optional<String> middleName() {
+        return Optional.ofNullable(middleName);
+    }
+
+    public Optional<String> nameParticle() {
+        return Optional.ofNullable(nameParticle);
+    }
+
     public Optional<String> familyName() {
         return Optional.ofNullable(familyName);
     }
@@ -39,6 +51,8 @@ public final class BiboPersonName {
     public static final class Builder {
         private final String fullName;
         private String givenName;
+        private String middleName;
+        private String nameParticle;
         private String familyName;
         private String suffix;
 
@@ -48,6 +62,16 @@ public final class BiboPersonName {
 
         public Builder givenName(String givenName) {
             this.givenName = normalizeOptional(givenName);
+            return this;
+        }
+
+        public Builder middleName(String middleName) {
+            this.middleName = normalizeOptional(middleName);
+            return this;
+        }
+
+        public Builder nameParticle(String nameParticle) {
+            this.nameParticle = normalizeOptional(nameParticle);
             return this;
         }
 
