@@ -424,6 +424,8 @@ Some BibTeX fields don't have direct BIBO equivalents:
 - `keywords` → `dcterms:subject` (multi-value, bidirectional)
 - `note` → `rdfs:comment` (bidirectional)
 
+**For comprehensive gap analysis:** See [docs/LIMITATIONS.md](docs/LIMITATIONS.md) for detailed information loss scenarios, heuristic strategies, and BIBO vs BibTeX comparison tables.
+
 ### Citation Key Generation
 
 When exporting BIBO → BibTeX, if no ID is present:

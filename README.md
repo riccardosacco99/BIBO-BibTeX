@@ -300,3 +300,28 @@ _:author2 a foaf:Person;
 - ✅ RDF Lists (`rdf:first`, `rdf:rest`, `rdf:nil`) preservano l'ordine degli autori
 - ✅ Caratteri Unicode (accenti, simboli) correttamente convertiti da escape sequences BibTeX
 - ✅ Formato Turtle con pretty-print e blank nodes inlinati
+
+## Limitazioni e Gap Informativo
+
+La conversione tra BIBO e BibTeX è **intrinsecamente lossy** in alcune direzioni a causa delle differenze di espressività tra i due modelli:
+
+- **BibTeX → BIBO**: Conversione generalmente lossless. BIBO è più espressivo e può rappresentare tutti i campi BibTeX.
+- **BIBO → BibTeX**: Conversione con perdita di informazione. BibTeX non supporta metadati ricchi come affiliazioni autori, organizzatori di conferenze strutturati, identificatori multipli dello stesso tipo, date complete (giorno/mese/anno).
+
+### Limitazioni Note
+
+- **Citation keys**: Rigenerati durante export BIBO→BibTeX se non presenti come proprietà esplicita
+- **Cross-references** (`crossref`): Ignorati, le entry devono essere completamente espanse
+- **Metadati organizzativi**: Campi come `organization` su `@inproceedings` possono essere persi
+- **Campi informali**: `howpublished` su `@misc` omessi (BIBO non li modella)
+
+### Documentazione Dettagliata
+
+Per un'analisi completa del gap informativo tra BIBO e BibTeX, inclusi:
+- 5 scenari dettagliati di perdita informativa con esempi RDF Turtle e BibTeX
+- Strategie euristiche implementate per minimizzare la perdita
+- Tabella comparativa di espressività BIBO vs BibTeX
+- Best practices per utenti e sviluppatori
+- Materiale di tesi (italiano) sull'analisi del gap
+
+**Consulta:** [docs/LIMITATIONS.md](docs/LIMITATIONS.md)
