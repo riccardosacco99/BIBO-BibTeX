@@ -17,11 +17,17 @@ public enum BiboDocumentType {
     CONFERENCE_PAPER(BiboVocabulary.CONFERENCE_PAPER),
     PROCEEDINGS(BiboVocabulary.PROCEEDINGS),
     WEBPAGE(BiboVocabulary.WEBPAGE),
+    BOOKLET(BiboVocabulary.DOCUMENT),
+    MANUAL(BiboVocabulary.MANUAL),
+    MANUSCRIPT(BiboVocabulary.MANUSCRIPT),
     OTHER(BiboVocabulary.DOCUMENT);
 
     private static final Map<IRI, BiboDocumentType> BY_IRI =
             Collections.unmodifiableMap(
-                    Arrays.stream(values()).collect(Collectors.toMap(BiboDocumentType::iri, Function.identity())));
+                    Arrays.stream(values()).collect(Collectors.toMap(
+                            BiboDocumentType::iri,
+                            Function.identity(),
+                            (a, b) -> a)));
 
     private final IRI iri;
 
