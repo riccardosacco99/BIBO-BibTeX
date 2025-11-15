@@ -163,7 +163,25 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         fieldValue(source, BibTeXEntry.KEY_PUBLISHER)
                 .or(() -> inferPublisher(source))
                 .ifPresent(builder::publisher);
-        fieldValue(source, BibTeXEntry.KEY_ADDRESS).ifPresent(builder::placeOfPublication);
+
+        // Context-aware address resolution (US-24)
+        AddressResolution addressRes = resolveAddress(source);
+        if (addressRes.address() != null) {
+            if (addressRes.type() == AddressType.CONFERENCE_LOCATION) {
+                builder.conferenceLocation(addressRes.address());
+            } else {
+                builder.placeOfPublication(addressRes.address());
+            }
+        }
+
+        // Context-aware organization resolution (US-24)
+        OrganizationResolution orgRes = resolveOrganization(source);
+        if (orgRes.organization() != null && orgRes.type() == OrganizationType.CONFERENCE_ORGANIZER) {
+            builder.conferenceOrganizer(orgRes.organization());
+        }
+
+        // Thesis degree type resolution (US-24)
+        resolveDegreeType(source).ifPresent(builder::degreeType);
 
         fieldValue(source, BibTeXEntry.KEY_JOURNAL, BibTeXEntry.KEY_BOOKTITLE).ifPresent(builder::containerTitle);
         fieldValue(source, BibTeXEntry.KEY_VOLUME).ifPresent(builder::volume);
@@ -222,7 +240,28 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         });
 
         source.publisher().ifPresent(value -> putField(entry, fieldForPublisher(entryType), value));
-        source.placeOfPublication().ifPresent(value -> putField(entry, BibTeXEntry.KEY_ADDRESS, value));
+
+        // Context-aware address field (US-24): conference location vs publisher location
+        if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(entryType) || BibTeXEntry.TYPE_PROCEEDINGS.equals(entryType)) {
+            source.conferenceLocation().ifPresent(value -> putField(entry, BibTeXEntry.KEY_ADDRESS, value));
+        } else {
+            source.placeOfPublication().ifPresent(value -> putField(entry, BibTeXEntry.KEY_ADDRESS, value));
+        }
+
+        // Context-aware organization field (US-24): conference organizer vs publisher
+        if (BibTeXEntry.TYPE_PROCEEDINGS.equals(entryType) || BibTeXEntry.TYPE_INPROCEEDINGS.equals(entryType)) {
+            source.conferenceOrganizer().ifPresent(value -> putField(entry, BibTeXEntry.KEY_ORGANIZATION, value));
+        } else if (BibTeXEntry.TYPE_MANUAL.equals(entryType)) {
+            // For @manual, organization is the publisher (already handled above, but can be explicit)
+            if (entry.getField(BibTeXEntry.KEY_PUBLISHER) == null) {
+                source.publisher().ifPresent(value -> putField(entry, BibTeXEntry.KEY_ORGANIZATION, value));
+            }
+        }
+
+        // Thesis degree type field (US-24)
+        if (BibTeXEntry.TYPE_PHDTHESIS.equals(entryType) || BibTeXEntry.TYPE_MASTERSTHESIS.equals(entryType)) {
+            source.degreeType().ifPresent(value -> putField(entry, BibTeXEntry.KEY_TYPE, value));
+        }
 
         source.containerTitle().ifPresent(value -> putField(entry, fieldForContainer(entryType), value));
         source.volume().ifPresent(value -> putField(entry, BibTeXEntry.KEY_VOLUME, value));
@@ -502,7 +541,100 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (BibTeXEntry.TYPE_TECHREPORT.equals(type)) {
             return fieldValue(entry, BibTeXEntry.KEY_INSTITUTION);
         }
+        // For @manual, organization field means publisher
+        if (BibTeXEntry.TYPE_MANUAL.equals(type)) {
+            return fieldValue(entry, BibTeXEntry.KEY_ORGANIZATION);
+        }
         return Optional.empty();
+    }
+
+    /**
+     * Resolves the address field based on BibTeX entry type context.
+     * For @inproceedings/@proceedings: address = conference location
+     * For @book/@article/@mastersthesis/@phdthesis: address = publisher/institution location
+     *
+     * @param entry the BibTeX entry
+     * @return AddressResolution containing the resolved address and its semantic type
+     */
+    private static AddressResolution resolveAddress(BibTeXEntry entry) {
+        Optional<String> address = fieldValue(entry, BibTeXEntry.KEY_ADDRESS);
+        if (address.isEmpty()) {
+            return new AddressResolution(null, AddressType.PUBLISHER_LOCATION);
+        }
+
+        Key type = entry.getType();
+        if (BibTeXEntry.TYPE_INPROCEEDINGS.equals(type) || BibTeXEntry.TYPE_PROCEEDINGS.equals(type)) {
+            return new AddressResolution(address.get(), AddressType.CONFERENCE_LOCATION);
+        }
+        // For all other types: book, article, thesis, techreport, etc.
+        return new AddressResolution(address.get(), AddressType.PUBLISHER_LOCATION);
+    }
+
+    /**
+     * Resolves the organization field based on BibTeX entry type context.
+     * For @proceedings: organization = conference organizer/sponsor
+     * For @manual: organization = publisher
+     *
+     * @param entry the BibTeX entry
+     * @return OrganizationResolution containing the resolved organization and its semantic type
+     */
+    private static OrganizationResolution resolveOrganization(BibTeXEntry entry) {
+        Optional<String> organization = fieldValue(entry, BibTeXEntry.KEY_ORGANIZATION);
+        if (organization.isEmpty()) {
+            return new OrganizationResolution(null, OrganizationType.PUBLISHER);
+        }
+
+        Key type = entry.getType();
+        if (BibTeXEntry.TYPE_PROCEEDINGS.equals(type) || BibTeXEntry.TYPE_INPROCEEDINGS.equals(type)) {
+            return new OrganizationResolution(organization.get(), OrganizationType.CONFERENCE_ORGANIZER);
+        } else if (BibTeXEntry.TYPE_MANUAL.equals(type)) {
+            return new OrganizationResolution(organization.get(), OrganizationType.PUBLISHER);
+        }
+        return new OrganizationResolution(organization.get(), OrganizationType.GENERIC);
+    }
+
+    /**
+     * Resolves the type field for thesis entries.
+     * Extracts degree type (e.g., "Master's thesis", "PhD dissertation").
+     *
+     * @param entry the BibTeX entry
+     * @return the degree type if available
+     */
+    private static Optional<String> resolveDegreeType(BibTeXEntry entry) {
+        if (entry == null || entry.getType() == null) {
+            return Optional.empty();
+        }
+
+        // Check explicit 'type' field first
+        Optional<String> explicitType = fieldValue(entry, BibTeXEntry.KEY_TYPE);
+        if (explicitType.isPresent()) {
+            return explicitType;
+        }
+
+        // Infer from entry type
+        Key type = entry.getType();
+        if (BibTeXEntry.TYPE_PHDTHESIS.equals(type)) {
+            return Optional.of("PhD dissertation");
+        } else if (BibTeXEntry.TYPE_MASTERSTHESIS.equals(type)) {
+            return Optional.of("Master's thesis");
+        }
+        return Optional.empty();
+    }
+
+    // Helper classes for semantic resolution
+    private record AddressResolution(String address, AddressType type) {}
+
+    private enum AddressType {
+        CONFERENCE_LOCATION,
+        PUBLISHER_LOCATION
+    }
+
+    private record OrganizationResolution(String organization, OrganizationType type) {}
+
+    private enum OrganizationType {
+        CONFERENCE_ORGANIZER,
+        PUBLISHER,
+        GENERIC
     }
 
     /**
@@ -858,6 +990,9 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
 
         containerTitle(model, subject).ifPresent(builder::containerTitle);
+        conferenceLocation(model, subject).ifPresent(builder::conferenceLocation);
+        conferenceOrganizer(model, subject).ifPresent(builder::conferenceOrganizer);
+        literal(model, subject, BiboVocabulary.DEGREE).ifPresent(builder::degreeType);
         iriOrLiteral(model, subject, FOAF.PAGE).ifPresent(builder::url);
 
         builder.identifiers(readIdentifiers(model, subject));
@@ -983,6 +1118,24 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .filter(value -> value instanceof Resource)
                 .map(value -> (Resource) value)
                 .map(container -> literal(model, container, DCTERMS.TITLE))
+                .flatMap(Optional::stream)
+                .findFirst();
+    }
+
+    private static Optional<String> conferenceLocation(Model model, Resource subject) {
+        return model.filter(subject, DCTERMS.IS_PART_OF, null).objects().stream()
+                .filter(value -> value instanceof Resource)
+                .map(value -> (Resource) value)
+                .map(container -> literal(model, container, DCTERMS.SPATIAL))
+                .flatMap(Optional::stream)
+                .findFirst();
+    }
+
+    private static Optional<String> conferenceOrganizer(Model model, Resource subject) {
+        return model.filter(subject, DCTERMS.IS_PART_OF, null).objects().stream()
+                .filter(value -> value instanceof Resource)
+                .map(value -> (Resource) value)
+                .map(container -> literal(model, container, BiboVocabulary.ORGANIZER))
                 .flatMap(Optional::stream)
                 .findFirst();
     }

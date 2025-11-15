@@ -48,6 +48,65 @@ This document describes the mapping decisions between BibTeX entry types/fields 
 | `series` | Series | `bibo:series` | Book or proceedings series name |
 | `edition` | Edition | `bibo:edition` | Edition description (e.g., "3rd", "Second Edition") |
 
+## Context-Dependent Field Conventions (BibTeX.com)
+
+Following [BibTeX.com](https://www.bibtex.com/e/entry-types/) conventions, **some fields have different meanings based on entry type**. The converter implements context-aware resolution:
+
+### Address Field Convention
+
+The `address` field semantics depend on the entry type:
+
+| Entry Type | `address` Meaning | BIBO Mapping | Example |
+|------------|-------------------|--------------|---------|
+| `@inproceedings` | **Conference location** | Container `dcterms:spatial` | "Berlin, Germany" |
+| `@proceedings` | **Conference location** | Container `dcterms:spatial` | "Paris, France" |
+| `@book` | **Publisher location** | `dcterms:spatial` | "Reading, MA" |
+| `@article` | **Publisher location** | `dcterms:spatial` | "New York, NY" |
+| `@phdthesis` | **University location** | `dcterms:spatial` | "Cambridge, MA" |
+| `@mastersthesis` | **University location** | `dcterms:spatial` | "Stanford, CA" |
+| `@techreport` | **Institution location** | `dcterms:spatial` | "Houston, TX" |
+
+**Implementation:** The converter uses `resolveAddress()` to determine whether `address` should map to:
+- `BiboDocument.conferenceLocation()` for conference papers/proceedings
+- `BiboDocument.placeOfPublication()` for all other types
+
+### Organization Field Convention
+
+The `organization` field also has context-dependent semantics:
+
+| Entry Type | `organization` Meaning | BIBO Mapping | Example |
+|------------|------------------------|--------------|---------|
+| `@inproceedings` | **Conference organizer** | Container `bibo:organizer` | "ACM" |
+| `@proceedings` | **Conference organizer** | Container `bibo:organizer` | "IEEE" |
+| `@manual` | **Publisher** | `dcterms:publisher` | "Free Software Foundation" |
+
+**Implementation:** The converter uses `resolveOrganization()` to map to:
+- `BiboDocument.conferenceOrganizer()` for conference entries
+- `BiboDocument.publisher()` for manuals (via `inferPublisher()`)
+
+### Type Field Convention (Theses)
+
+For thesis entries, the `type` field specifies the degree type:
+
+| Entry Type | Default Type | Custom Type Field | BIBO Mapping |
+|------------|--------------|-------------------|--------------|
+| `@phdthesis` | "PhD dissertation" | Overrides default | `bibo:degree` |
+| `@mastersthesis` | "Master's thesis" | Overrides default | `bibo:degree` |
+
+**Implementation:** The `resolveDegreeType()` method:
+1. Checks for explicit `type` field value
+2. Falls back to entry type inference
+3. Maps to `BiboDocument.degreeType()`
+
+### Roundtrip Preservation
+
+These conventions are preserved in **BibTeX → BIBO → BibTeX** roundtrips:
+
+- **@inproceedings with address**: `address` → `conferenceLocation` → container spatial → `address`
+- **@proceedings with organization**: `organization` → `conferenceOrganizer` → container organizer → `organization`
+- **@phdthesis**: Entry type → `degreeType="PhD dissertation"` → `@phdthesis`
+- **@mastersthesis**: Entry type → `degreeType="Master's thesis"` → `@mastersthesis`
+
 ### Article-Specific Fields
 
 | BibTeX Field | BIBO Property | Notes |
@@ -65,7 +124,7 @@ This document describes the mapping decisions between BibTeX entry types/fields 
 | `series` | `bibo:series` | Proceedings series name |
 | `volume` | `bibo:volume` | Proceedings volume (if multi-volume) |
 | `pages` | `bibo:pages` | Paper page range |
-| `organization` | - | **LOST** - Sponsoring organization (not mapped) |
+| `organization` | Container `bibo:organizer` | **Conference organizer** (context-aware) |
 | `publisher` | `dcterms:publisher` | Proceedings publisher |
 
 **Modeling Note:** `@inproceedings` entries represent a **paper** published in proceedings. The `booktitle` field contains the proceedings title and is mapped to the container relationship. In BIBO, this can be modeled as:
@@ -83,7 +142,7 @@ The current implementation uses the simple approach for pragmatism. Full reifica
 | `series` | `bibo:series` | Conference series |
 | `volume` | `bibo:volume` | Volume in series |
 | `publisher` | `dcterms:publisher` | Publisher |
-| `organization` | - | **LOST** - Organizing body (not mapped) |
+| `organization` | `bibo:organizer` | **Conference organizer** (context-aware) |
 | `isbn` | `bibo:isbn13` | Proceedings ISBN |
 
 ### Book-Specific Fields

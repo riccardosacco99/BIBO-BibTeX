@@ -92,7 +92,8 @@ class RoundTripConversionTest {
         BibTeXEntry roundTrip = converter.convertFromBibo(document).orElseThrow();
         assertBibTeXFieldEquals(roundTrip, "booktitle", "Proceedings of the Conversion Summit");
         assertBibTeXFieldEquals(roundTrip, "pages", "55-64");
-        assertBibTeXFieldMissing(roundTrip, "organization");
+        // US-24: Organization field now preserved (conference organizer convention)
+        assertBibTeXFieldEquals(roundTrip, "organization", "Conversion Society");
 
         assertModelIsomorphic(document.rdfModel(), converter.convertToBibo(roundTrip).orElseThrow().rdfModel());
     }

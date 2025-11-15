@@ -59,7 +59,8 @@ class BibTeXBibliographicConverterDetailedTest {
         assertEquals("Proceedings Example", document.title());
         assertEquals("Conference on Examples", document.containerTitle().orElseThrow());
         assertEquals("ACM Press", document.publisher().orElseThrow());
-        assertEquals("New York, USA", document.placeOfPublication().orElseThrow());
+        // US-24: For @inproceedings, address maps to conference location
+        assertEquals("New York, USA", document.conferenceLocation().orElseThrow());
         assertEquals("12", document.volume().orElseThrow());
         assertEquals("4", document.issue().orElseThrow());
         assertEquals("10-20", document.pages().orElseThrow());
@@ -109,7 +110,8 @@ class BibTeXBibliographicConverterDetailedTest {
                         .addContributor(new BiboContributor(editor, BiboContributorRole.EDITOR))
                         .publicationDate(BiboPublicationDate.ofYearMonth(2023, 2))
                         .publisher("ACM Press")
-                        .placeOfPublication("New York, USA")
+                        // US-24: For conference papers, use conferenceLocation
+                        .conferenceLocation("New York, USA")
                         .containerTitle("Conference on Examples")
                         .volume("12")
                         .issue("4")
