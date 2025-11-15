@@ -217,8 +217,8 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     public Optional<BibTeXEntry> convertFromBibo(BiboDocument source) {
         logger.info("Starting BIBO → BibTeX conversion for document: {}", source.title());
 
-        // Validate input
-        BibliographicValidator.validateBiboDocument(source);
+        // Validate input (lenient mode to allow roundtrip of malformed identifiers)
+        BibliographicValidator.validateBiboDocument(source, true);
 
         Key entryType = mapEntryType(source.type());
         logger.debug("Mapped BIBO type {} to BibTeX type {}", source.type(), entryType);

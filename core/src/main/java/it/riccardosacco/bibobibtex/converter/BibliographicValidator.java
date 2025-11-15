@@ -63,9 +63,10 @@ public class BibliographicValidator {
      * Validates BIBO document.
      *
      * @param document BIBO document to validate
+     * @param lenient if true, uses lenient validation (skips identifier and date validation)
      * @throws ValidationException if validation fails
      */
-    public static void validateBiboDocument(BiboDocument document) {
+    public static void validateBiboDocument(BiboDocument document, boolean lenient) {
         if (document == null) {
             throw new ValidationException("BIBO document cannot be null");
         }
@@ -80,15 +81,25 @@ public class BibliographicValidator {
             throw new ValidationException("Title is required", "title", document.title());
         }
 
-        // Validate publication date
-        if (document.publicationDate().isPresent()) {
+        // Validate publication date (skip in lenient mode for roundtrip compatibility)
+        if (!lenient && document.publicationDate().isPresent()) {
             validatePublicationDate(document.publicationDate().get());
         }
 
         // Validate identifiers
         for (BiboIdentifier identifier : document.identifiers()) {
-            validateIdentifier(identifier);
+            validateIdentifier(identifier, lenient);
         }
+    }
+
+    /**
+     * Validates BIBO document (strict mode).
+     *
+     * @param document BIBO document to validate
+     * @throws ValidationException if validation fails
+     */
+    public static void validateBiboDocument(BiboDocument document) {
+        validateBiboDocument(document, false);
     }
 
     /**
@@ -159,9 +170,10 @@ public class BibliographicValidator {
      * Validates identifier based on type.
      *
      * @param identifier identifier to validate
-     * @throws ValidationException if identifier is invalid
+     * @param lenient if true, validation errors are skipped (for roundtrip compatibility)
+     * @throws ValidationException if identifier is invalid and not in lenient mode
      */
-    public static void validateIdentifier(BiboIdentifier identifier) {
+    public static void validateIdentifier(BiboIdentifier identifier, boolean lenient) {
         if (identifier == null) {
             return;
         }
@@ -169,6 +181,12 @@ public class BibliographicValidator {
         String value = identifier.value();
         if (value == null || value.isBlank()) {
             throw new ValidationException("Identifier value cannot be empty");
+        }
+
+        // In lenient mode, skip format validation for identifiers
+        // This allows roundtrip conversion of malformed data from BibTeX
+        if (lenient) {
+            return;
         }
 
         switch (identifier.type()) {
@@ -179,6 +197,16 @@ public class BibliographicValidator {
                 // Other identifier types don't require specific validation
             }
         }
+    }
+
+    /**
+     * Validates identifier based on type (strict mode).
+     *
+     * @param identifier identifier to validate
+     * @throws ValidationException if identifier is invalid
+     */
+    public static void validateIdentifier(BiboIdentifier identifier) {
+        validateIdentifier(identifier, false);
     }
 
     /**
