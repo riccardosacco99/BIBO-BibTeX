@@ -49,7 +49,6 @@ import org.eclipse.rdf4j.rio.Rio;
 import org.jbibtex.BibTeXEntry;
 import org.jbibtex.Key;
 import org.jbibtex.StringValue;
-import org.jbibtex.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

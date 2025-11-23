@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,7 +39,7 @@ import java.util.stream.Stream;
 public class BatchConverter {
     private static final Logger logger = LoggerFactory.getLogger(BatchConverter.class);
 
-    private final BibTeXBibliographicConverter converter;
+    private final ThreadLocal<BibTeXBibliographicConverter> converterProvider;
     private final int parallelism;
 
     /**
@@ -55,7 +58,7 @@ public class BatchConverter {
         if (parallelism < 1) {
             throw new IllegalArgumentException("Parallelism must be at least 1");
         }
-        this.converter = new BibTeXBibliographicConverter();
+        this.converterProvider = ThreadLocal.withInitial(BibTeXBibliographicConverter::new);
         this.parallelism = parallelism;
     }
 
@@ -91,7 +94,7 @@ public class BatchConverter {
         for (BibTeXEntry entry : entries) {
             current++;
             try {
-                Optional<BiboDocument> doc = converter.convertToBibo(entry);
+                Optional<BiboDocument> doc = converterProvider.get().convertToBibo(entry);
                 doc.ifPresent(results::add);
             } catch (ValidationException e) {
                 logger.warn("Skipping entry {} due to validation error: {}",
@@ -141,15 +144,14 @@ public class BatchConverter {
             entries.size(), parallelism);
         long startTime = System.currentTimeMillis();
 
-        ForkJoinPool customPool = new ForkJoinPool(parallelism);
         List<BiboDocument> results;
 
-        try {
+        try (AutoCloseableForkJoinPool customPool = new AutoCloseableForkJoinPool(parallelism)) {
             results = customPool.submit(() ->
                 entries.parallelStream()
                     .map(entry -> {
                         try {
-                            return converter.convertToBibo(entry);
+                            return converterProvider.get().convertToBibo(entry);
                         } catch (ValidationException e) {
                             logger.warn("Skipping entry {} due to validation error: {}",
                                 getCitationKey(entry), e.getMessage());
@@ -163,8 +165,6 @@ public class BatchConverter {
         } catch (Exception e) {
             logger.error("Parallel conversion failed", e);
             throw new RuntimeException("Parallel conversion failed", e);
-        } finally {
-            customPool.shutdown();
         }
 
         if (progressListener != null) {
@@ -189,7 +189,7 @@ public class BatchConverter {
         return entries
             .map(entry -> {
                 try {
-                    return converter.convertToBibo(entry);
+                    return converterProvider.get().convertToBibo(entry);
                 } catch (ValidationException e) {
                     logger.warn("Skipping entry {} due to validation error: {}",
                         getCitationKey(entry), e.getMessage());
@@ -208,20 +208,7 @@ public class BatchConverter {
      * @return parallel stream of successfully converted BIBO documents
      */
     public Stream<BiboDocument> convertStreamParallel(Stream<BibTeXEntry> entries) {
-        ForkJoinPool customPool = new ForkJoinPool(parallelism);
-        return entries
-            .parallel()
-            .map(entry -> {
-                try {
-                    return converter.convertToBibo(entry);
-                } catch (ValidationException e) {
-                    logger.warn("Skipping entry {} due to validation error: {}",
-                        getCitationKey(entry), e.getMessage());
-                    return Optional.<BiboDocument>empty();
-                }
-            })
-            .filter(Optional::isPresent)
-            .map(Optional::get);
+        return convertStream(entries.parallel());
     }
 
     /**
@@ -231,6 +218,31 @@ public class BatchConverter {
      */
     public int getParallelism() {
         return parallelism;
+    }
+
+    private static final class AutoCloseableForkJoinPool implements AutoCloseable {
+        private final ForkJoinPool delegate;
+
+        AutoCloseableForkJoinPool(int parallelism) {
+            this.delegate = new ForkJoinPool(parallelism);
+        }
+
+        <T> Future<T> submit(Callable<T> task) {
+            return delegate.submit(task);
+        }
+
+        @Override
+        public void close() {
+            delegate.shutdown();
+            try {
+                if (!delegate.awaitTermination(30, TimeUnit.SECONDS)) {
+                    delegate.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                delegate.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     private String getCitationKey(BibTeXEntry entry) {

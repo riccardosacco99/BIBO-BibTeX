@@ -1,7 +1,6 @@
 package it.riccardosacco.bibobibtex.examples;
 
 import it.riccardosacco.bibobibtex.converter.BibTeXBibliographicConverter;
-import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;

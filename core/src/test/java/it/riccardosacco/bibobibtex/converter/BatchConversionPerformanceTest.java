@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 /**
  * Performance tests for batch conversion.
