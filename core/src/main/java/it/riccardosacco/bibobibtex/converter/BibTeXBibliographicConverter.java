@@ -440,7 +440,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         String candidate = base;
         int counter = 2;
         while (usedCitationKeys.contains(candidate)) {
-            candidate = clampCitationKey(base + "_" + counter++);
+            candidate = clampCitationKey(appendSuffix(base, counter++));
         }
         usedCitationKeys.add(candidate);
         return candidate;
