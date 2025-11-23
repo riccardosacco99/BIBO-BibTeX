@@ -128,8 +128,15 @@ public final class BatchConversion {
 
     private static void writeRdf(Model model, Path inputFile, Path outputDir) throws IOException {
         // Use the same filename as the input file, but with .ttl extension
-        String baseName = inputFile.getFileName().toString();
-        baseName = baseName.substring(0, baseName.lastIndexOf('.'));
+        Path fileName = inputFile.getFileName();
+        if (fileName == null) {
+            return;
+        }
+        String baseName = fileName.toString();
+        int dot = baseName.lastIndexOf('.');
+        if (dot > 0) {
+            baseName = baseName.substring(0, dot);
+        }
         Path outputFile = outputDir.resolve(baseName + ".ttl");
 
         try (Writer writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {

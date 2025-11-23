@@ -1,5 +1,6 @@
 package it.riccardosacco.bibobibtex.converter;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.riccardosacco.bibobibtex.exception.ValidationException;
 import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import org.jbibtex.BibTeXEntry;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ForkJoinPool;
@@ -45,6 +47,7 @@ public class BatchConverter {
     /**
      * Creates a new BatchConverter with default parallelism (available processors).
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Argument validation may throw intentionally")
     public BatchConverter() {
         this(Runtime.getRuntime().availableProcessors());
     }
@@ -54,6 +57,7 @@ public class BatchConverter {
      *
      * @param parallelism number of parallel threads to use (1 = sequential)
      */
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Argument validation may throw intentionally")
     public BatchConverter(int parallelism) {
         if (parallelism < 1) {
             throw new IllegalArgumentException("Parallelism must be at least 1");
@@ -115,6 +119,76 @@ public class BatchConverter {
             results.size(), total - results.size(), elapsed);
 
         return results;
+    }
+
+    /**
+     * Converts a collection of BibTeX entries to BIBO documents sequentially and collects statistics.
+     *
+     * @param entries entries to convert
+     * @param progressListener optional progress callback
+     * @return conversion result with documents and statistics
+     */
+    public BatchConversionResult convertBatchWithStats(
+            Collection<BibTeXEntry> entries,
+            ProgressListener progressListener) {
+
+        if (entries == null || entries.isEmpty()) {
+            return new BatchConversionResult(List.of(), new ConversionStatistics(0, 0, 0, List.of(), Map.of(), 0));
+        }
+
+        logger.info("Starting batch conversion with statistics for {} entries", entries.size());
+
+        StatisticsCollector stats = new StatisticsCollector();
+        stats.startTracking();
+
+        List<BiboDocument> results = new ArrayList<>();
+        int current = 0;
+        int total = entries.size();
+
+        for (BibTeXEntry entry : entries) {
+            current++;
+            stats.recordEntry();
+            try {
+                Optional<BiboDocument> doc = converterProvider.get().convertToBibo(entry);
+                if (doc.isPresent()) {
+                    results.add(doc.get());
+                    stats.recordSuccess(doc.get());
+                } else {
+                    stats.recordFailure(new ValidationException("Conversion returned empty document"));
+                }
+            } catch (ValidationException e) {
+                logger.warn("Skipping entry {} due to validation error: {}",
+                    getCitationKey(entry), e.getMessage());
+                stats.recordFailure(e);
+            } catch (Exception e) {
+                logger.error("Unexpected error converting entry {}", getCitationKey(entry), e);
+                stats.recordFailure(e);
+            }
+
+            if (progressListener != null && current % 10 == 0) {
+                progressListener.onProgress(current, total);
+            }
+        }
+
+        if (progressListener != null) {
+            progressListener.onProgress(total, total);
+        }
+
+        ConversionStatistics statistics = stats.build();
+        logger.info("Batch conversion with statistics complete: {} converted, {} failed in {}ms",
+            statistics.getSuccessfulConversions(), statistics.getFailedConversions(), statistics.getConversionTimeMs());
+
+        return new BatchConversionResult(results, statistics);
+    }
+
+    /**
+     * Converts a collection of BibTeX entries to BIBO documents sequentially and collects statistics.
+     *
+     * @param entries entries to convert
+     * @return conversion result with documents and statistics
+     */
+    public BatchConversionResult convertBatchWithStats(Collection<BibTeXEntry> entries) {
+        return convertBatchWithStats(entries, null);
     }
 
     /**

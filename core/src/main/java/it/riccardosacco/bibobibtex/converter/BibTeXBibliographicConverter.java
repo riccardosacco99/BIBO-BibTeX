@@ -143,6 +143,10 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         // Validate input
         BibliographicValidator.validateBibTeXEntry(source);
 
+        Optional<String> rawYear = fieldValue(source, BibTeXEntry.KEY_YEAR);
+        boolean isCirca = rawYear.map(BibTeXBibliographicConverter::containsCircaToken).orElse(false);
+        Optional<String> noteValue = fieldValue(source, BibTeXEntry.KEY_NOTE);
+
         String title = fieldValue(source, BibTeXEntry.KEY_TITLE).orElseGet(() -> citationKeyValue(source));
         if (title == null || title.isBlank()) {
             throw new ValidationException("Title is required", "title", title);
@@ -197,7 +201,6 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                 .ifPresent(builder::url);
         fieldValue(source, FIELD_LANGUAGE).ifPresent(builder::language);
         fieldValue(source, FIELD_ABSTRACT).ifPresent(builder::abstractText);
-        fieldValue(source, BibTeXEntry.KEY_NOTE).ifPresent(builder::notes);
         fieldValue(source, FIELD_SERIES).ifPresent(builder::series);
         fieldValue(source, FIELD_EDITION).ifPresent(builder::edition);
         fieldValue(source, FIELD_KEYWORDS).ifPresent(keywords -> {
@@ -207,6 +210,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                     .collect(Collectors.toList());
             builder.keywords(keywordList);
         });
+
+        String circaNote = isCirca ? formatCircaNote(rawYear.orElse(null)) : null;
+        String combinedNote = combineNotes(noteValue.orElse(null), circaNote);
+        if (combinedNote != null) {
+            builder.notes(combinedNote);
+        }
 
         BiboDocument result = builder.build();
         logger.info("Successfully converted BibTeX entry to BIBO document: {}", result.title());
@@ -1408,6 +1417,36 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         String joined =
                 contributors.stream().map(BibTeXBibliographicConverter::formatName).collect(Collectors.joining(" and "));
         return joined.isBlank() ? Optional.empty() : Optional.of(joined);
+    }
+
+    private static boolean containsCircaToken(String value) {
+        if (value == null) {
+            return false;
+        }
+        String lower = value.toLowerCase(Locale.ROOT);
+        return lower.contains("circa") || lower.contains("c.") || lower.contains("~");
+    }
+
+    private static String formatCircaNote(String rawYear) {
+        if (rawYear == null || rawYear.isBlank()) {
+            return "Approximate publication date";
+        }
+        try {
+            int year = extractYearFromFreeForm(rawYear);
+            return "Approximate publication date (circa " + year + ")";
+        } catch (Exception ex) {
+            return "Approximate publication date (" + rawYear.trim() + ")";
+        }
+    }
+
+    private static String combineNotes(String primary, String extra) {
+        if (primary == null || primary.isBlank()) {
+            return (extra == null || extra.isBlank()) ? null : extra.trim();
+        }
+        if (extra == null || extra.isBlank()) {
+            return primary.trim();
+        }
+        return primary.trim() + " | " + extra.trim();
     }
 
     private static String formatName(BiboContributor contributor) {

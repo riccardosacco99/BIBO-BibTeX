@@ -50,7 +50,11 @@ public final class ReverseConversion {
     }
 
     private static void writeBibTexFile(Path outputDir, Path source, List<BibTeXEntry> entries) throws IOException {
-        String baseName = source.getFileName().toString();
+        Path fileName = source.getFileName();
+        if (fileName == null) {
+            return;
+        }
+        String baseName = fileName.toString();
         int dot = baseName.lastIndexOf('.');
         if (dot > 0) {
             baseName = baseName.substring(0, dot);
