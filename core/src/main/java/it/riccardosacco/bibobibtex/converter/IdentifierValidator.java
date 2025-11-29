@@ -220,7 +220,7 @@ public final class IdentifierValidator {
         try {
             URI.create(urlString.trim()).toURL();
             return true;
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | IllegalArgumentException e) {
             return false;
         }
     }
