@@ -32,7 +32,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         // Single token names are treated as family names for bibliographic sorting
         assertEquals("Madonna", name.fullName());
         assertFalse(name.givenName().isPresent());
@@ -48,7 +48,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         // Single token names are treated as family names for bibliographic sorting
         assertEquals("Plato", name.fullName());
         assertFalse(name.givenName().isPresent());
@@ -64,7 +64,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         assertTrue(name.givenName().isPresent());
         assertEquals("Vincent", name.givenName().orElse(""));
         String familyName = name.familyName().orElse("");
@@ -80,7 +80,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         assertTrue(name.givenName().isPresent());
         assertEquals("John", name.givenName().orElse(""));
         String familyName = name.familyName().orElse("");
@@ -96,7 +96,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         assertTrue(name.givenName().isPresent());
         assertEquals("Charles", name.givenName().orElse(""));
         String familyName = name.familyName().orElse("");
@@ -112,7 +112,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        assertNotNull(doc.contributors().get(0).name());
+        assertNotNull(doc.contributors().getFirst().name());
     }
 
     @Test
@@ -124,7 +124,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        assertNotNull(doc.contributors().get(0).name());
+        assertNotNull(doc.contributors().getFirst().name());
     }
 
     @Test
@@ -136,7 +136,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         String fullName = name.fullName();
         assertTrue(fullName.contains("Søren") || fullName.contains("Müller"));
     }
@@ -150,7 +150,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         assertTrue(name.givenName().isPresent());
         assertEquals("Patrick", name.givenName().orElse(""));
         String familyName = name.familyName().orElse("");
@@ -166,7 +166,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        BiboPersonName name = doc.contributors().get(0).name();
+        BiboPersonName name = doc.contributors().getFirst().name();
         assertTrue(name.givenName().isPresent());
         assertEquals("Antoine", name.givenName().orElse(""));
         String familyName = name.familyName().orElse("");
@@ -183,7 +183,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
         BiboDocument doc = converter.convertToBibo(entry).orElseThrow();
 
         assertEquals(1, doc.contributors().size());
-        assertNotNull(doc.contributors().get(0).name());
+        assertNotNull(doc.contributors().getFirst().name());
     }
 
     @Test
@@ -573,7 +573,7 @@ class BibTeXBibliographicConverterEdgeCaseTest {
 
         assertTrue(doc.title().contains("ñ"));
         assertTrue(doc.title().contains("ü"));
-        String familyName = doc.contributors().get(0).name().familyName().orElse("");
+        String familyName = doc.contributors().getFirst().name().familyName().orElse("");
         assertTrue(familyName.contains("Müller"));
     }
 

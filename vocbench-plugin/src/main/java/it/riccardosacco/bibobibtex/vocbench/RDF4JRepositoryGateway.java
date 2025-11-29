@@ -98,10 +98,9 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
         // TODO: Full RDF -> BiboDocument conversion will be implemented in Phase 7.B
         // For now, this is a placeholder that verifies the document exists
 
-        String sparqlQuery = String.format(
-            "ASK WHERE { ?doc <%s> \"%s\" }",
-            DCTERMS.IDENTIFIER,
-            identifier.replace("\"", "\\\"")
+        String sparqlQuery = "ASK WHERE { ?doc <%s> \"%s\" }".formatted(
+                DCTERMS.IDENTIFIER,
+                identifier.replace("\"", "\\\"")
         );
 
         try (RepositoryConnection conn = repository.getConnection()) {
@@ -128,9 +127,8 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
         // TODO: Full RDF -> BiboDocument conversion will be implemented in Phase 7.B
         // For now, return empty list
 
-        String sparqlQuery = String.format(
-            "SELECT (COUNT(DISTINCT ?doc) AS ?count) WHERE { ?doc <%s> ?type }",
-            RDF.TYPE
+        String sparqlQuery = "SELECT (COUNT(DISTINCT ?doc) AS ?count) WHERE { ?doc <%s> ?type }".formatted(
+                RDF.TYPE
         );
 
         try (RepositoryConnection conn = repository.getConnection()) {

@@ -271,7 +271,7 @@ class BatchConversionPerformanceTest {
     }
 
     private String generateISBN(int seed) {
-        return String.format("978-0-%03d-%05d-0", seed % 1000, seed);
+        return "978-0-%03d-%05d-0".formatted(seed % 1000, seed);
     }
 
     private String getMonth(int month) {

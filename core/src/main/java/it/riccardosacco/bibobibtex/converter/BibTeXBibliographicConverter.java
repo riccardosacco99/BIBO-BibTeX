@@ -497,7 +497,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
             byte[] hash = digest.digest();
             StringBuilder builder = new StringBuilder();
             for (byte value : hash) {
-                builder.append(String.format("%02x", value));
+                builder.append("%02x".formatted(value));
                 if (builder.length() >= 8) {
                     break;
                 }
@@ -923,7 +923,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         // Single token = family name only
         if (tokens.size() == 1) {
-            return new NameComponents(null, null, null, tokens.get(0), null);
+            return new NameComponents(null, null, null, tokens.getFirst(), null);
         }
 
         // Extract family name + particle from the end
@@ -937,7 +937,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
         // Collect particles (lowercase words before family name)
         while (index >= 0 && isParticleToken(tokens.get(index))) {
-            particleTokens.add(0, tokens.get(index));
+            particleTokens.addFirst(tokens.get(index));
             index--;
         }
 
@@ -948,12 +948,12 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         if (index >= 0) {
             List<String> givenTokens = tokens.subList(0, index + 1);
             if (givenTokens.size() == 1) {
-                givenName = givenTokens.get(0);
+                givenName = givenTokens.getFirst();
             } else if (givenTokens.size() >= 2) {
                 // Last token of given tokens is middle name
                 givenName = givenTokens.subList(0, givenTokens.size() - 1).stream()
                         .collect(Collectors.joining(" "));
-                middleName = givenTokens.get(givenTokens.size() - 1);
+                middleName = givenTokens.getLast();
             }
         }
 
@@ -1016,23 +1016,23 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         }
 
         if (tokens.size() == 1) {
-            return new NameParticlePair(null, tokens.get(0));
+            return new NameParticlePair(null, tokens.getFirst());
         }
 
         List<String> particleTokens = new ArrayList<>();
         List<String> familyTokens = new ArrayList<>();
 
         // Start from the end: last token is always family name
-        familyTokens.add(tokens.get(tokens.size() - 1));
+        familyTokens.add(tokens.getLast());
 
         // Work backwards to find particles
         for (int i = tokens.size() - 2; i >= 0; i--) {
             if (isParticleToken(tokens.get(i))) {
-                particleTokens.add(0, tokens.get(i));
+                particleTokens.addFirst(tokens.get(i));
             } else {
                 // Non-particle tokens at the start are part of family name
                 for (int j = 0; j <= i; j++) {
-                    familyTokens.add(0, tokens.get(j));
+                    familyTokens.addFirst(tokens.get(j));
                 }
                 break;
             }
@@ -1059,8 +1059,8 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         Set<Resource> containers = new java.util.HashSet<>();
         model.filter(null, DCTERMS.IS_PART_OF, null).forEach(statement -> {
             org.eclipse.rdf4j.model.Value object = statement.getObject();
-            if (object instanceof Resource) {
-                containers.add((Resource) object);
+            if (object instanceof Resource resource) {
+                containers.add(resource);
             }
         });
 
@@ -1355,8 +1355,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                         .map(String::trim)
                         .filter(token -> !token.isEmpty())
                         .map(BibTeXBibliographicConverter::classifyIsbn)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
+                        .flatMap(Optional::stream)
                         .forEach(identifiers::add));
 
         fieldValue(entry, FIELD_ISSN)

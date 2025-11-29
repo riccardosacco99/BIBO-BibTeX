@@ -232,8 +232,7 @@ public class BatchConverter {
                             return Optional.<BiboDocument>empty();
                         }
                     })
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
+                    .flatMap(Optional::stream)
                     .collect(Collectors.toList())
             ).get();
         } catch (Exception e) {
@@ -270,8 +269,7 @@ public class BatchConverter {
                     return Optional.<BiboDocument>empty();
                 }
             })
-            .filter(Optional::isPresent)
-            .map(Optional::get);
+            .flatMap(Optional::stream);
     }
 
     /**

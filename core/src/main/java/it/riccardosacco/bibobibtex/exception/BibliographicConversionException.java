@@ -42,7 +42,7 @@ public class BibliographicConversionException extends RuntimeException {
      * @param fieldValue value that caused the error
      */
     public BibliographicConversionException(String message, String fieldName, Object fieldValue) {
-        super(String.format("%s [field='%s', value='%s']", message, fieldName, fieldValue));
+        super("%s [field='%s', value='%s']".formatted(message, fieldName, fieldValue));
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
     }

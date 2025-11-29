@@ -57,10 +57,10 @@ public final class BiboPublicationDate {
         if (month != null && day != null) {
             return valueFactory.createLiteral(LocalDate.of(year, month, day));
         } else if (month != null) {
-            String value = String.format("%04d-%02d", year, month);
+            String value = "%04d-%02d".formatted(year, month);
             return valueFactory.createLiteral(value, XSD.GYEARMONTH);
         } else {
-            String value = String.format("%04d", year);
+            String value = "%04d".formatted(year);
             return valueFactory.createLiteral(value, XSD.GYEAR);
         }
     }

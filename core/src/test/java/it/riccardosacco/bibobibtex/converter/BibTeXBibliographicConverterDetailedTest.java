@@ -177,7 +177,7 @@ class BibTeXBibliographicConverterDetailedTest {
         assertEquals(6, document.authors().size(), "Should have 6 authors");
 
         // Verify exact ordering is preserved
-        assertEquals("First, Alice", document.authors().get(0).name().fullName());
+        assertEquals("First, Alice", document.authors().getFirst().name().fullName());
         assertEquals("Second, Bob", document.authors().get(1).name().fullName());
         assertEquals("Third, Carol", document.authors().get(2).name().fullName());
         assertEquals("Fourth, David", document.authors().get(3).name().fullName());
@@ -231,7 +231,7 @@ class BibTeXBibliographicConverterDetailedTest {
 
         // Verify we can access authors through the document API
         assertEquals(3, document.authors().size());
-        assertEquals("Alpha, A", document.authors().get(0).name().fullName());
+        assertEquals("Alpha, A", document.authors().getFirst().name().fullName());
         assertEquals("Beta, B", document.authors().get(1).name().fullName());
         assertEquals("Gamma, G", document.authors().get(2).name().fullName());
     }

@@ -45,26 +45,26 @@ class ReverseConversionTest {
         BiboDocument article = sampleArticle();
         List<BiboDocument> result = converter.convertAllFromRDF(article.rdfModel());
         assertEquals(1, result.size());
-        assertEquals(article.title(), result.get(0).title());
-        assertEquals(article.containerTitle().orElseThrow(), result.get(0).containerTitle().orElseThrow());
-        assertEquals(article.identifiers().size(), result.get(0).identifiers().size());
+        assertEquals(article.title(), result.getFirst().title());
+        assertEquals(article.containerTitle().orElseThrow(), result.getFirst().containerTitle().orElseThrow());
+        assertEquals(article.identifiers().size(), result.getFirst().identifiers().size());
     }
 
     @Test
     void convertAllFromRdfPreservesContributorOrder() {
         BiboDocument document = multiAuthorDocument();
         List<BiboDocument> result = converter.convertAllFromRDF(document.rdfModel());
-        assertEquals(2, result.get(0).authors().size());
-        assertEquals("Alice Smith", result.get(0).authors().get(0).name().fullName());
-        assertEquals("Bob Johnson", result.get(0).authors().get(1).name().fullName());
+        assertEquals(2, result.getFirst().authors().size());
+        assertEquals("Alice Smith", result.getFirst().authors().getFirst().name().fullName());
+        assertEquals("Bob Johnson", result.getFirst().authors().get(1).name().fullName());
     }
 
     @Test
     void convertAllFromRdfReadsKeywordsAndIdentifiers() {
         BiboDocument document = sampleArticle();
         List<BiboDocument> result = converter.convertAllFromRDF(document.rdfModel());
-        assertEquals(document.keywords(), result.get(0).keywords());
-        assertEquals(document.identifiers().get(0).value(), result.get(0).identifiers().get(0).value());
+        assertEquals(document.keywords(), result.getFirst().keywords());
+        assertEquals(document.identifiers().getFirst().value(), result.getFirst().identifiers().getFirst().value());
     }
 
     @Test
@@ -94,8 +94,8 @@ class ReverseConversionTest {
 
         List<BiboDocument> documents = converter.convertAllFromRDF(model);
         assertEquals(1, documents.size());
-        assertTrue(documents.get(0).id().isEmpty());
-        assertEquals("Blank Node Article", documents.get(0).title());
+        assertTrue(documents.getFirst().id().isEmpty());
+        assertEquals("Blank Node Article", documents.getFirst().title());
     }
 
     @Test
@@ -122,9 +122,9 @@ class ReverseConversionTest {
         model.add(subject, BiboVocabulary.AUTHOR_LIST, authorList);
 
         List<BiboDocument> documents = converter.convertAllFromRDF(model);
-        assertEquals(2, documents.get(0).authors().size());
-        assertEquals("Alice", documents.get(0).authors().get(0).name().givenName().orElseThrow());
-        assertEquals("Johnson", documents.get(0).authors().get(1).name().familyName().orElseThrow());
+        assertEquals(2, documents.getFirst().authors().size());
+        assertEquals("Alice", documents.getFirst().authors().getFirst().name().givenName().orElseThrow());
+        assertEquals("Johnson", documents.getFirst().authors().get(1).name().familyName().orElseThrow());
     }
 
     @Test
@@ -142,7 +142,7 @@ class ReverseConversionTest {
         model.add(subject, DCTERMS.IS_PART_OF, container);
 
         List<BiboDocument> documents = converter.convertAllFromRDF(model);
-        assertEquals("Proceedings of Blank Nodes", documents.get(0).containerTitle().orElseThrow());
+        assertEquals("Proceedings of Blank Nodes", documents.getFirst().containerTitle().orElseThrow());
     }
 
     @Test
@@ -151,7 +151,7 @@ class ReverseConversionTest {
         Path file = writeModelToFile(document.rdfModel(), "article", RDFFormat.TURTLE);
         List<BiboDocument> result = converter.convertFromRDFFile(file);
         assertEquals(1, result.size());
-        assertEquals(document.title(), result.get(0).title());
+        assertEquals(document.title(), result.getFirst().title());
     }
 
     @Test
@@ -167,7 +167,7 @@ class ReverseConversionTest {
 
         List<BiboDocument> result = converter.convertAllFromRDF(model);
         assertEquals(1, result.size());
-        assertEquals(document.title(), result.get(0).title());
+        assertEquals(document.title(), result.getFirst().title());
     }
 
     @Test
@@ -180,7 +180,7 @@ class ReverseConversionTest {
     @Test
     void convertAllFromRdfParsesPublicationDate() {
         BiboDocument thesis = thesisDocument();
-        BiboDocument converted = converter.convertAllFromRDF(thesis.rdfModel()).get(0);
+        BiboDocument converted = converter.convertAllFromRDF(thesis.rdfModel()).getFirst();
         assertEquals(thesis.publicationDate().orElseThrow().year(), converted.publicationDate().orElseThrow().year());
     }
 

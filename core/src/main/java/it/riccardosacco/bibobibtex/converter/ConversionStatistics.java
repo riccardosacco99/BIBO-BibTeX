@@ -63,10 +63,10 @@ public final class ConversionStatistics {
     public String toTextReport() {
         StringBuilder report = new StringBuilder();
         report.append("=== Conversion Statistics ===\n");
-        report.append(String.format("Total entries: %d%n", totalEntries));
-        report.append(String.format("Successful: %d%n", successfulConversions));
-        report.append(String.format("Failed: %d%n", failedConversions));
-        report.append(String.format("Time: %d ms%n", conversionTimeMs));
+        report.append("Total entries: %d%n".formatted(totalEntries));
+        report.append("Successful: %d%n".formatted(successfulConversions));
+        report.append("Failed: %d%n".formatted(failedConversions));
+        report.append("Time: %d ms%n".formatted(conversionTimeMs));
 
         if (!warningMessages.isEmpty()) {
             report.append("\nWarnings:\n");
@@ -76,7 +76,7 @@ public final class ConversionStatistics {
         if (!fieldStatistics.isEmpty()) {
             report.append("\nField Statistics:\n");
             fieldStatistics.forEach((field, count) ->
-                    report.append(String.format("  %s: %d%n", field, count)));
+                    report.append("  %s: %d%n".formatted(field, count)));
         }
 
         return report.toString();

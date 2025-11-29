@@ -54,11 +54,11 @@ class BiboDocumentTest {
         assertEquals(2, document.contributors().size());
         assertEquals(1, document.authors().size());
         assertEquals(1, document.editors().size());
-        assertEquals(List.of(document.authors().get(0), document.editors().get(0)), document.contributors());
-        assertEquals("Ada Lovelace", document.authors().get(0).name().fullName());
-        assertEquals(BiboContributorRole.AUTHOR, document.authors().get(0).role());
-        assertEquals("Charles Babbage", document.editors().get(0).name().fullName());
-        assertEquals(BiboContributorRole.EDITOR, document.editors().get(0).role());
+        assertEquals(List.of(document.authors().getFirst(), document.editors().getFirst()), document.contributors());
+        assertEquals("Ada Lovelace", document.authors().getFirst().name().fullName());
+        assertEquals(BiboContributorRole.AUTHOR, document.authors().getFirst().role());
+        assertEquals("Charles Babbage", document.editors().getFirst().name().fullName());
+        assertEquals(BiboContributorRole.EDITOR, document.editors().getFirst().role());
 
         BiboPublicationDate publicationDate = document.publicationDate().orElseThrow();
         assertEquals(1843, publicationDate.year());
@@ -73,7 +73,7 @@ class BiboDocumentTest {
         assertEquals("666-699", document.pages().orElseThrow());
 
         assertEquals(1, document.identifiers().size());
-        BiboIdentifier identifier = document.identifiers().get(0);
+        BiboIdentifier identifier = document.identifiers().getFirst();
         assertEquals(BiboIdentifierType.DOI, identifier.type());
         assertEquals("10.0000/analytical-engine-notes", identifier.value());
 
@@ -114,12 +114,12 @@ class BiboDocumentTest {
                         .orElseThrow();
         List<Value> authorValues = RDFCollections.asValues(model, authorListHead, new ArrayList<>());
         assertFalse(authorValues.isEmpty());
-        Resource authorNode = (Resource) authorValues.get(0);
+        Resource authorNode = (Resource) authorValues.getFirst();
         assertTrue(model.contains(authorNode, FOAF.NAME, Values.literal("Ada Lovelace")));
 
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> document.contributors().add(document.contributors().get(0)));
+                () -> document.contributors().add(document.contributors().getFirst()));
         assertThrows(
                 UnsupportedOperationException.class, () -> document.identifiers().add(identifier));
 

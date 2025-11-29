@@ -170,7 +170,7 @@ class NameParsingTest {
 
     @Test
     void multipleAuthorsMaintainOrderWithNewParser() {
-        BiboPersonName first = parseAuthors("First, Alice and Second, Bob").get(0);
+        BiboPersonName first = parseAuthors("First, Alice and Second, Bob").getFirst();
         BiboPersonName second = parseAuthors("First, Alice and Second, Bob").get(1);
         assertEquals("Alice", first.givenName().orElseThrow());
         assertEquals("First", first.familyName().orElseThrow());
@@ -298,7 +298,7 @@ class NameParsingTest {
 
     private BiboPersonName parseSingleAuthor(String authorField) {
         List<BiboPersonName> names = parseAuthors(authorField);
-        return names.get(0);
+        return names.getFirst();
     }
 
     private List<BiboPersonName> parseAuthors(String authorField) {

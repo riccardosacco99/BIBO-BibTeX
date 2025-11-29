@@ -107,7 +107,7 @@ public final class DateValidator {
     public static void validateOrThrow(int year, int month, int day) {
         if (!isValidDate(year, month, day)) {
             throw new DateException(
-                    String.format("Invalid date: %04d-%02d-%02d", year, month, day)
+                    "Invalid date: %04d-%02d-%02d".formatted(year, month, day)
             );
         }
 
@@ -219,7 +219,7 @@ public final class DateValidator {
             int currentYear = LocalDate.now().getYear();
             if (year > currentYear) {
                 throw new DateException(
-                        String.format("Future date not allowed: %04d-%02d-%02d", year, month, day)
+                        "Future date not allowed: %04d-%02d-%02d".formatted(year, month, day)
                 );
             }
         }

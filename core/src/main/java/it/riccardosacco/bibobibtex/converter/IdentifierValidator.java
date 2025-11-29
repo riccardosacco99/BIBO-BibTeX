@@ -1,6 +1,7 @@
 package it.riccardosacco.bibobibtex.converter;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.regex.Pattern;
 
@@ -217,7 +218,7 @@ public final class IdentifierValidator {
             return false;
         }
         try {
-            new URL(urlString.trim());
+            URI.create(urlString.trim()).toURL();
             return true;
         } catch (MalformedURLException e) {
             return false;

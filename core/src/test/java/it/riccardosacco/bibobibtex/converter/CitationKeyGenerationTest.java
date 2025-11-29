@@ -23,7 +23,7 @@ class CitationKeyGenerationTest {
         BiboDocument second = createDocument("Second Study", 2024, "Alice", "Smith");
 
         List<BibTeXEntry> entries = converter.convertFromBiboBatch(List.of(first, second));
-        assertEquals("smith_2024", entries.get(0).getKey().getValue());
+        assertEquals("smith_2024", entries.getFirst().getKey().getValue());
         assertEquals("smith_2024_2", entries.get(1).getKey().getValue());
     }
 
