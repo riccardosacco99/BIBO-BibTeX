@@ -163,7 +163,7 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
             }
             WHERE {
                 ?doc rdf:type ?type .
-                FILTER(STRSTARTS(STR(?type), STR(bibo:)))
+                FILTER(STRSTARTS(STR(?type), "http://purl.org/ontology/bibo/"))
                 ?doc ?p ?o .
                 OPTIONAL {
                     ?doc ?rel ?related .

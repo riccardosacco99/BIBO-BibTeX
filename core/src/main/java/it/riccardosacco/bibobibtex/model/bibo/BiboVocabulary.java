@@ -39,6 +39,13 @@ public final class BiboVocabulary {
     public static final IRI SERIES = iri("series");
     public static final IRI EDITION = iri("edition");
 
+    // Extended metadata (US-16)
+    public static final IRI NUM_PAGES = iri("numPages");
+    public static final IRI PAGE_START = iri("pageStart");
+    public static final IRI PAGE_END = iri("pageEnd");
+    public static final IRI CHAPTER_NUMBER = iri("chapter");
+    public static final IRI STATUS = iri("status");
+
     public static final IRI DOI = iri("doi");
     public static final IRI HANDLE = iri("handle");
     public static final IRI ISSN = iri("issn");

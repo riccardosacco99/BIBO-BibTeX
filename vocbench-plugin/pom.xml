@@ -11,8 +11,13 @@
     </parent>
 
     <artifactId>vocbench-plugin</artifactId>
-    <name>VocBench Plugin Skeleton</name>
-    <description>Scheletro iniziale del plugin VocBench per il convertitore BIBO-BibTeX</description>
+    <name>VocBench BIBO-BibTeX Plugin</name>
+    <description>VocBench plugin for bidirectional BibTeX/BIBO RDF conversion</description>
+
+    <properties>
+        <plugin.name>BIBO-BibTeX Converter</plugin.name>
+        <plugin.vendor>Riccardo Sacco</plugin.vendor>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -58,4 +63,73 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Maven Shade Plugin for uber-JAR creation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Implementation-Title>${plugin.name}</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <Implementation-Vendor>${plugin.vendor}</Implementation-Vendor>
+                                        <Plugin-Name>${plugin.name}</Plugin-Name>
+                                        <Plugin-Description>${project.description}</Plugin-Description>
+                                        <Plugin-Version>${project.version}</Plugin-Version>
+                                        <Built-By>${plugin.vendor}</Built-By>
+                                        <Build-Jdk>${maven.compiler.target}</Build-Jdk>
+                                    </manifestEntries>
+                                </transformer>
+                                <!-- Merge service files for RDF4J -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>all</shadedClassifierName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven JAR Plugin for manifest in regular JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Plugin-Name>${plugin.name}</Plugin-Name>
+                            <Plugin-Description>${project.description}</Plugin-Description>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
