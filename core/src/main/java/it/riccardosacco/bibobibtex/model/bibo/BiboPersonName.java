@@ -48,6 +48,28 @@ public final class BiboPersonName {
         return Optional.ofNullable(suffix);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BiboPersonName that = (BiboPersonName) o;
+        return Objects.equals(fullName, that.fullName)
+                && Objects.equals(givenName, that.givenName)
+                && Objects.equals(middleName, that.middleName)
+                && Objects.equals(nameParticle, that.nameParticle)
+                && Objects.equals(familyName, that.familyName)
+                && Objects.equals(suffix, that.suffix);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fullName, givenName, middleName, nameParticle, familyName, suffix);
+    }
+
     public static final class Builder {
         private final String fullName;
         private String givenName;

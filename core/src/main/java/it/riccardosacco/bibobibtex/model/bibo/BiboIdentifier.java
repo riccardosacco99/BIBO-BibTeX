@@ -19,6 +19,23 @@ public final class BiboIdentifier {
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BiboIdentifier that = (BiboIdentifier) o;
+        return type == that.type && Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, value);
+    }
+
     private static String normalizeRequired(String value, String fieldName) {
         Objects.requireNonNull(value, fieldName);
         String trimmed = value.strip();

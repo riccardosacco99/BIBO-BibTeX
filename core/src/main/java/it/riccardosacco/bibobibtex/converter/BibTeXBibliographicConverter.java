@@ -21,7 +21,7 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -81,10 +81,14 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
                     Map.entry("dec", 12),
                     Map.entry("december", 12));
 
+    private static final int MIN_CITATION_KEY_LENGTH = 3;
+    private static final int MAX_CITATION_KEY_LENGTH = 64;
+
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s+and\\s+", Pattern.CASE_INSENSITIVE);
     private static final Pattern MULTI_VALUE_SEPARATOR = Pattern.compile("[,;]");
     private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^a-z0-9]+");
-    private static final Pattern VALID_CITATION_KEY = Pattern.compile("^[a-zA-Z0-9_-]{3,64}$");
+    private static final Pattern VALID_CITATION_KEY = Pattern.compile(
+            "^[a-zA-Z0-9_-]{" + MIN_CITATION_KEY_LENGTH + "," + MAX_CITATION_KEY_LENGTH + "}$");
     private static final Set<String> PARTICLE_TOKENS =
             Set.of("von", "van", "der", "den", "de", "del", "della", "di", "da", "dos", "das", "du", "le", "la", "ter", "ibn", "bin", "al");
     private static final Set<String> SUFFIX_TOKENS = Set.of("jr", "sr", "iii", "iv", "ii", "v", "phd", "md", "esq");
@@ -125,7 +129,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
     private static final Key TYPE_MANUAL = new Key("manual");
     private static final Key TYPE_UNPUBLISHED = new Key("unpublished");
     private static final Key TYPE_CONFERENCE = new Key("conference");
-    private final Set<String> usedCitationKeys = new HashSet<>();
+    private final Set<String> usedCitationKeys = ConcurrentHashMap.newKeySet();
     private final KeyGenerationStrategy keyStrategy;
 
     public BibTeXBibliographicConverter() {
@@ -423,8 +427,8 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     private static String appendSuffix(String base, int counter) {
         String suffix = "_" + counter;
-        if (base.length() + suffix.length() > 64) {
-            int maxBaseLength = Math.max(3, 64 - suffix.length());
+        if (base.length() + suffix.length() > MAX_CITATION_KEY_LENGTH) {
+            int maxBaseLength = Math.max(MIN_CITATION_KEY_LENGTH, MAX_CITATION_KEY_LENGTH - suffix.length());
             base = base.substring(0, Math.min(base.length(), maxBaseLength));
         }
         return base + suffix;
@@ -517,10 +521,10 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
 
     private static String clampCitationKey(String value) {
         String sanitized = sanitizeForKey(value);
-        if (sanitized.length() > 64) {
-            sanitized = sanitized.substring(0, 64);
+        if (sanitized.length() > MAX_CITATION_KEY_LENGTH) {
+            sanitized = sanitized.substring(0, MAX_CITATION_KEY_LENGTH);
         }
-        while (sanitized.length() < 3) {
+        while (sanitized.length() < MIN_CITATION_KEY_LENGTH) {
             sanitized = sanitized + "_x";
         }
         return sanitized;
@@ -1109,7 +1113,7 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         literal(model, subject, BiboVocabulary.PAGES).ifPresent(builder::pages);
         literal(model, subject, BiboVocabulary.SERIES).ifPresent(builder::series);
         literal(model, subject, BiboVocabulary.EDITION).ifPresent(builder::edition);
-        literal(model, subject, BiboVocabulary.DEGREE_TYPE).ifPresent(builder::degreeType);
+        literal(model, subject, BiboVocabulary.DEGREE).ifPresent(builder::degreeType);
 
         containerTitle(model, subject).ifPresent(builder::containerTitle);
         conferenceLocation(model, subject).ifPresent(builder::conferenceLocation);

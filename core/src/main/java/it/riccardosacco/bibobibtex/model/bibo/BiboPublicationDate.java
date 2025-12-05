@@ -65,6 +65,25 @@ public final class BiboPublicationDate {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BiboPublicationDate that = (BiboPublicationDate) o;
+        return year == that.year
+                && Objects.equals(month, that.month)
+                && Objects.equals(day, that.day);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(year, month, day);
+    }
+
     private static int validateYear(int year) {
         if (year <= 0) {
             throw new IllegalArgumentException("year must be positive");

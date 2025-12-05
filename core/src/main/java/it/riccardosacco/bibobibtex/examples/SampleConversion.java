@@ -21,8 +21,8 @@ import org.jbibtex.ObjectResolutionException;
 import org.jbibtex.ParseException;
 
 /**
- * Piccolo programma dimostrativo che converte un file BibTeX in RDF (BIBO) sfruttando il core
- * converter. Viene generato un file Turtle per ogni entry trovata.
+ * Sample program demonstrating BibTeX to RDF (BIBO) conversion using the core converter.
+ * Generates a Turtle file for each entry found.
  */
 public final class SampleConversion {
     private SampleConversion() {
@@ -72,7 +72,7 @@ public final class SampleConversion {
             Collection<BibTeXEntry> entries = database.getEntries().values();
 
             if (entries.isEmpty()) {
-                System.out.println("Nessuna entry trovata in " + input);
+                System.out.println("No entries found in " + input);
                 return;
             }
 
@@ -81,7 +81,7 @@ public final class SampleConversion {
             for (BibTeXEntry entry : entries) {
                 Optional<BiboDocument> document = converter.convertToBibo(entry);
                 if (document.isEmpty()) {
-                    System.out.println("Entry ignorata perché non convertibile: " + entry);
+                    System.out.println("Entry skipped (not convertible): " + entry);
                     continue;
                 }
 
@@ -101,6 +101,6 @@ public final class SampleConversion {
             Rio.write(model, writer, RDFFormat.TURTLE);
         }
 
-        System.out.printf("Generato %s con %d triple%n", outputFile, model.size());
+        System.out.printf("Generated %s with %d triples%n", outputFile, model.size());
     }
 }

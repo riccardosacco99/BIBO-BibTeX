@@ -288,7 +288,7 @@ public final class BibTeXUnicodeConverter {
     private static String replaceUnbracedPattern(String input, String regex, String accent) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (matcher.find()) {
             String letter = matcher.group(1);

@@ -30,6 +30,25 @@ public final class BiboContributor {
         return Optional.ofNullable(affiliation);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BiboContributor that = (BiboContributor) o;
+        return Objects.equals(name, that.name)
+                && role == that.role
+                && Objects.equals(affiliation, that.affiliation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, role, affiliation);
+    }
+
     private static String normalizeOptional(String value) {
         if (value == null) {
             return null;

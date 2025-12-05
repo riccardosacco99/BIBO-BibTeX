@@ -203,6 +203,48 @@ public final class BiboDocument {
         return resource;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        BiboDocument that = (BiboDocument) o;
+        return type == that.type
+                && Objects.equals(id, that.id)
+                && Objects.equals(title, that.title)
+                && Objects.equals(subtitle, that.subtitle)
+                && Objects.equals(contributors, that.contributors)
+                && Objects.equals(publicationDate, that.publicationDate)
+                && Objects.equals(publisher, that.publisher)
+                && Objects.equals(placeOfPublication, that.placeOfPublication)
+                && Objects.equals(conferenceLocation, that.conferenceLocation)
+                && Objects.equals(conferenceOrganizer, that.conferenceOrganizer)
+                && Objects.equals(degreeType, that.degreeType)
+                && Objects.equals(containerTitle, that.containerTitle)
+                && Objects.equals(volume, that.volume)
+                && Objects.equals(issue, that.issue)
+                && Objects.equals(pages, that.pages)
+                && Objects.equals(identifiers, that.identifiers)
+                && Objects.equals(url, that.url)
+                && Objects.equals(language, that.language)
+                && Objects.equals(abstractText, that.abstractText)
+                && Objects.equals(notes, that.notes)
+                && Objects.equals(series, that.series)
+                && Objects.equals(edition, that.edition)
+                && Objects.equals(keywords, that.keywords);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, id, title, subtitle, contributors, publicationDate,
+                publisher, placeOfPublication, conferenceLocation, conferenceOrganizer,
+                degreeType, containerTitle, volume, issue, pages, identifiers,
+                url, language, abstractText, notes, series, edition, keywords);
+    }
+
     /**
      * Serializes this document to Turtle format (pretty-printed).
      *
@@ -247,7 +289,8 @@ public final class BiboDocument {
 
             Rio.write(model, rdfWriter);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to write RDF in format " + format, e);
+            throw new it.riccardosacco.bibobibtex.exception.BibliographicConversionException(
+                    "Failed to write RDF in format " + format, e);
         }
     }
 
@@ -501,9 +544,6 @@ public final class BiboDocument {
             keywords.forEach(keyword ->
                 model.add(subject, DCTERMS.SUBJECT, VF.createLiteral(keyword))
             );
-            if (degreeType != null) {
-                model.add(subject, BiboVocabulary.DEGREE_TYPE, VF.createLiteral(degreeType));
-            }
 
             return new BiboDocument(this, subject, model);
         }

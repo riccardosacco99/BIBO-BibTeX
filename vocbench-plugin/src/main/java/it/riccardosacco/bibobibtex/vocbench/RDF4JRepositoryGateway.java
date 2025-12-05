@@ -98,9 +98,9 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
         // TODO: Full RDF -> BiboDocument conversion will be implemented in Phase 7.B
         // For now, this is a placeholder that verifies the document exists
 
-        String sparqlQuery = "ASK WHERE { ?doc <%s> \"%s\" }".formatted(
+        String sparqlQuery = "ASK WHERE { ?doc <%s> ?id . FILTER(str(?id) = \"%s\") }".formatted(
                 DCTERMS.IDENTIFIER,
-                identifier.replace("\"", "\\\"")
+                escapeSparqlString(identifier)
         );
 
         try (RepositoryConnection conn = repository.getConnection()) {
@@ -214,5 +214,24 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
             logger.warn("Repository availability check failed", e);
             return false;
         }
+    }
+
+    /**
+     * Escapes a string for safe use in SPARQL queries.
+     * Handles backslashes, quotes, newlines, and other special characters.
+     *
+     * @param value the string to escape
+     * @return the escaped string safe for SPARQL
+     */
+    private static String escapeSparqlString(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

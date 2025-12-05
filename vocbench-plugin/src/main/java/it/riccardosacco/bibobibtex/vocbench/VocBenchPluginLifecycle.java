@@ -134,6 +134,9 @@ public final class VocBenchPluginLifecycle {
         original.publicationDate().ifPresent(builder::publicationDate);
         original.publisher().ifPresent(builder::publisher);
         original.placeOfPublication().ifPresent(builder::placeOfPublication);
+        original.conferenceLocation().ifPresent(builder::conferenceLocation);
+        original.conferenceOrganizer().ifPresent(builder::conferenceOrganizer);
+        original.degreeType().ifPresent(builder::degreeType);
         original.containerTitle().ifPresent(builder::containerTitle);
         original.volume().ifPresent(builder::volume);
         original.issue().ifPresent(builder::issue);
