@@ -1,10 +1,7 @@
 package it.riccardosacco.bibobibtex.vocbench.integration;
 
-import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import it.riccardosacco.bibobibtex.vocbench.RDF4JRepositoryGateway;
 import it.riccardosacco.bibobibtex.vocbench.api.BibTeXApiService;
-import it.riccardosacco.bibobibtex.vocbench.api.ExportRequest;
-import it.riccardosacco.bibobibtex.vocbench.api.ExportResult;
 import it.riccardosacco.bibobibtex.vocbench.api.ImportRequest;
 import it.riccardosacco.bibobibtex.vocbench.api.ImportResult;
 import org.eclipse.rdf4j.repository.sail.SailRepository;
@@ -13,8 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

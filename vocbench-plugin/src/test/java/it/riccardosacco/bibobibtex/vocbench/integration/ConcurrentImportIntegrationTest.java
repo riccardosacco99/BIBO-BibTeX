@@ -90,7 +90,6 @@ class ConcurrentImportIntegrationTest {
         }
 
         // Verify total entries stored
-        int expectedTotal = threadCount * entriesPerThread;
         List<BiboDocument> stored = gateway.listAll();
 
         // Due to concurrent access, some entries might have unique key conflicts
