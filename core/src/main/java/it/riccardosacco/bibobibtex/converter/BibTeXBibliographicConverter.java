@@ -1086,12 +1086,15 @@ public class BibTeXBibliographicConverter implements BibliographicConverter<BibT
         String title = literal(model, subject, DCTERMS.TITLE)
                 .orElseThrow(() -> new ValidationException("Document title is required in RDF source"));
 
+        // Collect all type IRIs, filtering out bibo:Document (generic) to prefer specific types
         BiboDocumentType type =
                 model.filter(subject, RDF.TYPE, null).objects().stream()
                         .filter(value -> value instanceof IRI)
                         .map(value -> (IRI) value)
+                        .filter(iri -> !iri.equals(BiboVocabulary.DOCUMENT)) // Skip generic bibo:Document
                         .map(BiboDocumentType::fromIri)
                         .filter(candidate -> candidate != BiboDocumentType.OTHER)
+                        .filter(candidate -> candidate != BiboDocumentType.BOOKLET) // BOOKLET also uses bibo:Document
                         .findFirst()
                         .orElse(BiboDocumentType.OTHER);
 

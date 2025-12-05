@@ -57,9 +57,10 @@ class RDF4JRepositoryGatewayTest {
 
         gateway.store(doc.rdfModel());
 
-        // Note: fetchByIdentifier returns empty until Phase 7.B (RDF->BiboDocument conversion)
-        // For now we just verify store doesn't throw
-        assertDoesNotThrow(() -> gateway.fetchByIdentifier("doc1"));
+        // Verify document can be fetched back
+        Optional<BiboDocument> fetched = gateway.fetchByIdentifier("doc1");
+        assertTrue(fetched.isPresent(), "Document should be retrievable after store");
+        assertEquals("Test Article", fetched.get().title());
     }
 
     @Test
@@ -68,15 +69,14 @@ class RDF4JRepositoryGatewayTest {
         BiboDocument doc2 = createTestDocument("doc2", "Second Article");
         BiboDocument doc3 = createTestDocument("doc3", "Third Article");
 
-        assertDoesNotThrow(() -> {
-            gateway.store(doc1.rdfModel());
-            gateway.store(doc2.rdfModel());
-            gateway.store(doc3.rdfModel());
-        });
+        gateway.store(doc1.rdfModel());
+        gateway.store(doc2.rdfModel());
+        gateway.store(doc3.rdfModel());
 
-        // listAll() returns empty until Phase 7.B
+        // Verify all documents can be listed
         List<BiboDocument> all = gateway.listAll();
         assertNotNull(all);
+        assertEquals(3, all.size(), "Should retrieve all 3 documents");
     }
 
     @Test
@@ -102,14 +102,17 @@ class RDF4JRepositoryGatewayTest {
     }
 
     // Fetch tests (3 tests)
-    // Note: Full RDF->BiboDocument conversion in Phase 7.B, these test basic functionality
 
     @Test
-    void fetchByIdentifier_existingDocument_doesNotThrow() {
+    void fetchByIdentifier_existingDocument_returnsDocument() {
         BiboDocument doc = createTestDocument("test-doc", "Test Document");
         gateway.store(doc.rdfModel());
 
-        assertDoesNotThrow(() -> gateway.fetchByIdentifier("test-doc"));
+        Optional<BiboDocument> fetched = gateway.fetchByIdentifier("test-doc");
+
+        assertTrue(fetched.isPresent(), "Document should be found");
+        assertEquals("Test Document", fetched.get().title());
+        assertEquals(BiboDocumentType.ARTICLE, fetched.get().type());
     }
 
     @Test
@@ -128,7 +131,6 @@ class RDF4JRepositoryGatewayTest {
     }
 
     // ListAll tests (3 tests)
-    // Note: Full RDF->BiboDocument conversion in Phase 7.B, these test basic functionality
 
     @Test
     void listAll_emptyRepository_returnsEmptyList() {
@@ -139,22 +141,27 @@ class RDF4JRepositoryGatewayTest {
     }
 
     @Test
-    void listAll_singleDocument_doesNotThrow() {
+    void listAll_singleDocument_returnsDocument() {
         BiboDocument doc = createTestDocument("single-doc", "Single Document");
         gateway.store(doc.rdfModel());
 
-        assertDoesNotThrow(() -> gateway.listAll());
+        List<BiboDocument> result = gateway.listAll();
+
+        assertEquals(1, result.size());
+        assertEquals("Single Document", result.getFirst().title());
     }
 
     @Test
-    void listAll_manyDocuments_doesNotThrow() {
+    void listAll_manyDocuments_returnsAll() {
         // Create and store 10 documents
         for (int i = 0; i < 10; i++) {
             BiboDocument doc = createTestDocument("doc-" + i, "Document " + i);
             gateway.store(doc.rdfModel());
         }
 
-        assertDoesNotThrow(() -> gateway.listAll());
+        List<BiboDocument> result = gateway.listAll();
+
+        assertEquals(10, result.size(), "Should retrieve all 10 documents");
     }
 
     // Transaction tests (2 tests)

@@ -1,8 +1,10 @@
 package it.riccardosacco.bibobibtex.vocbench;
 
+import it.riccardosacco.bibobibtex.converter.BibTeXBibliographicConverter;
+import it.riccardosacco.bibobibtex.model.bibo.BiboDocument;
 import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.vocabulary.DCTERMS;
-import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
+import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.eclipse.rdf4j.query.QueryLanguage;
 import org.eclipse.rdf4j.repository.Repository;
 import org.eclipse.rdf4j.repository.RepositoryConnection;
@@ -28,6 +30,7 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
 
     private final Repository repository;
     private final boolean managedLifecycle;
+    private final BibTeXBibliographicConverter converter;
 
     /**
      * Creates gateway with existing repository.
@@ -37,6 +40,7 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
     public RDF4JRepositoryGateway(Repository repository) {
         this.repository = Objects.requireNonNull(repository, "repository");
         this.managedLifecycle = false;
+        this.converter = new BibTeXBibliographicConverter();
 
         if (!repository.isInitialized()) {
             repository.init();
@@ -60,6 +64,7 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
         NativeStore nativeStore = new NativeStore(dataDirFile);
         this.repository = new SailRepository(nativeStore);
         this.managedLifecycle = true;
+        this.converter = new BibTeXBibliographicConverter();
 
         try {
             repository.init();
@@ -90,30 +95,53 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
     }
 
     @Override
-    public Optional<it.riccardosacco.bibobibtex.model.bibo.BiboDocument> fetchByIdentifier(String identifier) {
+    public Optional<BiboDocument> fetchByIdentifier(String identifier) {
         Objects.requireNonNull(identifier, "identifier");
 
         logger.info("Fetching document by identifier: {}", identifier);
 
-        // TODO: Full RDF -> BiboDocument conversion will be implemented in Phase 7.B
-        // For now, this is a placeholder that verifies the document exists
-
-        String sparqlQuery = "ASK WHERE { ?doc <%s> ?id . FILTER(str(?id) = \"%s\") }".formatted(
-                DCTERMS.IDENTIFIER,
-                escapeSparqlString(identifier)
-        );
+        // SPARQL CONSTRUCT query to extract all triples related to the document
+        String sparqlQuery = """
+            PREFIX dcterms: <http://purl.org/dc/terms/>
+            CONSTRUCT {
+                ?doc ?p ?o .
+                ?related ?rp ?ro .
+            }
+            WHERE {
+                ?doc dcterms:identifier ?id .
+                FILTER(str(?id) = "%s")
+                ?doc ?p ?o .
+                OPTIONAL {
+                    ?doc ?rel ?related .
+                    FILTER(isBlank(?related) || (isIRI(?related) && ?rel = dcterms:isPartOf))
+                    ?related ?rp ?ro .
+                }
+            }
+            """.formatted(escapeSparqlString(identifier));
 
         try (RepositoryConnection conn = repository.getConnection()) {
-            boolean exists = conn.prepareBooleanQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate();
+            Model model = new LinkedHashModel();
+            try (GraphQueryResult result = conn.prepareGraphQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate()) {
+                while (result.hasNext()) {
+                    model.add(result.next());
+                }
+            }
 
-            if (!exists) {
+            if (model.isEmpty()) {
                 logger.warn("No document found with identifier: {}", identifier);
                 return Optional.empty();
             }
 
-            logger.info("Document found (placeholder returned)");
-            logger.warn("Full RDF->BiboDocument conversion not yet implemented (Phase 7.B)");
-            return Optional.empty(); // Placeholder until Phase 7.B
+            logger.debug("Retrieved {} statements for document: {}", model.size(), identifier);
+
+            List<BiboDocument> documents = converter.convertAllFromRDF(model);
+            if (documents.isEmpty()) {
+                logger.warn("Could not convert RDF to BiboDocument for identifier: {}", identifier);
+                return Optional.empty();
+            }
+
+            logger.info("Successfully fetched and converted document: {}", identifier);
+            return Optional.of(documents.getFirst());
         } catch (Exception e) {
             logger.error("Failed to fetch document by identifier: {}", identifier, e);
             throw new RepositoryException("Failed to fetch document: " + identifier, e);
@@ -121,28 +149,48 @@ public class RDF4JRepositoryGateway implements VocBenchRepositoryGateway {
     }
 
     @Override
-    public List<it.riccardosacco.bibobibtex.model.bibo.BiboDocument> listAll() {
+    public List<BiboDocument> listAll() {
         logger.info("Listing all documents in repository");
 
-        // TODO: Full RDF -> BiboDocument conversion will be implemented in Phase 7.B
-        // For now, return empty list
-
-        String sparqlQuery = "SELECT (COUNT(DISTINCT ?doc) AS ?count) WHERE { ?doc <%s> ?type }".formatted(
-                RDF.TYPE
-        );
+        // SPARQL CONSTRUCT query to extract all BIBO documents with their related data
+        String sparqlQuery = """
+            PREFIX bibo: <http://purl.org/ontology/bibo/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX dcterms: <http://purl.org/dc/terms/>
+            CONSTRUCT {
+                ?doc ?p ?o .
+                ?related ?rp ?ro .
+            }
+            WHERE {
+                ?doc rdf:type ?type .
+                FILTER(STRSTARTS(STR(?type), STR(bibo:)))
+                ?doc ?p ?o .
+                OPTIONAL {
+                    ?doc ?rel ?related .
+                    FILTER(isBlank(?related) || (isIRI(?related) && ?rel = dcterms:isPartOf))
+                    ?related ?rp ?ro .
+                }
+            }
+            """;
 
         try (RepositoryConnection conn = repository.getConnection()) {
-            long count = conn.prepareTupleQuery(QueryLanguage.SPARQL, sparqlQuery)
-                .evaluate()
-                .stream()
-                .findFirst()
-                .map(bindings -> bindings.getValue("count"))
-                .map(value -> Long.parseLong(value.stringValue()))
-                .orElse(0L);
+            Model model = new LinkedHashModel();
+            try (GraphQueryResult result = conn.prepareGraphQuery(QueryLanguage.SPARQL, sparqlQuery).evaluate()) {
+                while (result.hasNext()) {
+                    model.add(result.next());
+                }
+            }
 
-            logger.info("Found {} documents in repository (placeholder returned empty list)", count);
-            logger.warn("Full RDF->BiboDocument conversion not yet implemented (Phase 7.B)");
-            return List.of(); // Placeholder until Phase 7.B
+            if (model.isEmpty()) {
+                logger.info("No documents found in repository");
+                return List.of();
+            }
+
+            logger.debug("Retrieved {} statements from repository", model.size());
+
+            List<BiboDocument> documents = converter.convertAllFromRDF(model);
+            logger.info("Successfully converted {} documents from repository", documents.size());
+            return documents;
         } catch (Exception e) {
             logger.error("Failed to list all documents", e);
             throw new RepositoryException("Failed to list documents", e);

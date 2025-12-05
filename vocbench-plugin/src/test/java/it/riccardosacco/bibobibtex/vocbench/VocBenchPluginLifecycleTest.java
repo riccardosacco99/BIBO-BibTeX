@@ -67,10 +67,11 @@ class VocBenchPluginLifecycleTest {
         // Store document in repository
         gateway.store(document.rdfModel());
 
-        // Note: fetchByIdentifier returns empty until Phase 7.B (RDF->BiboDocument conversion)
-        // This test verifies the lifecycle workflow, actual fetch will work in Phase 7.B
+        // Fetch document by identifier and verify roundtrip
         Optional<BiboDocument> fetched = gateway.fetchByIdentifier("article-1");
-        assertTrue(fetched.isEmpty()); // Expected until Phase 7.B
+        assertTrue(fetched.isPresent(), "Document should be fetched from repository");
+        assertTrue(fetched.get().title().equals("Article Example"), "Title should match");
+        assertTrue(fetched.get().type() == BiboDocumentType.ARTICLE, "Type should match");
 
         // Verify repository is functional
         assertTrue(gateway.isAvailable());
