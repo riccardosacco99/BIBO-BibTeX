@@ -415,18 +415,79 @@ La conversione BIBO→BibTeX è **intrinsecamente lossy** a causa delle differen
 
 ---
 
+## BIBO Extension Ontology
+
+To address some of the limitations documented above, this project provides a **BIBO Extension Ontology** (`ontology/bibo-ext.owl`) that introduces additional properties and classes not present in the standard BIBO vocabulary.
+
+### Extended Identifier Properties
+
+The extension defines additional identifier types commonly used in academic publishing:
+
+| Property | Description |
+|----------|-------------|
+| `bibo-ext:eissn` | Electronic ISSN for online serials |
+| `bibo-ext:pmid` | PubMed Identifier for biomedical literature |
+| `bibo-ext:pmcid` | PubMed Central Identifier |
+| `bibo-ext:arxivId` | arXiv preprint identifier |
+| `bibo-ext:mr` | Mathematical Reviews number |
+| `bibo-ext:zbl` | Zentralblatt MATH identifier |
+
+### Author Metadata Extensions
+
+| Property | Description |
+|----------|-------------|
+| `bibo-ext:orcid` | ORCID identifier for researchers |
+| `bibo-ext:affiliation` | Links person to organization (object property) |
+| `bibo-ext:affiliationName` | Affiliation name as literal string |
+
+### Extended Document Types
+
+| Class | Description |
+|-------|-------------|
+| `bibo-ext:Dataset` | Research datasets |
+| `bibo-ext:Software` | Software/code references |
+| `bibo-ext:Preprint` | Pre-peer-review articles |
+| `bibo-ext:Standard` | Technical standards (ISO, IEEE, W3C) |
+| `bibo-ext:Online` | Online-only resources |
+
+### BibTeX-Specific Properties
+
+| Property | Description |
+|----------|-------------|
+| `bibo-ext:howpublished` | BibTeX @misc publication method |
+| `bibo-ext:crossref` | Cross-reference to parent entry |
+| `bibo-ext:key` | Sort/label key for citations |
+| `bibo-ext:annotation` | Entry annotations |
+| `bibo-ext:keywords` | Document keywords |
+| `bibo-ext:language` | Document language |
+| `bibo-ext:version` | Document/software version |
+
+### Usage
+
+The extension ontology is available at `ontology/bibo-ext.owl` and uses the namespace:
+
+```
+http://purl.org/ontology/bibo-ext/
+```
+
+Java constants for these properties are defined in `BiboVocabulary.java` with the `EXT_` prefix (e.g., `BiboVocabulary.EXT_ORCID`).
+
+---
+
 ## References
 
 1. **BIBO Specification**: http://purl.org/ontology/bibo/
-2. **BibTeX.com Entry Types**: https://www.bibtex.com/e/entry-types/
-3. **Dublin Core Metadata Terms**: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/
-4. **FOAF Vocabulary**: http://xmlns.com/foaf/spec/
-5. **ISO 8601 Date Format**: https://www.iso.org/iso-8601-date-and-time-format.html
+2. **BIBO Extension Ontology**: `ontology/bibo-ext.owl` (this project)
+3. **BibTeX.com Entry Types**: https://www.bibtex.com/e/entry-types/
+4. **Dublin Core Metadata Terms**: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/
+5. **FOAF Vocabulary**: http://xmlns.com/foaf/spec/
+6. **ISO 8601 Date Format**: https://www.iso.org/iso-8601-date-and-time-format.html
 
 ---
 
 ## Changelog
 
+- **2025-12-12**: Added BIBO Extension Ontology section documenting bibo-ext vocabulary
 - **2025-11-15**: Initial creation (Sprint 02, US-23)
 - Document includes 5 detailed information loss scenarios
 - Italian thesis material section added

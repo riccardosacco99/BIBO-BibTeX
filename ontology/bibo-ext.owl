@@ -1,0 +1,237 @@
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc:       <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix bibo:     <http://purl.org/ontology/bibo/> .
+@prefix foaf:     <http://xmlns.com/foaf/0.1/> .
+@prefix bibo-ext: <http://purl.org/ontology/bibo-ext/> .
+
+# =============================================================================
+# BIBO Extension Ontology
+# =============================================================================
+#
+# This ontology extends the Bibliographic Ontology (BIBO) with additional
+# properties and classes needed for complete BibTeX interoperability.
+#
+# These extensions address gaps in the standard BIBO vocabulary that prevent
+# full round-trip conversion with BibTeX bibliographic entries.
+# =============================================================================
+
+<http://purl.org/ontology/bibo-ext/>
+    a owl:Ontology ;
+    dc:title "BIBO Extension Ontology"@en ;
+    dc:description "Extensions to the Bibliographic Ontology (BIBO) for enhanced BibTeX interoperability"@en ;
+    dc:creator "Riccardo Sacco" ;
+    dc:date "2025"^^xsd:gYear ;
+    owl:versionInfo "1.0.0" ;
+    owl:imports <http://purl.org/ontology/bibo/> .
+
+# =============================================================================
+# Extended Identifier Properties
+# =============================================================================
+# These properties capture identifier types not present in standard BIBO.
+# All are defined as subproperties of bibo:identifier for compatibility.
+# =============================================================================
+
+bibo-ext:eissn
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "eISSN"@en ;
+    rdfs:comment "Electronic International Standard Serial Number. The ISSN for the electronic version of a serial publication."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:pmid
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "PMID"@en ;
+    rdfs:comment "PubMed Identifier. A unique identifier assigned to articles indexed in PubMed/MEDLINE."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:pmcid
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "PMCID"@en ;
+    rdfs:comment "PubMed Central Identifier. A unique identifier for articles in the PubMed Central archive."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:arxivId
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "arXiv ID"@en ;
+    rdfs:comment "arXiv preprint identifier. Format: YYMM.NNNNN or archive/YYMMNNN for older entries."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:mr
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "MR Number"@en ;
+    rdfs:comment "Mathematical Reviews identifier from the American Mathematical Society."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:zbl
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf bibo:identifier ;
+    rdfs:label "Zentralblatt MATH"@en ;
+    rdfs:comment "Zentralblatt MATH identifier for mathematical publications."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# Author/Contributor Metadata Properties
+# =============================================================================
+# These properties enhance contributor descriptions beyond FOAF capabilities.
+# =============================================================================
+
+bibo-ext:orcid
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dcterms:identifier ;
+    rdfs:label "ORCID"@en ;
+    rdfs:comment "Open Researcher and Contributor ID. A persistent digital identifier for researchers. Format: XXXX-XXXX-XXXX-XXXX."@en ;
+    rdfs:domain foaf:Person ;
+    rdfs:range xsd:string .
+
+bibo-ext:affiliation
+    a owl:ObjectProperty ;
+    rdfs:label "affiliation"@en ;
+    rdfs:comment "The organizational affiliation of a person, typically their institution or employer at the time of publication."@en ;
+    rdfs:domain foaf:Person ;
+    rdfs:range foaf:Organization .
+
+bibo-ext:affiliationName
+    a owl:DatatypeProperty ;
+    rdfs:label "affiliation name"@en ;
+    rdfs:comment "The name of an organization with which a person is affiliated, when a full Organization resource is not needed."@en ;
+    rdfs:domain foaf:Person ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# Extended Document Types
+# =============================================================================
+# Document types not present in standard BIBO but commonly found in BibTeX.
+# =============================================================================
+
+bibo-ext:Dataset
+    a owl:Class ;
+    rdfs:subClassOf bibo:Document ;
+    rdfs:label "Dataset"@en ;
+    rdfs:comment "A collection of data, typically structured for computational analysis. Maps to BibTeX @dataset entries."@en .
+
+bibo-ext:Software
+    a owl:Class ;
+    rdfs:subClassOf bibo:Document ;
+    rdfs:label "Software"@en ;
+    rdfs:comment "A computer program or code. Maps to BibTeX @software entries."@en .
+
+bibo-ext:Preprint
+    a owl:Class ;
+    rdfs:subClassOf bibo:Article ;
+    rdfs:label "Preprint"@en ;
+    rdfs:comment "A version of a scholarly article that precedes formal peer review and publication. Often found on repositories like arXiv or bioRxiv."@en .
+
+bibo-ext:Standard
+    a owl:Class ;
+    rdfs:subClassOf bibo:Document ;
+    rdfs:label "Standard"@en ;
+    rdfs:comment "A technical standard or specification document, typically issued by a standards body (ISO, IEEE, W3C, etc.)."@en .
+
+bibo-ext:Online
+    a owl:Class ;
+    rdfs:subClassOf bibo:Document ;
+    rdfs:label "Online Resource"@en ;
+    rdfs:comment "A document primarily available online, not fitting other categories. Maps to BibTeX @online entries."@en .
+
+# =============================================================================
+# BibTeX-specific Metadata Properties
+# =============================================================================
+# Properties that capture BibTeX fields with no direct BIBO equivalent.
+# =============================================================================
+
+bibo-ext:howpublished
+    a owl:DatatypeProperty ;
+    rdfs:label "how published"@en ;
+    rdfs:comment "Describes how something unusual has been published. Used in BibTeX @misc entries."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:crossref
+    a owl:ObjectProperty ;
+    rdfs:label "cross-reference"@en ;
+    rdfs:comment "Reference to a parent entry from which fields are inherited, corresponding to BibTeX crossref field."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range bibo:Document .
+
+bibo-ext:key
+    a owl:DatatypeProperty ;
+    rdfs:label "sort key"@en ;
+    rdfs:comment "Used for alphabetizing, cross-referencing, and creating a label when author and editor are missing. Corresponds to BibTeX key field."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:annotation
+    a owl:DatatypeProperty ;
+    rdfs:label "annotation"@en ;
+    rdfs:comment "An annotation or note about the bibliographic entry, typically not displayed in the bibliography."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:keywords
+    a owl:DatatypeProperty ;
+    rdfs:label "keywords"@en ;
+    rdfs:comment "Keywords or key phrases describing the content of the document."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:language
+    a owl:DatatypeProperty ;
+    rdfs:label "language"@en ;
+    rdfs:comment "The language(s) of the document. Corresponds to BibTeX language field."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+bibo-ext:version
+    a owl:DatatypeProperty ;
+    rdfs:label "version"@en ;
+    rdfs:comment "The version number of a document, software, or dataset."@en ;
+    rdfs:domain bibo:Document ;
+    rdfs:range xsd:string .
+
+# =============================================================================
+# Publication Venue Properties
+# =============================================================================
+# Enhanced properties for describing publication context.
+# =============================================================================
+
+bibo-ext:journalSubtitle
+    a owl:DatatypeProperty ;
+    rdfs:label "journal subtitle"@en ;
+    rdfs:comment "The subtitle of a journal or periodical."@en ;
+    rdfs:domain bibo:Periodical ;
+    rdfs:range xsd:string .
+
+bibo-ext:shortJournal
+    a owl:DatatypeProperty ;
+    rdfs:label "short journal"@en ;
+    rdfs:comment "The abbreviated form of a journal title (e.g., 'J. ACM' for 'Journal of the ACM')."@en ;
+    rdfs:domain bibo:Periodical ;
+    rdfs:range xsd:string .
+
+bibo-ext:eventTitle
+    a owl:DatatypeProperty ;
+    rdfs:label "event title"@en ;
+    rdfs:comment "The title of an event (conference, workshop, symposium) associated with a publication."@en ;
+    rdfs:domain bibo:Event ;
+    rdfs:range xsd:string .
+
+bibo-ext:venue
+    a owl:DatatypeProperty ;
+    rdfs:label "venue"@en ;
+    rdfs:comment "The location or venue where an event took place."@en ;
+    rdfs:domain bibo:Event ;
+    rdfs:range xsd:string .

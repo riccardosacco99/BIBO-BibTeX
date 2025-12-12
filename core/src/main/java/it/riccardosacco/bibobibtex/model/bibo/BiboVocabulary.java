@@ -9,8 +9,13 @@ import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 public final class BiboVocabulary {
     private static final ValueFactory VF = SimpleValueFactory.getInstance();
 
+    // Standard BIBO namespace
     public static final String NAMESPACE = "http://purl.org/ontology/bibo/";
     public static final Namespace NS = new SimpleNamespace("bibo", NAMESPACE);
+
+    // BIBO Extension namespace (for properties not in standard BIBO)
+    public static final String EXT_NAMESPACE = "http://purl.org/ontology/bibo-ext/";
+    public static final Namespace EXT_NS = new SimpleNamespace("bibo-ext", EXT_NAMESPACE);
 
     private BiboVocabulary() {
         // utility class
@@ -18,6 +23,10 @@ public final class BiboVocabulary {
 
     private static IRI iri(String localName) {
         return VF.createIRI(NAMESPACE, localName);
+    }
+
+    private static IRI extIri(String localName) {
+        return VF.createIRI(EXT_NAMESPACE, localName);
     }
 
     public static final IRI DOCUMENT = iri("Document");
@@ -70,4 +79,43 @@ public final class BiboVocabulary {
     public static final IRI ORGANIZER = iri("organizer");
     public static final IRI DEGREE = iri("degree");
     public static final IRI THESIS_DEGREE = iri("ThesisDegree");
+
+    // =========================================================================
+    // BIBO Extension (bibo-ext:) - Properties not in standard BIBO
+    // =========================================================================
+
+    // Extended identifier properties
+    public static final IRI EXT_EISSN = extIri("eissn");
+    public static final IRI EXT_PMID = extIri("pmid");
+    public static final IRI EXT_PMCID = extIri("pmcid");
+    public static final IRI EXT_ARXIV_ID = extIri("arxivId");
+    public static final IRI EXT_MR = extIri("mr");
+    public static final IRI EXT_ZBL = extIri("zbl");
+
+    // Author/contributor metadata
+    public static final IRI EXT_ORCID = extIri("orcid");
+    public static final IRI EXT_AFFILIATION = extIri("affiliation");
+    public static final IRI EXT_AFFILIATION_NAME = extIri("affiliationName");
+
+    // Extended document types
+    public static final IRI EXT_DATASET = extIri("Dataset");
+    public static final IRI EXT_SOFTWARE = extIri("Software");
+    public static final IRI EXT_PREPRINT = extIri("Preprint");
+    public static final IRI EXT_STANDARD = extIri("Standard");
+    public static final IRI EXT_ONLINE = extIri("Online");
+
+    // BibTeX-specific metadata
+    public static final IRI EXT_HOWPUBLISHED = extIri("howpublished");
+    public static final IRI EXT_CROSSREF = extIri("crossref");
+    public static final IRI EXT_KEY = extIri("key");
+    public static final IRI EXT_ANNOTATION = extIri("annotation");
+    public static final IRI EXT_KEYWORDS = extIri("keywords");
+    public static final IRI EXT_LANGUAGE = extIri("language");
+    public static final IRI EXT_VERSION = extIri("version");
+
+    // Publication venue properties
+    public static final IRI EXT_JOURNAL_SUBTITLE = extIri("journalSubtitle");
+    public static final IRI EXT_SHORT_JOURNAL = extIri("shortJournal");
+    public static final IRI EXT_EVENT_TITLE = extIri("eventTitle");
+    public static final IRI EXT_VENUE = extIri("venue");
 }
