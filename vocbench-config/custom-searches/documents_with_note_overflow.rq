@@ -1,0 +1,14 @@
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+# documents_with_note_overflow.rq
+# Documenti con metadati nel campo note (da conversion lossy)
+SELECT ?doc ?title ?note WHERE {
+  ?doc a bibo:Document ;
+       dcterms:title ?title ;
+       rdfs:comment ?note .
+  FILTER(CONTAINS(?note, "Series:") ||
+         CONTAINS(?note, "ORCID:") ||
+         CONTAINS(?note, "eISSN:"))
+}

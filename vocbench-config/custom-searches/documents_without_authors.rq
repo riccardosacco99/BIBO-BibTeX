@@ -1,0 +1,10 @@
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+# documents_without_authors.rq
+SELECT ?doc ?title WHERE {
+  ?doc a bibo:Document ;
+       dcterms:title ?title .
+  FILTER NOT EXISTS { ?doc bibo:authorList ?authors }
+  FILTER NOT EXISTS { ?doc dcterms:creator ?creator }
+}

@@ -1,0 +1,35 @@
+@prefix : <http://example.org/test/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# 1. Document without Identifier
+:docNoId a bibo:Document ;
+    dcterms:title "Document Without ID" .
+
+# 2. Document without Authors
+:docNoAuthors a bibo:Document ;
+    dcterms:title "Document Without Authors" ;
+    bibo:doi "10.1234/no-authors" .
+
+# 3. Incomplete Person (has name but no given/family)
+:personIncomplete a foaf:Person ;
+    foaf:name "Incomplete Person Name" .
+
+# 4. Document with Note Overflow (metadata in comment)
+:docNoteOverflow a bibo:Document ;
+    dcterms:title "Document With Note Overflow" ;
+    rdfs:comment "Some random comment. Series: Lecture Notes in CS. ORCID: 0000-0000-0000-0000." .
+
+# 5. Correct Document (Control)
+:docCorrect a bibo:Document ;
+    dcterms:title "Correct Document" ;
+    bibo:doi "10.1234/correct" ;
+    bibo:authorList ( :personCorrect ) .
+
+:personCorrect a foaf:Person ;
+    foaf:name "Correct Person" ;
+    foaf:givenName "Correct" ;
+    foaf:familyName "Person" .

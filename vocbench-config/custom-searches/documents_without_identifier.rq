@@ -1,0 +1,13 @@
+PREFIX bibo: <http://purl.org/ontology/bibo/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+# documents_without_identifier.rq
+# Documenti senza DOI, ISBN, o altri identificatori
+SELECT ?doc ?title WHERE {
+  ?doc a bibo:Document ;
+       dcterms:title ?title .
+  FILTER NOT EXISTS { ?doc bibo:doi ?doi }
+  FILTER NOT EXISTS { ?doc bibo:isbn10 ?isbn10 }
+  FILTER NOT EXISTS { ?doc bibo:isbn13 ?isbn13 }
+  FILTER NOT EXISTS { ?doc bibo:issn ?issn }
+}
