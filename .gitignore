@@ -59,4 +59,11 @@ GEMINI.md
 .trees
 
 # Sprint execution plans
+
 sprints/*-EXECUTION-PLAN.md
+
+
+
+# Local test servers
+
+semanticturkey-*/

@@ -14,9 +14,26 @@
     <name>VocBench BIBO-BibTeX Plugin</name>
     <description>VocBench plugin for bidirectional BibTeX/BIBO RDF conversion</description>
 
+    <repositories>
+        <repository>
+            <id>art-release-repository</id>
+            <name>ART release repository</name>
+            <url>http://art.uniroma2.it/mvn/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
-        <plugin.name>BIBO-BibTeX Converter</plugin.name>
-        <plugin.vendor>Riccardo Sacco</plugin.vendor>
+        <plugin.id>it.riccardosacco.bibobibtex</plugin.id>
+        <plugin.class>it.riccardosacco.bibobibtex.vocbench.BibTeXPlugin</plugin.class>
+        <plugin.version>${project.version}</plugin.version>
+        <plugin.provider>Riccardo Sacco</plugin.provider>
+        <plugin.dependencies />
     </properties>
 
     <dependencies>
@@ -25,6 +42,21 @@
             <artifactId>bibo-bibtex-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <!-- VocBench / Semantic Turkey Dependencies -->
+        <dependency>
+            <groupId>it.uniroma2.art.semanticturkey</groupId>
+            <artifactId>st-core-framework</artifactId>
+            <version>14.0</version> <!-- Updated to match user's local version -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.pf4j</groupId>
+            <artifactId>pf4j</artifactId>
+            <version>3.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-model</artifactId>
@@ -66,7 +98,7 @@
 
     <build>
         <plugins>
-            <!-- Maven Shade Plugin for uber-JAR creation -->
+            <!-- Maven Shade Plugin for uber-JAR creation (if needed for internal deps) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -82,14 +114,11 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Implementation-Title>${plugin.name}</Implementation-Title>
-                                        <Implementation-Version>${project.version}</Implementation-Version>
-                                        <Implementation-Vendor>${plugin.vendor}</Implementation-Vendor>
-                                        <Plugin-Name>${plugin.name}</Plugin-Name>
-                                        <Plugin-Description>${project.description}</Plugin-Description>
-                                        <Plugin-Version>${project.version}</Plugin-Version>
-                                        <Built-By>${plugin.vendor}</Built-By>
-                                        <Build-Jdk>${maven.compiler.target}</Build-Jdk>
+                                        <Plugin-Id>${plugin.id}</Plugin-Id>
+                                        <Plugin-Class>${plugin.class}</Plugin-Class>
+                                        <Plugin-Version>${plugin.version}</Plugin-Version>
+                                        <Plugin-Provider>${plugin.provider}</Plugin-Provider>
+                                        <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
                                     </manifestEntries>
                                 </transformer>
                                 <!-- Merge service files for RDF4J -->
