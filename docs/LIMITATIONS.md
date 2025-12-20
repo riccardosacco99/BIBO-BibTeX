@@ -78,6 +78,11 @@ This document analyzes 5 critical scenarios where information is lost or degrade
 
 **BIBO Input (Turtle):**
 ```turtle
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix bibo-ext: <http://purl.org/ontology/bibo-ext/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
 :paper2024 a bibo:Article ;
     dcterms:title "Machine Learning for Ontology Alignment" ;
     bibo:authorList ( :author1 :author2 ) .
@@ -86,8 +91,8 @@ This document analyzes 5 critical scenarios where information is lost or degrade
     foaf:givenName "Alice" ;
     foaf:familyName "Smith" ;
     foaf:mbox <mailto:alice.smith@example.org> ;
-    bibo:orcid "0000-0002-1234-5678" ;
-    bibo:affiliation :affiliation1 .
+    bibo-ext:orcid "0000-0002-1234-5678" ;
+    bibo-ext:affiliation :affiliation1 .
 
 :affiliation1 a foaf:Organization ;
     foaf:name "University of Knowledge" ;
@@ -97,8 +102,8 @@ This document analyzes 5 critical scenarios where information is lost or degrade
     foaf:givenName "Bob" ;
     foaf:familyName "Johnson" ;
     foaf:mbox <mailto:bob.j@research.org> ;
-    bibo:orcid "0000-0001-9876-5432" ;
-    bibo:affiliation :affiliation2 .
+    bibo-ext:orcid "0000-0001-9876-5432" ;
+    bibo-ext:affiliation :affiliation2 .
 
 :affiliation2 a foaf:Organization ;
     foaf:name "Research Institute of Technology" ;
@@ -134,13 +139,17 @@ This document analyzes 5 critical scenarios where information is lost or degrade
 
 **BIBO Input (Turtle):**
 ```turtle
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix bibo-ext: <http://purl.org/ontology/bibo-ext/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
 :article2024 a bibo:Article ;
     dcterms:title "Comprehensive Review of RDF Technologies" ;
     bibo:doi "10.1234/example.2024.001" ;
     bibo:issn "1234-5678" ;
-    bibo:eissn "8765-4321" ;
-    bibo:pmid "98765432" ;
-    bibo:arxiv "2024.01234" .
+    bibo-ext:eissn "8765-4321" ;
+    bibo-ext:pmid "98765432" ;
+    bibo-ext:arxivId "2024.01234" .
 ```
 
 **BibTeX Output:**
