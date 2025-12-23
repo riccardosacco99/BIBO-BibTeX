@@ -12,6 +12,7 @@
 
 # Maven
 target/
+.m2_local/
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -47,6 +48,9 @@ repository-data/
 # Temporary files
 *.tmp
 *.temp
+
+# Deploy artifacts
+deploy-package.zip
 
 # Github
 .Github
