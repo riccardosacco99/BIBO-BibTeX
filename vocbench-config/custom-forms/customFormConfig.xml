@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<customFormConfig>
+    <formsMapping>
+        <entry resource="http://purl.org/ontology/bibo/Article" formCollectionId="BiboFormCollection" replace="false"/>
+        <entry resource="http://purl.org/ontology/bibo/Book" formCollectionId="BiboFormCollection" replace="false"/>
+        <entry resource="http://purl.org/ontology/bibo/ConferencePaper" formCollectionId="BiboFormCollection" replace="false"/>
+        <entry resource="http://xmlns.com/foaf/0.1/Person" formCollectionId="BiboFormCollection" replace="false"/>
+        <entry resource="http://purl.org/ontology/bibo/Thesis" formCollectionId="BiboFormCollection" replace="false"/>
+    </formsMapping>
+</customFormConfig>

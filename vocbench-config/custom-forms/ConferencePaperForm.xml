@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customForm id="it.riccardosacco.bibobibtex.ConferencePaperForm" type="graph">
+    <pearl><![CDATA[
+prefix bibo: <http://purl.org/ontology/bibo/>
+prefix bibo-ext: <http://purl.org/ontology/bibo-ext/>
+prefix dcterms: <http://purl.org/dc/terms/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix coda: <http://art.uniroma2.it/coda/contracts/>
+
+rule it.riccardosacco.bibobibtex.ConferencePaperForm {
+    nodes = {
+        paper uri(coda:randIdGen("confPaper", {})) .
+        title literal userPrompt/title .
+        @DataOneOf({"en", "it", "de", "fr"})
+        titleLang literal userPrompt/titleLang .
+        eventTitle literal userPrompt/eventTitle .
+        venue literal userPrompt/venue .
+        doi literal userPrompt/doi .
+        pageStart literal userPrompt/pageStart .
+        pageEnd literal userPrompt/pageEnd .
+        year literal(xsd:gYear) userPrompt/year .
+        url literal userPrompt/url .
+    }
+    graph = {
+        $paper a bibo:ConferencePaper .
+        $paper dcterms:title $title@$titleLang .
+        OPTIONAL { $paper bibo-ext:eventTitle $eventTitle . }
+        OPTIONAL { $paper bibo-ext:venue $venue . }
+        OPTIONAL { $paper bibo:doi $doi . }
+        OPTIONAL { $paper bibo:pageStart $pageStart . }
+        OPTIONAL { $paper bibo:pageEnd $pageEnd . }
+        OPTIONAL { $paper dcterms:issued $year . }
+        OPTIONAL { $paper foaf:homepage $url . }
+    }
+}
+    ]]></pearl>
+</customForm>

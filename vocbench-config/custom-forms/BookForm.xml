@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customForm id="it.riccardosacco.bibobibtex.BookForm" type="graph">
+    <pearl><![CDATA[
+prefix bibo: <http://purl.org/ontology/bibo/>
+prefix dcterms: <http://purl.org/dc/terms/>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix coda: <http://art.uniroma2.it/coda/contracts/>
+
+rule it.riccardosacco.bibobibtex.BookForm {
+    nodes = {
+        book uri(coda:randIdGen("book", {})) .
+        title literal userPrompt/title .
+        @DataOneOf({"en", "it", "de", "fr"})
+        titleLang literal userPrompt/titleLang .
+        isbn13 literal userPrompt/isbn13 .
+        isbn10 literal userPrompt/isbn10 .
+        publisher literal userPrompt/publisher .
+        date literal(xsd:gYear) userPrompt/publicationYear .
+        edition literal userPrompt/edition .
+        series literal userPrompt/series .
+        volume literal userPrompt/volume .
+        url literal userPrompt/url .
+    }
+    graph = {
+        $book a bibo:Book .
+        $book dcterms:title $title@$titleLang .
+        OPTIONAL { $book bibo:isbn13 $isbn13 . }
+        OPTIONAL { $book bibo:isbn10 $isbn10 . }
+        OPTIONAL { $book dcterms:publisher $publisher . }
+        OPTIONAL { $book dcterms:issued $date . }
+        OPTIONAL { $book bibo:edition $edition . }
+        OPTIONAL { $book bibo:series $series . }
+        OPTIONAL { $book bibo:volume $volume . }
+        OPTIONAL { $book foaf:homepage $url . }
+    }
+}
+    ]]></pearl>
+</customForm>

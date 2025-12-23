@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formCollection id="BiboFormCollection">
+    <forms>
+        <form id="it.riccardosacco.bibobibtex.ArticleForm"/>
+        <form id="it.riccardosacco.bibobibtex.BookForm"/>
+        <form id="it.riccardosacco.bibobibtex.ConferencePaperForm"/>
+        <form id="it.riccardosacco.bibobibtex.ContributorForm"/>
+        <form id="it.riccardosacco.bibobibtex.ThesisForm"/>
+    </forms>
+    <suggestions>
+        <suggestion class="http://purl.org/ontology/bibo/Article" formId="it.riccardosacco.bibobibtex.ArticleForm"/>
+        <suggestion class="http://purl.org/ontology/bibo/Book" formId="it.riccardosacco.bibobibtex.BookForm"/>
+        <suggestion class="http://purl.org/ontology/bibo/ConferencePaper" formId="it.riccardosacco.bibobibtex.ConferencePaperForm"/>
+        <suggestion class="http://xmlns.com/foaf/0.1/Person" formId="it.riccardosacco.bibobibtex.ContributorForm"/>
+        <suggestion class="http://purl.org/ontology/bibo/Thesis" formId="it.riccardosacco.bibobibtex.ThesisForm"/>
+    </suggestions>
+</formCollection>
