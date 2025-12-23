@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<formCollection id="BiboFormCollection">
+<formCollection id="it.riccardosacco.bibobibtex.BiboFormCollection">
     <forms>
         <form id="it.riccardosacco.bibobibtex.ArticleForm"/>
         <form id="it.riccardosacco.bibobibtex.BookForm"/>

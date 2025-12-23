@@ -1,25 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<customForm id="it.riccardosacco.bibobibtex.ContributorForm" type="graph">
-    <pearl><![CDATA[
-prefix bibo-ext: <http://purl.org/ontology/bibo-ext/>
-prefix foaf: <http://xmlns.com/foaf/0.1/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<customForm id="it.riccardosacco.bibobibtex.ContributorForm" name="Contributor" type="graph">
+  <description>Form for creating FOAF Person instances as contributors</description>
+  <ref><![CDATA[prefix foaf: <http://xmlns.com/foaf/0.1/>
 prefix coda: <http://art.uniroma2.it/coda/contracts/>
 
-rule it.riccardosacco.bibobibtex.ContributorForm {
+rule it.riccardosacco.bibobibtex.ContributorForm id:contributorform {
     nodes = {
         person uri(coda:randIdGen("person", {})) .
         givenName literal userPrompt/givenName .
         familyName literal userPrompt/familyName .
-        affiliation literal userPrompt/affiliation .
-        orcid literal userPrompt/orcid .
     }
     graph = {
         $person a foaf:Person .
         $person foaf:givenName $givenName .
         $person foaf:familyName $familyName .
-        OPTIONAL { $person bibo-ext:affiliationName $affiliation . }
-        OPTIONAL { $person bibo-ext:orcid $orcid . }
     }
-}
-    ]]></pearl>
+}]]></ref>
 </customForm>

@@ -1,30 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<customForm id="it.riccardosacco.bibobibtex.ArticleForm" type="graph">
-    <pearl><![CDATA[
-prefix bibo: <http://purl.org/ontology/bibo/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<customForm id="it.riccardosacco.bibobibtex.ArticleForm" name="Article" type="graph">
+  <description>Form for creating BIBO Article instances</description>
+  <ref><![CDATA[prefix bibo: <http://purl.org/ontology/bibo/>
 prefix dcterms: <http://purl.org/dc/terms/>
 prefix foaf: <http://xmlns.com/foaf/0.1/>
-prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix coda: <http://art.uniroma2.it/coda/contracts/>
 
-rule it.riccardosacco.bibobibtex.ArticleForm {
+rule it.riccardosacco.bibobibtex.ArticleForm id:articleform {
     nodes = {
         article uri(coda:randIdGen("article", {})) .
         title literal userPrompt/title .
-        @DataOneOf({"en", "it", "de", "fr"})
-        titleLang literal userPrompt/titleLang .
         doi literal userPrompt/doi .
         issn literal userPrompt/issn .
         volume literal userPrompt/volume .
         issue literal userPrompt/issue .
         pageStart literal userPrompt/pageStart .
         pageEnd literal userPrompt/pageEnd .
-        year literal(xsd:gYear) userPrompt/year .
-        url literal userPrompt/url .
+        year literal userPrompt/year .
     }
     graph = {
         $article a bibo:Article .
-        $article dcterms:title $title@$titleLang .
+        $article dcterms:title $title .
         OPTIONAL { $article bibo:doi $doi . }
         OPTIONAL { $article bibo:issn $issn . }
         OPTIONAL { $article bibo:volume $volume . }
@@ -32,8 +28,6 @@ rule it.riccardosacco.bibobibtex.ArticleForm {
         OPTIONAL { $article bibo:pageStart $pageStart . }
         OPTIONAL { $article bibo:pageEnd $pageEnd . }
         OPTIONAL { $article dcterms:issued $year . }
-        OPTIONAL { $article foaf:homepage $url . }
     }
-}
-    ]]></pearl>
+}]]></ref>
 </customForm>

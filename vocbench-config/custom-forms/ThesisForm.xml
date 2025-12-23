@@ -1,31 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<customForm id="it.riccardosacco.bibobibtex.ThesisForm" type="graph">
-    <pearl><![CDATA[
-prefix bibo: <http://purl.org/ontology/bibo/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<customForm id="it.riccardosacco.bibobibtex.ThesisForm" name="Thesis" type="graph">
+  <description>Form for creating BIBO Thesis instances</description>
+  <ref><![CDATA[prefix bibo: <http://purl.org/ontology/bibo/>
 prefix dcterms: <http://purl.org/dc/terms/>
-prefix foaf: <http://xmlns.com/foaf/0.1/>
-prefix xsd: <http://www.w3.org/2001/XMLSchema#>
 prefix coda: <http://art.uniroma2.it/coda/contracts/>
 
-rule it.riccardosacco.bibobibtex.ThesisForm {
+rule it.riccardosacco.bibobibtex.ThesisForm id:thesisform {
     nodes = {
         thesis uri(coda:randIdGen("thesis", {})) .
         title literal userPrompt/title .
-        @DataOneOf({"en", "it", "de", "fr"})
-        titleLang literal userPrompt/titleLang .
         university literal userPrompt/university .
         degree literal userPrompt/degree .
-        year literal(xsd:gYear) userPrompt/year .
-        url literal userPrompt/url .
+        year literal userPrompt/year .
     }
     graph = {
         $thesis a bibo:Thesis .
-        $thesis dcterms:title $title@$titleLang .
+        $thesis dcterms:title $title .
         OPTIONAL { $thesis dcterms:publisher $university . }
         OPTIONAL { $thesis bibo:degree $degree . }
         OPTIONAL { $thesis dcterms:issued $year . }
-        OPTIONAL { $thesis foaf:homepage $url . }
     }
-}
-    ]]></pearl>
+}]]></ref>
 </customForm>
